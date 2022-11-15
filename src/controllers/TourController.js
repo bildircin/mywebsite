@@ -1,11 +1,11 @@
-const {Op} = require("sequelize")
-const sequelize = require("sequelize")
-const Tour = require("../models/template/Tour")
-const Category = require('../models/Category')
-const TourCategory = require('../models/template/TourCategory')
-const moment = require('moment')
-const db = require('../../db')
-const { getCheckedBtn } = require("../../globalFunctions")
+import {Op} from "sequelize"
+import sequelize from "sequelize"
+import Tour from "../models/template/Tour"
+import Category from '../models/Category'
+import TourCategory from '../models/template/TourCategory'
+import moment from 'moment'
+import db from '../../db'
+import { getCheckedBtn } from "../../globalFunctions"
 
 
 const allTour = async (req,res)=>{

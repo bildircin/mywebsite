@@ -1,7 +1,7 @@
-const { Op } = require("sequelize")
-const User = require('../models/User')
-const moment = require('moment')
-const { getCheckedBtn } = require("../../globalFunctions")
+import { Op } from "sequelize"
+import User from '../models/User'
+import moment from 'moment'
+import { getCheckedBtn } from "../../globalFunctions"
 
 
 const allUsers = async (req,res)=>{

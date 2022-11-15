@@ -1,11 +1,11 @@
-const {Op} = require("sequelize")
-const sequelize = require("sequelize")
-const Video = require('../models/Video')
-const Category = require('../models/Category')
-const VideoCategory = require('../models/VideoCategory')
-const moment = require('moment')
-const db = require('../../db')
-const { getCheckedBtn } = require("../../globalFunctions")
+import {Op} from "sequelize"
+import sequelize from "sequelize"
+import Video from '../models/Video'
+import Category from '../models/Category'
+import VideoCategory from '../models/VideoCategory'
+import moment from 'moment'
+import db from '../../db'
+import { getCheckedBtn } from "../../globalFunctions"
 
 
 const allVideos = async (req,res)=>{

@@ -1,10 +1,10 @@
-const {Op} = require("sequelize")
-const sequelize = require("sequelize")
-const Navigation = require('../models/template/Navigation')
-const Page = require('../models/template/Page')
-const moment = require('moment')
-const db = require('../../db')
-const { getCheckedBtn, deserializeList } = require("../../globalFunctions")
+import {Op} from "sequelize"
+import sequelize from "sequelize"
+import Navigation from '../models/template/Navigation'
+import Page from '../models/template/Page'
+import moment from 'moment'
+import db from '../../db'
+import { getCheckedBtn, deserializeList } from "../../globalFunctions"
 
 
 // navigation
