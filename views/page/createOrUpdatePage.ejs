@@ -1,0 +1,234 @@
+
+
+
+    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+            <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Yeni Ekle</h1>
+                <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                    <li class="breadcrumb-item text-muted">
+                        <a href="/admin" class="text-muted text-hover-primary">Anasayfa</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                    </li>
+                    <li class="breadcrumb-item text-muted">Sayfa İşlemleri</li>
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                    </li>
+                     <li class="breadcrumb-item text-muted">
+                        <a href="/sayfalar" class="text-muted text-hover-primary">Sayfalar</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                    </li>
+                    <li class="breadcrumb-item text-muted">Yeni Ekle</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="kt_app_content" class="app-content flex-column-fluid">
+        <div id="kt_app_content_container" class="app-container container-fluid">
+            <div class="card card-docs flex-row-fluid mb-2">
+                <div class="card-body fs-6 py-15 px-10 py-lg-15 px-lg-15 text-gray-700">
+
+                    <form action="/createOrUpdatePageAjax" id="item_save_form" method="post" enctype="multipart/form-data">
+                           
+                        <input type="hidden" id="id" name="id" value="<%= page.id %>" />
+                        
+                        <div class="mb-10">
+                            <label class="required form-label">Başlık</label>
+                            <input type="text" class="form-control" id="title" name="title" value="<%= page.title %>" />
+                        </div>
+                        <div class="mb-10">
+                            <label class="required form-label">Url</label>
+                            <input type="text" class="form-control" id="url" name="url" value="<%= page.url %>"  />
+                        </div>
+                        <div class="mb-10">
+                            <label class="required form-label">Seo Keywords</label>
+                            <div class="form-floating">
+                                <textarea class="form-control" id="seo_keywords" name="seoKeywords" style="height: 100px"  value="<%= page.seoKeywords %>" ></textarea>
+                            </div>
+                        </div>
+                        <div class="mb-10">
+                            <label class="required form-label">Seo Description</label>
+                            <div class="form-floating">
+                                <textarea class="form-control" id="seo_description" name="seoDescription" style="height: 100px"  value="<%= page.seoDescription %>" ></textarea>
+                            </div>
+                        </div>
+
+                        <div class="mb-10 border">
+                            <label class="form-label">Header</label>
+                            <div id="toolbar_container_header"></div>
+                            <div id="page_header">
+                                
+                            </div>
+    
+                            <div class="d-none" id="page_header_hidden">
+                                <%= page.header %>
+                            </div>
+                        </div>
+                        <div class="mb-10 border">
+                            <label class="form-label">Content</label>
+                            <div id="toolbar_container_content"></div>
+                            <div id="page_content">
+                                
+                            </div>
+    
+                            <div class="d-none" id="page_content_hidden">
+                                <%= page.content %>
+                            </div>
+                        </div>
+
+                        <div class="mb-10">
+                            <input type="hidden" name="dataSrcCoverUrl" value="<%= page.coverUrl %>">
+                            <div style="width: 300px; height: auto;">
+                                <% if(page.coverUrl){ %>
+                                    <img src="<%= page.coverUrl %>" alt="" style="width:100%;">
+                                <% }else{ %>
+                                    <img src="/webUI/image/no_image.png" alt="" style="width:100%;">
+                                <% } %>
+                            </div>
+                            <label class="required form-label">Cover İmage</label>
+                            <input type="file" name="coverUrlFile" accept="image/png, image/gif, image/jpeg" />
+                        </div>
+                      
+                        <div class="form-check form-switch form-check-custom form-check-solid my-10">
+                            <input class="form-check-input" type="checkbox" id="is_active" name="isActive" <%= page.isActive ? 'checked=checked' : '' %> />
+                            <label class="form-check-label" for="is_active">
+                                Aktif
+                            </label>
+                        </div>
+                    
+                        <div class="form-group row mt-5">
+                            <div class="col-md-2">
+                                <a href="/turlar" class="btn btn-block btn-dark" id="back_btn">GERİ</a>
+                            </div>
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-primary" id="save_btn">
+                                    <span class="indicator-label">
+                                        KAYDET
+                                    </span>
+                                    <span class="indicator-progress">
+                                        Lütfen Bekleyin... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/global/plugins/jquery-form/jquery.form.js"></script>
+    <script src="../assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js" type="text/javascript"></script>
+    <script src="../assets/plugins/custom/ckeditor/ckeditor-document.bundle.js"></script>
+   
+   
+   <!-- <script type="module" src='/@ckeditor/ckeditor5-source-editing/src/sourceediting'></script> -->
+<script>
+    
+    //import SourceEditing  from './@ckeditor/ckeditor5-source-editing/src/sourceediting';
+
+    const SourceEditing = require('@ckeditor/ckeditor5-source-editing/src/sourceediting')
+    
+    $(document).ready(function(){
+        $('#day, #sequence, #persons').inputmask({
+            mask: '9',
+            repeat: 12,
+            greedy: !1
+        })
+        $('#price').inputmask({
+            'alias': 'decimal',
+            rightAlign: false,
+            showMaskOnHover: false,
+            'autoGroup': false,
+            'digits': 2,
+            'digitsOptional': false,
+            'placeholder': '0.00',
+            autoGroup: true,
+            allowMinus: false,
+            radixPoint: '.'
+        })
+
+        $("#started_at, #finished_at").flatpickr();
+
+        DecoupledEditor
+            .create(document.querySelector('#page_content'), {
+        plugins: [ SourceEditing],
+        toolbar: [ 'sourceEditing']
+    })
+            .then(editor => {
+                const toolbarContainer = document.querySelector( '#toolbar_container_content' );
+                toolbarContainer.appendChild( editor.ui.view.toolbar.element );
+                editor.setData( document.getElementById('page_content_hidden').innerText );
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        DecoupledEditor
+            .create(document.querySelector('#page_header'))
+            .then(editor => {
+                const toolbarContainer = document.querySelector( '#toolbar_container_header' );
+                toolbarContainer.appendChild( editor.ui.view.toolbar.element );
+                editor.setData( document.getElementById('page_header_hidden').innerText );
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    })
+ 
+    $('#item_save_form').ajaxForm({
+        beforeSubmit: function (arr) {
+            //global.showLoader()
+            $('#save_btn').attr("data-kt-indicator", "on")
+            $('#save_btn').attr("disabled", "disabled")
+        },
+        beforeSend: function (e) {
+
+            if ($('#category').val() == "") {
+                toastr.warning("Kategori seçiniz");
+                $('#category').focus();
+                //global.hideLoader()
+                return false;
+            }
+            if ($('#title').val() == "") {
+                toastr.warning("Başlık giriniz");
+                $('#title').focus();
+                //global.hideLoader()
+                return false;
+            }
+            if ($('#started_at').val() == "") {
+                toastr.warning("Başlama tarihi giriniz");
+                $('#started_at').focus();
+                //global.hideLoader()
+                return false;
+            }
+            if ($('#finished_at').val() == "") {
+                toastr.warning("Bitiş tarihi giriniz");
+                $('#finished_at').focus();
+                //global.hideLoader()
+                return false;
+            }
+        },
+        complete: function (result) {
+            //global.hideLoader();
+            console.log(result.responseJSON)
+
+            if (result.responseJSON.isSuccess) {
+                toastr.success(result.responseJSON.message);
+            }
+            else {
+                toastr.error(result.responseJSON.message)
+            }
+
+            $('#save_btn').removeAttr('data-kt-indicator')
+            $('#save_btn').removeAttr('disabled')
+        },
+    });
+
+</script>

@@ -1,16 +1,16 @@
-const express = require('express')
-const expressLayouts = require('express-ejs-layouts')
-const moment = require('moment')
-const cookieParser = require("cookie-parser")
-const session = require('express-session')
-const passport = require('passport')
-const flash = require('connect-flash')
-const path = require('path')
-const i18next = require('i18next')
-const Backend = require('i18next-fs-backend')
-const middleware  = require('i18next-http-middleware')
-const fs = require('fs')
-const Page = require('./src/models/template/Page')
+import express from 'express' 
+import expressLayouts from 'express-ejs-layouts'
+import moment from 'moment'
+import cookieParser from "cookie-parser"
+import session from 'express-session'
+import passport from 'passport'
+import flash from 'connect-flash'
+import path from 'path'
+import i18next from 'i18next'
+import Backend from 'i18next-fs-backend'
+import middleware from 'i18next-http-middleware'
+import fs from 'fs'
+import Page from './src/models/template/Page'
 
 
 i18next.use(Backend).use(middleware.LanguageDetector).init({
@@ -68,22 +68,25 @@ app.get('/', (req, res)=>{
     res.render('webUI/home', {layout:'webUI/layout'})
 })
 
-getPages()
 
-async function getPages(){
-    const pages = await Page.findAll({
+app.use(async (req,res,next)=>{
+    const url = req.originalUrl
+    let page = await getPages(url)
+
+    if(page){
+        res.render('webUI/content', {layout:'webUI/layout', header:page.header, content:page.content})
+    }else{
+        next()
+    }
+})
+
+async function getPages(url){
+    return await Page.findOne({
         where:{
-            isDeleted:false
+            isDeleted:false,
+            url:url
         }
     })
-    
-    for (let i = 0; i < pages.length; i++) {
-        const item = pages[i];
-        
-        app.get(item.url, async (req, res)=>{
-            res.render('webUI/content', {layout:'webUI/layout', content:item.content})
-        })
-    }
 }
 
 

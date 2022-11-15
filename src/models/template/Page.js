@@ -15,10 +15,10 @@ const Page = db.define('Page', {
         type:Sequelize.STRING
     },
     header:{
-        type:Sequelize.STRING
+        type:Sequelize.TEXT('long')
     },
     content:{
-        type:Sequelize.STRING
+        type:Sequelize.TEXT('long')
     },
     seoKeywords:{
         type:Sequelize.STRING

@@ -8,4 +8,13 @@ router.post('/sequenceNavigationUpdateAjax', templateController.sequenceNavigati
 router.post('/createOrUpdateNavAjax', templateController.createOrUpdateNavAjax)
 router.post('/deleteNavigationAjax', templateController.deleteNavigationAjax)
 
+router.get('/sayfalar', templateController.pages)
+router.get('/sayfa-kaydet/:id?', templateController.createOrUpdatePage)
+
+
+
+
+
+
+
 module.exports = router;

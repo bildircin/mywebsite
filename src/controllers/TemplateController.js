@@ -1,12 +1,13 @@
 const {Op} = require("sequelize")
 const sequelize = require("sequelize")
 const Navigation = require('../models/template/Navigation')
+const Page = require('../models/template/Page')
 const moment = require('moment')
 const db = require('../../db')
 const { getCheckedBtn, deserializeList } = require("../../globalFunctions")
 
 
-
+// navigation
 const navigations = async (req,res)=>{
     res.locals.title="Navigasyonlar"
 
@@ -163,6 +164,32 @@ const deleteNavigationAjax = async (req,res) => {
     await res.send({isSuccess:true, message: "Navigasyon başarıyla silindi", id, removedIds})
 }
 
+//page
+const pages = async (req,res)=>{
+    res.locals.title="Sayfalar"
+
+    const pages = await Page.findAll({
+        where:{
+            isDeleted:false
+        }
+    })
+
+    await res.render('page/pages', {pages})
+}
+
+const createOrUpdatePage = async (req,res)=>{
+    res.locals.title=""
+
+    const id = req.params.id
+
+    const page = await Page.findByPk(id, {
+        where:{
+            isDeleted:false
+        }
+    })
+
+    await res.render('page/createOrUpdatePage', {page})
+}
 
 
 function isChildren(item){
@@ -208,5 +235,7 @@ module.exports = {
     navigations,
     sequenceNavigationUpdateAjax,
     createOrUpdateNavAjax,
-    deleteNavigationAjax
+    deleteNavigationAjax,
+    pages,
+    createOrUpdatePage
 }
