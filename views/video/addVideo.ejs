@@ -1,0 +1,141 @@
+
+
+
+    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+            <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Yeni Ekle</h1>
+                <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                    <li class="breadcrumb-item text-muted">
+                        <a href="/admin" class="text-muted text-hover-primary">Anasayfa</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                    </li>
+                    <li class="breadcrumb-item text-muted">Video İşlemleri</li>
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                    </li>
+                     <li class="breadcrumb-item text-muted">
+                        <a href="/videolar" class="text-muted text-hover-primary">Videolar</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                    </li>
+                    <li class="breadcrumb-item text-muted">Yeni Ekle</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="kt_app_content" class="app-content flex-column-fluid">
+        <div id="kt_app_content_container" class="app-container container-fluid">
+            <div class="card card-docs flex-row-fluid mb-2">
+                <div class="card-body fs-6 py-15 px-10 py-lg-15 px-lg-15 text-gray-700">
+
+                    <form action="/addVideoAjax" id="video_save_form" method="post">
+                           
+                        <div class="mb-10">
+                            <label class="required form-label">Kategori</label>
+                            <select multiple="multiple" class="form-select form-select-solid" id="category" name="category" data-control="select2" data-placeholder="Seçim yapınız">
+                                <option></option>
+                                <% categories.forEach(item =>{ %>
+                                    <option value="<%= item.id %>"><%= item.name %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+
+                        <div class="mb-10">
+                            <label class="required form-label">Başlık</label>
+                            <input type="text" class="form-control" id="title" name="title" />
+                        </div>
+                        <div class="mb-10">
+                            <label class="required form-label">Sıra</label>
+                            <input type="text" class="form-control" id="sequence" name="sequence" />
+                        </div>
+                        <div class="mb-10">
+                            <label class="required form-label">Video Süresi</label>
+                            <input type="text" class="form-control" id="duration" name="duration" placeholder="Saniye cinsinden giriniz" />
+                        </div>
+                        <div class="mb-10">
+                            <label class="required form-label">Video Dosyası</label>
+                            <input type="file" class="form-control" id="video_file" name="videoFile" />
+                        </div>
+
+                        <div class="form-check form-switch form-check-custom form-check-solid my-10">
+                            <input class="form-check-input" type="checkbox" id="is_active" name="isActive" checked="checked" />
+                            <label class="form-check-label" for="is_active">
+                                Aktif
+                            </label>
+                        </div>
+                    
+                        <div class="form-group row mt-5">
+                            <div class="col-md-2">
+                                <a href="/videolar" class="btn btn-block btn-dark" id="back_btn">GERİ</a>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary">KAYDET</button>
+                            </div>
+                        </div>
+                        
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/global/plugins/jquery-form/jquery.form.js"></script>
+    <script src="../assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js" type="text/javascript"></script>
+
+<script>
+
+    $(document).ready(function(){
+      
+        $('#duration, #sequence').inputmask({
+            mask: '9',
+            repeat: 12,
+            greedy: !1
+        })
+    })
+ 
+    $('#video_save_form').ajaxForm({
+        beforeSubmit: function (arr) {
+            //global.showLoader()
+        },
+        beforeSend: function (e) {
+
+            if ($('#category').val() == []) {
+                toastr.warning("Kategori seçiniz");
+                $('#category').focus();
+                //global.hideLoader()
+                return false;
+            }
+            if ($('#title').val() == "") {
+                toastr.warning("Video başlığı giriniz");
+                $('#title').focus();
+                //global.hideLoader()
+                return false;
+            }
+            if ($('#duration').val() == "") {
+                toastr.warning("Süre giriniz");
+                $('#duration').focus();
+                //global.hideLoader()
+                return false;
+            }
+        },
+        complete: function (result) {
+            //global.hideLoader();
+
+            console.log(result.responseJSON)
+
+            if (result.responseJSON.isSuccess) {
+                toastr.success(result.responseJSON.message);
+            }
+            else {
+                toastr.error(result.responseJSON.message)
+            }
+        },
+    });
+
+</script>

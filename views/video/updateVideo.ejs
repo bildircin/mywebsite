@@ -1,0 +1,206 @@
+
+
+
+    
+  <!--   <style>
+        .nav.nav-tabs{
+            justify-content: flex-end;
+        }
+    </style> -->
+
+    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+            <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0"><%= video.title %></h1>
+                <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                    <li class="breadcrumb-item text-muted">
+                        <a href="/admin" class="text-muted text-hover-primary">Anasayfa</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                    </li>
+                    <li class="breadcrumb-item text-muted">Video İşlemleri</li>
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                    </li>
+                     <li class="breadcrumb-item text-muted">
+                        <a href="/videolar" class="text-muted text-hover-primary">Videolar</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                    </li>
+                    <li class="breadcrumb-item text-muted"><%= video.title %></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="custom-tab-1">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#public_info"><i class="la la-photo-video mr-2"></i> Video Bilgileri</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#video_file_info"><i class="la la-file-video mr-2"></i> Video Dosyası</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="public_info" role="tabpanel">
+                                <div class="pt-4">
+                                    <div class="basic-form">
+                                        
+                                        <form action="/updateVideoAjax" id="category_update_form" method="post">
+                
+                                            <input type="hidden" name="id" value="<%= video.id %>" />
+                                           
+                                            <div class="mb-10">
+                                                <label class="required form-label">Kategori</label>
+                                                <select class="form-select form-select-solid" id="category" name="category" multiple="multiple" data-placeholder="Seçim yapınız">
+                                                    <option></option>
+                                                    <%_ categories.forEach(item =>{  _%>
+                                                        <option value="<%= item.id %>" <%= categoryIds.includes(item.id) ? 'selected=selected' : '' %>><%= item.name %></option>
+                                                    <%_  }) _%>
+                                                </select>
+                                            </div>
+                
+                                            <div class="mb-10">
+                                                <label class="required form-label">Başlık</label>
+                                                <input type="text" class="form-control input-default" id="title" name="title" value="<%= video.title %>" />
+                                            </div>
+                                            <div class="mb-10">
+                                                <label class="required form-label">Video Süresi</label>
+                                                <input type="text" class="form-control input-default" id="duration" name="duration" placeholder="Saniye cinsinden giriniz" value="<%= video.duration %>" />
+                                            </div>
+
+                                            <div class="form-check form-switch form-check-custom form-check-solid my-10">
+                                                <input class="form-check-input" type="checkbox" id="is_active" name="isActive" <%= video.isActive ? 'checked=checked' : '' %> />
+                                                <label class="form-check-label" for="is_active">
+                                                    Aktif
+                                                </label>
+                                            </div>
+                                        
+                                            <div class="form-group row mt-5">
+                                                <div class="col-md-2">
+                                                    <a href="/videolar" class="btn btn-block btn-dark">GERİ</a>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <button type="submit" class="btn btn-primary" >Güncelle</button>
+                                                </div>
+                                            </div>
+                                            
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="video_file_info">
+                                <div class="pt-4">
+                                    <div class="basic-form">
+                                        <form action="/updateVideoFileAjax" id="video_file_update_form" method="post">
+                                           
+                                            <input type="hidden" name="id" value="<%= video.id %>" />
+
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">Video Dosyası</label>
+                                                <input type="file" class="form-control input-default" id="video_file" name="videoFile" />
+                                            </div>
+                
+                                            <div class="form-group row mt-5">
+                                                <div class="col-md-2">
+                                                    <a href="/videolar" class="btn btn-block btn-dark">GERİ</a>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <button type="submit" class="btn btn-primary" id="save_btn">Güncelle</button>
+                                                </div>
+                                            </div>
+                                            
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/global/plugins/jquery-form/jquery.form.js"></script>
+    <script src="../assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js" type="text/javascript"></script>
+
+<script>
+
+    $(document).ready(function(){
+        $('#duration').inputmask({
+            mask: '9',
+            repeat: 12,
+            greedy: !1
+        })
+    })
+
+ 
+    $('#category_update_form').ajaxForm({
+        beforeSubmit: function (arr) {
+            //global.showLoader()
+        },
+        beforeSend: function (e) {
+
+            if ($('#title').val() == "") {
+                toastr.warning("Kategori adı giriniz");
+                $('#title').focus();
+                //global.hideLoader()
+                return false;
+            }
+            if ($('#duration').val() == "") {
+                toastr.warning("Süre giriniz");
+                $('#duration').focus();
+                //global.hideLoader()
+                return false;
+            }
+        },
+        complete: function (result) {
+            //global.hideLoader();
+
+            console.log(result.responseJSON)
+
+            if (result.responseJSON.isSuccess) {
+
+                global.toast("success", result.responseJSON.message);
+            }
+            else {
+                global.toast("error", result.responseJSON.message)
+            }
+        },
+    });
+    $('#video_file_update_form').ajaxForm({
+        beforeSubmit: function (arr) {
+            //global.showLoader()
+        },
+        beforeSend: function (e) {
+
+        },
+        complete: function (result) {
+            //global.hideLoader();
+
+            console.log(result.responseJSON)
+
+            if (result.responseJSON.isSuccess) {
+               toastr.success(result.responseJSON.message);
+            } else {
+               toastr.error(result.responseJSON.message)
+            }
+        },
+    });
+
+
+   
+
+
+
+
+</script>

@@ -1,0 +1,299 @@
+<link rel="stylesheet" href="../assets/vendor/select2/css/select2.min.css">
+<link href="../assets/vendor/nestable2/css/jquery.nestable.min.css" rel="stylesheet">
+<link href="../assets/vendor/datatables/css/jquery.dataTables.min.css" rel="stylesheet">
+
+  <style>
+       .edit-button, .delete-item{
+            height: 20px;
+            width: 20px;
+            padding: 0 !important;
+        }
+        .edit-button i, .delete-item i{
+           line-height: 0.5;
+            font-size: 10px;
+       }
+       .dd-item-btn-group{
+            float: right;
+       }
+    </style>
+
+<div class="page-titles">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/" class="custom-bread">Anasayfa</a></li>
+        <li class="breadcrumb-item"><a href="javascript:void(0)" class="not-link">Video İşlemleri</a></li>
+        <li class="breadcrumb-item"><a href="javascript:void(0)" class="not-link">Kategori Videoları</a></li>
+        <li class="breadcrumb-item active"><a href="javascript:void(0)"> Videoları</a></li>
+    </ol>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title" id="page_head">Kategori Videoları</h4>
+                <span>
+                    <form action="/videosToCategoryUpdateAjax" role="form" id="videos_to_category_form"  method="post" style="display: inline-block;">
+                        <input type="hidden" id="category_id" name="categoryId" />
+                        <input type="hidden" id="nestable-output" name="EditableJSONList" />
+                        <button type="submit" class="btn btn-primary btn-md" style="display: none;">Sıralamayı Güncelle</button>
+                    </form>
+                    <form action="#" role="form" method="post" style="display: inline-block;">
+                        <input type="hidden" id="nestable2-output" name="EditableJSONListUnselected" />
+                    </form>
+                </span>
+            </div>
+            <div class="card-body">
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Kategori</label>
+                    <select id="category" name="category">
+                        <option></option>
+                        <% categories.forEach(item =>{ %>
+                            <option value="<%= item.id %>"><%= item.name %></option>
+                        <% }) %>
+                    </select>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="dd" id="nestable">
+                            <ol class="dd-list">
+                                
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="dd" id="nestable2">
+                            <ol class="dd-list">
+                                
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="delete-item-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Kategori Sil</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <input type="hidden" id="delete_object_id" value="" />
+                <strong id="object_name"></strong>&nbsp;kategorisini silmek istediğinizden emin misiniz?
+                <br />
+                <p>
+                    <span class="label label-danger">Uyarı</span>
+                    <small>Bu kategoriyi silmeniz durumunda kategoriye bağlı bütün alt kategoriler de silinir.</small>
+                </p>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">VAZGEÇ</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="DeleteObject()">EVET</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Datatable -->
+<script src="../assets/vendor/datatables/js/jquery.dataTables.min.js"></script>
+<script src="../assets/vendor/select2/js/select2.full.min.js"></script>
+<script src="../assets/vendor/nestable2/js/jquery.nestable.js"></script>
+<script src="../assets/global/plugins/jquery-form/jquery.form.js"></script>
+
+<script>
+
+    var updateOutput = function (e) {
+        var list = e.length ? e : $(e.target);
+        output = list.data('output');
+        if (window.JSON) {
+            output.val(window.JSON.stringify(list.nestable('serialize')));//, null, 2));
+        } else {
+            alert("Tarayınız bu öğeyi desteklemiyor. Google Chrome veya Mozilla kullanınız.");
+            return;
+        }
+    };
+
+    $(document).ready(function () {
+
+        $('#category').select2({
+            width:null,
+            placeholder:'Seçiniz'
+        })
+
+        $('.edit-button').on('click', function(){
+            const id = $(this).closest('.dd-item').data('id')
+            window.location.href = '/kategori-guncelle/' + id + '?backhref=sequence'
+        })
+
+        $('.delete-item').on('click', function(){
+            const id = $(this).closest('.dd-item').data('id')
+            const name = $(this).closest('.dd-item').data('name')
+
+            $('#delete_object_id').val(id)
+            $('#object_name').text(name)
+
+            $("#delete-item-modal").modal('show')
+        })
+
+        
+
+        $("#delete-item-modal").on("hidden.bs.modal", function () {
+            $('#delete_object_id').val('');
+            $('#object_name').text('');
+        })
+
+        $("#category").on("change", function(){
+            let id = $(this).val()
+
+            $.post('/videosToCategoryAjax', { 'id': id })
+                .done(function (r) {
+                    if (r.isSuccess) {
+
+                        let id = r.id
+                        let videos = r.videos
+                        let unselectedVideos = r.unselectedVideos
+
+                        $('#nestable').html(getNestList(videos, 'handle'))
+                        $('#nestable2').html(getNestList(unselectedVideos, 'handle'))
+                    
+                        // activate Nestable for list 1
+                        $('#nestable').nestable({
+                            group: 1,
+                            maxDepth: 1
+                        })
+                        .on('change', updateOutput);
+
+                        // activate Nestable for list 2
+                        $('#nestable2').nestable({
+                            group: 1,
+                            maxDepth: 1
+                        })
+                        .on('change', updateOutput);
+
+                        // output initial serialised data
+                        updateOutput($('#nestable').data('output', $('#nestable-output')));
+                        updateOutput($('#nestable2').data('output', $('#nestable2-output')));
+
+                        $('#category_id').val(id)
+
+                        $(".dd a").on("mousedown", function (event) { // mousedown prevent nestable click
+                            event.preventDefault();
+                            return false;
+                        })
+
+                        console.log(videos)
+                        console.log(unselectedVideos)
+                        global.toast("success", r.message);
+                    }
+                    else {
+                        global.toast("warning", r.message);
+                    }
+                })
+                .fail(function () {
+                    global.toast("error", "Internal Server Error");
+                })
+            
+            if($(this).val() != ''){
+                $('#videos_to_category_form button').css('display', 'block')
+            }else{
+                $('#videos_to_category_form button').css('display', 'none')
+            }
+        })
+    })
+
+    function DeleteObject() {
+        var id = $('#delete_object_id').val();
+
+        if (id == null || id == 'null' || id == undefined || id == '') {
+            global.toast("warning", "Kategroi silinemiyor. Sayfayı yenileyip yeniden deneyiniz.");
+            return;
+        }
+
+        $.post('/deleteCategoryAjax',
+            { 'id': id })
+            .done(function (r) {
+                if (r.isSuccess) {
+
+                    $('.handle_' + id).remove();
+
+                    global.toast("success", r.message);
+                }
+                else {
+                    global.toast("warning", r.message);
+                }
+            })
+            .fail(function () {
+                global.toast("error", "Internal Server Error");
+            })
+    }
+
+    function getNestList(list, cssClass){
+        let ret = '<ol class="dd-list">'
+
+        list.forEach(item => {
+            let li = `<li class="dd-item ${cssClass}_${item.id}" data-name="${item.title}" data-id="${item.id}">
+                        <div class="dd-${cssClass} dd-container">
+
+                            <span class="category-title">${item.title}</span>
+                            <span class="dd-item-btn-group">
+                                <a href="javascript:;" class="badge light badge-secondary edit-button"><i class="flaticon-381-edit-1"></i></a>
+                                <a class="badge light badge-danger delete-item"><i class="flaticon-381-trash-1"></i></a>
+                            </span>
+                        </div>`
+            if (item.hasOwnProperty('children')){
+                li += `<ol class="dd-list">`
+                li += getNestList(item.children, cssClass)
+                li += `</ol>`
+                li += `</li>`
+            }else{
+                li += `</li>`
+            }
+            ret += li
+        })
+
+        ret += "</ol>"
+
+        if(list.length == 0){
+            ret = '<div class="dd-empty"></div>'
+        }
+
+        return ret
+    }
+
+    
+
+
+    $('#videos_to_category_form').ajaxForm({
+        beforeSubmit: function (arr) {
+            global.showLoader()
+
+        },
+        beforeSend: function (e) {
+
+            global.showLoader();
+        },
+        complete: function (result) {
+
+            console.log(result.responseJSON)
+            
+            if (result.responseJSON.isSuccess) {
+                
+                global.toast("success", result.responseJSON.message);
+            }
+            else {
+                global.toast("error", result.responseJSON.message)
+            }
+            
+            global.hideLoader()
+        },
+    })
+
+</script>

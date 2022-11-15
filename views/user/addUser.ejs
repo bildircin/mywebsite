@@ -1,0 +1,157 @@
+
+
+    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+            <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Yeni Ekle</h1>
+                <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                    <li class="breadcrumb-item text-muted">
+                        <a href="/admin" class="text-muted text-hover-primary">Anasayfa</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                    </li>
+                    <li class="breadcrumb-item text-muted">Kullanıcı İşlemleri</li>
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                    </li>
+                     <li class="breadcrumb-item text-muted">
+                        <a href="/kullanicilar" class="text-muted text-hover-primary">Kullanıcılar</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                    </li>
+                    <li class="breadcrumb-item text-muted">Yeni Ekle</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="kt_app_content" class="app-content flex-column-fluid">
+        <div id="kt_app_content_container" class="app-container container-fluid">
+            <div class="card card-docs flex-row-fluid mb-2">
+                <div class="card-body fs-6 py-15 px-10 py-lg-15 px-lg-15 text-gray-700">
+
+                    <form action="/addUserAjax" id="user_save_form" method="post">
+                           
+                        <div class="mb-10">
+                            <label class="required form-label">Kullanıcı Türü</label>
+                            <select class="form-select form-select-solid" id="type" name="type" data-control="select2" data-placeholder="Seçim yapınız">
+                                <option></option>
+                                <option value="0">Standart</option>
+                                <option value="1">Yönetici</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-10">
+                            <label for="exampleFormControlInput1" class="required form-label">İsim</label>
+                            <input type="text" name="name" class="form-control" />
+                        </div>
+
+                        <div class="mb-10">
+                            <label class="required form-label">İsim ve Soyisim</label>
+                            <input type="text" class="form-control" id="name_and_surname" name="nameAndSurname" />
+                        </div>
+                        <div class="mb-10">
+                            <label class="required form-label">Kullanıcı Adı</label>
+                            <input type="text" class="form-control" id="user_name" name="userName" />
+                        </div>
+                        <div class="mb-10">
+                            <label class="required form-label">Email</label>
+                            <input type="text" class="form-control" id="email" name="email" />
+                        </div>
+                        <div class="mb-10">
+                            <label class="required form-label">Şifre</label>
+                            <input type="text" class="form-control" id="password" name="password" />
+                        </div>
+                        <div class="mb-10">
+                            <label class="required form-label">Şifre Tekrarı</label>
+                            <input type="text" class="form-control" id="password2" name="password2" />
+                        </div>
+
+                        <div class="form-group row mt-5">
+                            <div class="col-md-2">
+                                <a href="/kullanicilar" class="btn btn-block btn-dark">GERİ</a>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-success">Kaydet</button>
+                            </div>
+                        </div>
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="../assets/global/plugins/jquery-form/jquery.form.js"></script>
+
+<script>
+
+    
+    $(document).ready(function () {
+        $("#type").select2({
+            width:null,
+            placeholder:'Seçiniz'
+        });
+    })
+   
+    $('#user_save_form').ajaxForm({
+        beforeSubmit: function (arr) {
+           //global.showLoader()
+        },
+        beforeSend: function (e) {
+
+            if ($('#name_and_surname').val() == "") {
+                toastr.warning("İsim ve soyisim giriniz");
+                $('#name_and_surname').focus();
+                //global.hideLoader()
+                return false;
+            }
+            if ($('#user_name').val() == "") {
+                toastr.warning("Kullanıcı adı giriniz");
+                $('#user_name').focus();
+                //global.hideLoader()
+                return false;
+            }
+            if ($('#email').val() == "") {
+                toastr.warning("Email giriniz");
+                $('#email').focus();
+                //global.hideLoader()
+                return false;
+            }
+            if ($('#password').val() == "") {
+                toastr.warning("Şifre giriniz");
+                $('#password').focus();
+                //global.hideLoader()
+                return false;
+            }
+            if ($('#password2').val() == "") {
+                toastr.warning("Şifre Tekrarı giriniz");
+                $('#password2').focus();
+                //global.hideLoader()
+                return false;
+            }
+            if($('#password').val() != $('#password2').val()){
+                toastr.warning("Şifre tekrarı aynı olmalıdır. Lütfen tekrar deneyiniz");
+                $('#password2').focus();
+                //global.hideLoader()
+                return false;
+            }
+        },
+        complete: function (result) {
+            //global.hideLoader();
+
+            console.log(result.responseJSON)
+
+            if (result.responseJSON.isSuccess) {
+                toastr.success(result.responseJSON.message)
+            }
+            else {
+                toastr.error(result.responseJSON.message)
+            }
+        },
+    });
+
+</script>

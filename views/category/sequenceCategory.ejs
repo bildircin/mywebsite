@@ -1,0 +1,228 @@
+
+    
+    <link href="../assets/vendor/nestable2/css/jquery.nestable.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/vendor/select2/css/select2.min.css">
+
+    <style>
+       .edit-button, .delete-item{
+            height: 20px;
+            width: 20px;
+            padding: 0 !important;
+        }
+        .edit-button i, .delete-item i{
+           line-height: 0.5;
+            font-size: 10px;
+            margin: auto !important;
+       }
+       .delete-item i{
+        color: white;
+       }
+       .dd-item-btn-group{
+            float: right;
+       }
+    </style>
+
+<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+    <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+        <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Kategori Sıralama</h1>
+            <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                <li class="breadcrumb-item text-muted">
+                    <a href="/admin" class="text-muted text-hover-primary">Anasayfa</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                </li>
+                <li class="breadcrumb-item text-muted">Kategori İşlemleri</li>
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                </li>
+                <li class="breadcrumb-item text-muted">Kategori Sıralama</li>
+            </ul>
+        </div>
+        <div class="d-flex align-items-center gap-2 gap-lg-3">
+            <form action="/seqenceCategoryUpdateAjax" role="form" id="categories_sequence_update_form"  method="post" style="display: inline-block;">
+                <input type="hidden" id="editable_list_sort" name="EditableJSONList" />
+                <button type="submit" class="btn btn-primary btn-md">Sıralamayı Güncelle</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="kt_app_content" class="app-content flex-column-fluid">
+    <div id="kt_app_content_container" class="app-container container-fluid">
+        <div class="card card-docs flex-row-fluid mb-2">
+            <div class="card-body fs-6 py-15 px-10 py-lg-15 px-lg-15 text-gray-700">
+
+                <div class="dd" id="nestable_list_editable">
+                    <ol class="dd-list">
+                        
+                        <% function nested(list, cssClass){ 
+                            list.forEach((item)=>{  %>
+                               
+                                <li class="dd-item <%= cssClass + '_' + item.id %>" data-name="<%= item.name %>" data-id="<%= item.id %>">
+                                    <div class="dd-<%= cssClass %> dd-container">
+
+                                        <span class="category-title"><%= item.name %></span>
+                                        <span class="dd-item-btn-group">
+                                            <a href="javascript:;" class="badge light badge-secondary edit-button"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <a href="javascript:;" class="badge light badge-danger delete-item"><i class="fa-solid fa-trash"></i></a>
+                                        </span>
+                                    </div>
+                                     
+                                      <%  if (item.hasOwnProperty('children')){ %>
+                                        <ol class="dd-list">
+                                            <%    nested(item.children, cssClass) %>
+                                        </ol>
+                                         <%  }  %>
+                                </li>
+                            <%
+                                 }) 
+                            } %>
+
+                           <%  nested(categories, 'handle') %>
+                    </ol>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="delete-item-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Kategori Sil</h5>
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal">
+                    <span class="svg-icon svg-icon-2x"></span>
+                </div>
+                <!--end::Close-->
+            </div>
+            <div class="modal-body">
+
+                <form action="deleteCategoryAjax" role="form" id="category_delete_form" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="delete_object_id" />
+                        <p><strong id="delete_object_name"></strong> kategorisini silmek istediğinize emin misiniz?</p>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dark btn-outline" data-bs-dismiss="modal">VAZGEÇ</button>
+                        <button type="submit" class="btn btn-primary">EVET</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../assets/vendor/select2/js/select2.full.min.js"></script>
+<script src="../assets/vendor/nestable2/js/jquery.nestable.min.js"></script>
+<script src="../assets/global/plugins/jquery-form/jquery.form.js"></script>
+    
+<script>
+    var updateOutput = function (e) {
+        var list = e.length ? e : $(e.target);
+        if (window.JSON) {
+            $('#editable_list_sort').val(window.JSON.stringify(list.nestable('serialize')));
+        } else {
+            alert("Tarayınız bu öğeyi desteklemiyor. Google Chrome veya Mozilla kullanınız.");
+            return;
+        }
+    };
+
+    $(document).ready(function () {
+
+        // activate Nestable for list 2
+        $('#nestable_list_editable').nestable({
+            maxDepth: 5
+        }).on('change', updateOutput);
+
+        // output initial serialised data
+        updateOutput($('#nestable_list_editable').data('output', $('#nestable_list_editable_output')))
+
+        $(".dd a").on("mousedown", function (event) { // mousedown prevent nestable click
+            event.preventDefault();
+            return false;
+        })
+
+        $('.edit-button').on('click', function(){
+            const id = $(this).closest('.dd-item').data('id')
+            window.location.href = '/kategori-guncelle/' + id + '?backhref=sequence'
+        })
+
+        $('.delete-item').on('click', function(){
+            let id = $(this).closest('.dd-item').data('id')
+            let name = $(this).closest('.dd-item').data('name')
+
+            $('#delete_object_id').val(id)
+
+            $('#delete_object_name').text(name)
+            $('#delete-item-modal').modal('show')
+        })
+
+        $("#delete-item-modal").on("hidden.bs.modal", function () {
+            $('#delete_object_id').val('');
+            $('#delete_object_name').text('');
+        })
+
+
+    })
+
+    $('#category_delete_form').ajaxForm({
+        beforeSubmit: function (arr) {
+            //global.showLoader()
+            let id = $('#delete_object_id').val()
+
+            if (id == null || id == 'null' || id == undefined || id == '') {
+                toastr.warning("Kategroi silinemiyor. Sayfayı yenileyip yeniden deneyiniz.");
+                return;
+            }
+        },
+        beforeSend: function (e) {
+            //global.showLoader();
+        },
+        complete: function (result) {
+            console.log(result.responseJSON)
+          
+            if (result.responseJSON.isSuccess){
+                let id = $('#delete_object_id').val()
+
+                $('.handle_' + id).remove()
+
+                $('#delete-item-modal').modal('hide')
+                toastr.success(result.responseJSON.message)
+            }else{
+                toastr.error(result.responseJSON.message)
+            }
+            //global.hideLoader()
+        }
+    })
+
+    $('#categories_sequence_update_form').ajaxForm({
+        beforeSubmit: function (arr) {
+            //global.showLoader()
+        },
+        beforeSend: function (e) {
+            //global.showLoader();
+        },
+        complete: function (result) {
+            console.log(result.responseJSON)
+
+            if (result.responseJSON.isSuccess) {
+                toastr.success(result.responseJSON.message);
+            }
+            else {
+                toastr.error(result.responseJSON.message)
+            }
+            //global.hideLoader()
+        },
+    })
+
+
+    
+
+</script>

@@ -1,0 +1,399 @@
+
+
+<link href="../assets/vendor/nestable2/css/jquery.nestable.min.css" rel="stylesheet">
+
+<style>
+    .edit-button, .delete-item{
+         height: 20px;
+         width: 20px;
+         padding: 0 !important;
+     }
+     .edit-button i, .delete-item i{
+        line-height: 0.5;
+         font-size: 10px;
+         margin: auto !important;
+    }
+    .delete-item i{
+     color: white;
+    }
+    .dd-item-btn-group{
+         float: right;
+    }
+ </style>
+
+<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+    <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+        <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Navigasyon<h1>
+            <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                <li class="breadcrumb-item text-muted">
+                    <a href="/admin" class="text-muted text-hover-primary">Anasayfa</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                </li>
+                <li class="breadcrumb-item text-muted">Tema</li>
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                </li>
+                <li class="breadcrumb-item text-muted">Navigasyon</li>
+            </ul>
+        </div>
+        <div class="d-flex align-items-center gap-2 gap-lg-3">
+            <button class="btn btn-primary btn-md" id="new_add_btn">Yeni Ekle</button>
+            <form action="/sequenceNavigationUpdateAjax" role="form" id="sequence_update_form"  method="post" style="display: inline-block;">
+                <input type="hidden" id="editable_list_sort" name="EditableJSONList" />
+                <button type="submit" class="btn btn-primary btn-md">Sıralamayı Güncelle</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div id="kt_app_content" class="app-content flex-column-fluid">
+    <div id="kt_app_content_container" class="app-container container-fluid">
+        <div class="card card-docs flex-row-fluid mb-2">
+            <div class="card-body fs-6 py-15 px-10 py-lg-15 px-lg-15 text-gray-700">
+
+                <div class="dd" id="nestable_list_editable">
+                    <ol class="dd-list">
+                        
+                        <% function nested(list, cssClass){ 
+                            list.forEach((item)=>{  %>
+                               
+                                <li class="dd-item <%= cssClass + '_' + item.id %>" data-name="<%= item.title %>" data-id="<%= item.id %>">
+                                    <div class="dd-<%= cssClass %> dd-container">
+
+                                        <span class="item-title"><%= item.title %></span>
+                                        <span class="dd-item-btn-group">
+                                            <a href="javascript:;" class="badge light badge-secondary edit-button"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <a href="javascript:;" class="badge light badge-danger delete-item"><i class="fa-solid fa-trash"></i></a>
+                                        </span>
+                                    </div>
+                                     
+                                      <%  if (item.hasOwnProperty('children')){ %>
+                                        <ol class="dd-list">
+                                            <%    nested(item.children, cssClass) %>
+                                        </ol>
+                                        <%  }  %>
+                                </li>
+                            <%
+                                 }) 
+                            } %>
+
+                           <%  nested(navigations, 'handle') %>
+                    </ol>
+                </div>
+
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="temp_navigations" style="display:none;"><%= JSON.stringify(tempNavigations) %></div>
+
+
+<div class="modal fade" tabindex="-1" id="update-item-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal">
+                    <span class="svg-icon svg-icon-2x"></span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <form action="/createOrUpdateNavAjax" id="navigation_update_form" method="post">
+
+                    <input type="hidden" id="update_navigation_id" name="id" value="">
+
+                    <div class="mb-10">
+                        <label class="required form-label">Başlık</label>
+                        <input type="text" id="title" name="title" class="form-control" />
+                    </div>
+                    
+                    <div class="mb-10">
+                        <label class="required form-label">Link</label>
+                        <input type="text" id="link" name="link" class="form-control" />
+                    </div>
+                    
+                    <div class="d-flex flex-column">
+                        <label for="" class="form-label">Açıklama</label>
+                        <textarea class="form-control form-control form-control-solid" id="description" name="description" data-kt-autosize="true"></textarea>
+                    </div>
+
+                      <div class="form-check form-switch form-check-custom form-check-solid my-10">
+                        <input class="form-check-input" type="checkbox" id="update_navigation_isActive" name="isActive" />
+                        <label class="form-check-label" for="is_active">
+                            Aktif
+                        </label>
+                    </div>
+
+                </form>
+
+            </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">VAZGEÇ</button>
+                <button type="button" class="btn btn-primary" onclick="submitUpdateNavigation()">KAYDET</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="delete-item-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Kategori Sil</h5>
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal">
+                    <span class="svg-icon svg-icon-2x"></span>
+                </div>
+                <!--end::Close-->
+            </div>
+            <div class="modal-body">
+
+                <form action="deleteNavigationAjax" role="form" id="item_delete_form" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="delete_item_id" />
+                        <p><strong id="delete_object_name"></strong> kategorisini silmek istediğinize emin misiniz?</p>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dark btn-outline" data-bs-dismiss="modal">VAZGEÇ</button>
+                        <button type="submit" class="btn btn-primary">EVET</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="../assets/vendor/nestable2/js/jquery.nestable.min.js"></script>
+<script src="../assets/global/plugins/jquery-form/jquery.form.js"></script>
+    
+<script>
+
+    let tempNavigations = $('#temp_navigations').text() == '' ? [] : JSON.parse($('#temp_navigations').text())
+
+    var updateOutput = function (e) {
+        var list = e.length ? e : $(e.target);
+        if (window.JSON) {
+            $('#editable_list_sort').val(window.JSON.stringify(list.nestable('serialize')));
+        } else {
+            alert("Tarayınız bu öğeyi desteklemiyor. Google Chrome veya Mozilla kullanınız.");
+            return;
+        }
+    };
+
+    $(document).ready(function () {
+
+        // activate Nestable for list 2
+        $('#nestable_list_editable').nestable({
+            maxDepth: 3
+        }).on('change', updateOutput);
+
+        // output initial serialised data
+        updateOutput($('#nestable_list_editable').data('output', $('#nestable_list_editable_output')));
+
+
+        $(".dd a").on("mousedown", function (event) { // mousedown prevent nestable click
+            event.preventDefault();
+            return false;
+        })
+
+        $('#nestable_list_editable').on('click', '.edit-button', function(){
+            const id = $(this).closest('.dd-item').data('id')
+            
+            let item = tempNavigations.find(el => el.id == id)
+            
+            $('#update_navigation_id').val(id)
+            $('#update-item-modal .modal-title').text(item.title)
+
+            $('#title').val(item.title)
+            $('#link').val(item.link)
+            $('#description').text(item.description)
+
+            if(item.isActive){
+                $('#update_navigation_isActive').prop('checked', true).trigger('change')
+            }else{
+                $('#update_navigation_isActive').prop('checked', false).trigger('change')
+            }
+
+            $("#update-item-modal").modal('show')
+            
+        })
+
+        $('#nestable_list_editable').on('click', '.delete-item', function(){
+            let id = $(this).closest('.dd-item').data('id')
+            let name = $(this).closest('.dd-item').data('name')
+
+            $('#delete_item_id').val(id)
+
+            $('#delete_object_name').text(name)
+            $('#delete-item-modal').modal('show')
+        })
+
+        $("#delete-item-modal").on("hidden.bs.modal", function () {
+            $('#delete_item_id').val('');
+            $('#object_name').text('');
+        })
+    })
+
+    $('#item_delete_form').ajaxForm({
+        beforeSubmit: function (arr) {
+            //global.showLoader()
+            let id = $('#delete_item_id').val()
+
+            if (id == null || id == 'null' || id == undefined || id == '') {
+                toastr.warning("Navigasyon silinemiyor. Sayfayı yenileyip yeniden deneyiniz.");
+                return;
+            }
+        },
+        beforeSend: function (e) {
+            //global.showLoader();
+        },
+        complete: function (result) {
+            console.log(result.responseJSON)
+          
+            if (result.responseJSON.isSuccess){
+                let id = $('#delete_item_id').val()
+
+                $('.handle_' + id).remove()
+
+                $('#delete-item-modal').modal('hide')
+                toastr.success(result.responseJSON.message)
+            }else{
+                toastr.error(result.responseJSON.message)
+            }
+            //global.hideLoader()
+        }
+    })
+
+    $('#sequence_update_form').ajaxForm({
+        beforeSubmit: function (arr) {
+            //global.showLoader()
+        },
+        beforeSend: function (e) {
+            //global.showLoader();
+        },
+        complete: function (result) {
+            console.log(result.responseJSON)
+            
+            if (result.responseJSON.isSuccess) {
+                toastr.success(result.responseJSON.message);
+            } else {
+                toastr.error(result.responseJSON.message)
+            }
+            //global.hideLoader()
+        }
+    })
+
+    $('#navigation_update_form').ajaxForm({
+        beforeSubmit: function (arr) {
+           // global.showLoader()
+        },
+        beforeSend: function (e) {
+           // global.showLoader();
+        },
+        complete: function (result) {
+            console.log(result.responseJSON)
+            
+            if (result.responseJSON.isSuccess) {
+
+                const id = $('#update_navigation_id').val()
+
+                // create
+                if(id == undefined || id == null || id == ""){
+
+                    let navigation = result.responseJSON.navigation
+              
+                    let createItem = {
+                        id: navigation.id,
+                        title: navigation.title,
+                        link: navigation.link,
+                        description: navigation.description,
+                        isActive: navigation.isActive
+                    }
+                    console.log('navigation.id')
+                    console.log(navigation.id)
+                    tempNavigations.push(createItem)
+
+                    let ddItem = `<li class="dd-item handle_${navigation.id}" data-name="${navigation.title}" data-id="${navigation.id}">
+                                    <div class="dd-handle dd-container">
+
+                                        <span class="item-title">${navigation.title}</span>
+                                        <span class="dd-item-btn-group">
+                                            <a href="javascript:;" class="badge light badge-secondary edit-button"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <a href="javascript:;" class="badge light badge-danger delete-item"><i class="fa-solid fa-trash"></i></a>
+                                        </span>
+                                    </div>
+                                </li>`
+
+                    $('#nestable_list_editable > .dd-list').append(ddItem)
+                    
+                // update
+                }else{
+                    let title = $('#title').val()
+                    let link = $('#link').val()
+                    let description = $('#description').text()
+                    let isActive = $('#update_navigation_isActive').prop('checked')
+
+                    let filteredArray =  tempNavigations.filter(el => el.id != id)
+                    let updatedItem = {
+                        id,
+                        title,
+                        link,
+                        description,
+                        isActive
+                    }
+                    tempNavigations = [...filteredArray, updatedItem]
+
+                    $('.handle_' + id + ' > .dd-handle > .item-title').text(title)
+                }
+
+                $(".dd a").on("mousedown", function (event) { // mousedown prevent nestable click
+                    event.preventDefault();
+                    return false;
+                })
+
+                $("#update-item-modal").modal('hide')
+
+                toastr.success(result.responseJSON.message);
+            }
+            else {
+                toastr.error(result.responseJSON.message)
+            }
+            
+            //global.hideLoader()
+        },
+    })
+
+    $('#update-item-modal').on('hidden.bs.modal', function () {
+        $('#title').val('')
+        $('#link').val('')
+        $('#description').val('')
+        $('#update_navigation_isActive').prop('checked', true).trigger('change')
+    })
+
+    $('#new_add_btn').on('click', function(){
+        $('#update_navigation_id').val('')
+        $('#title').val('')
+        $('#link').val('')
+        $('#description').val('')
+        $('#update_navigation_isActive').prop('checked', true).trigger('change')
+
+        $('#update-item-modal').modal('show')
+    })
+
+    function submitUpdateNavigation(){
+        $("#navigation_update_form").submit()
+    }
+
+    
+
+</script>
