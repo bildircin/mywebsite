@@ -178,18 +178,143 @@ const pages = async (req,res)=>{
 }
 
 const createOrUpdatePage = async (req,res)=>{
-    res.locals.title=""
-
+    
     const id = req.params.id
-
-    const page = await Page.findByPk(id, {
-        where:{
-            isDeleted:false
-        }
-    })
-
-    await res.render('page/createOrUpdatePage', {page})
+    
+    if(id == undefined || id == null || id == ""){
+        res.locals.title="Yeni Sayfa Ekle"
+        const page = Page.build()
+        await res.render('page/createOrUpdatePage', {page})
+    }else{
+        const page = await Page.findByPk(id, {
+            where:{
+                isDeleted:false
+            }
+        })
+        res.locals.title = page.title
+    
+        await res.render('page/createOrUpdatePage', {page})
+    }
 }
+
+const createOrUpdatePageAjax = async (req,res)=>{
+
+    const {id, title, url, seoKeywords, seoDescription, pageHeader, pageContent, dataSrcCoverUrl, isActive} = req.body
+
+    if (title == "" || title == null || title == undefined) {
+        return res.status(400).send({isSuccess:false, message: "Lütfen başlık giriniz"})
+    }
+    
+    /* create */
+    if(id == null || id == undefined || id == ""){
+        
+        const sameUrl = await Page.findOne({
+            where:{
+                url,
+                isDeleted:false
+            }
+        })
+        if (sameUrl) {
+            return res.send({isSuccess:false, message: "Bu sayfada url var. Lütfen farklı bir url giriniz"})
+        }
+        const t = await db.transaction()
+        try{
+            const tour = await Tour.create({
+                title,
+                sequence,
+                description,
+                day,
+                persons,
+                price,
+                startedAt,
+                finishedAt,
+                coverUrl: Object.keys(req.files).length > 0 && req.files.coverUrlFile && req.files.coverUrlFile[0] ? '/webUI/image/' + req.files.coverUrlFile[0].filename : null,
+                headImgUrl: Object.keys(req.files).length > 0 && req.files.headImgUrlFile && req.files.headImgUrlFile[0] ? '/webUI/image/' + req.files.headImgUrlFile[0].filename : null,
+                isActive:getCheckedBtn(isActive),
+                isDeleted:false,
+                createdAt:moment(),
+                updatedAt: moment()
+            }, { transaction: t })
+            
+            for (let i = 0; i < category.length; i++) {
+                const item = category[i];
+                await TourCategory.create({
+                    tourId:tour.id,
+                    categoryId:item
+                }, { transaction: t })
+            }
+            await t.commit()
+            await res.send({isSuccess:true, message:'Tur başarıyla eklendi'})
+        } catch(err){
+            console.log(err)
+            await t.rollback()
+            await res.send({isSuccess:false, message:'Bir hata oluştu'})
+        }
+        /* update */
+    }else{ 
+        const title = req.body.title.trim()
+        
+        const sameTour = await Tour.findOne({
+            where:{
+                title,
+                id:{
+                    [Op.ne]: id,
+                }
+            }
+        })
+
+        if (sameTour && id != sameTour.id) {
+            return res.status(400).send({isSuccess:false, message: "Bu başlıkta tur var. Lütfen farklı bir başlık giriniz"})
+        }
+        
+        try {
+            const result = await db.transaction(async (t) => {
+                const tour = await Tour.update({
+                    title,
+                    description,
+                    sequence,
+                    day,
+                    persons,
+                    price,
+                    startedAt,
+                    finishedAt,
+                    coverUrl: Object.keys(req.files).length > 0 && req.files.coverUrlFile && req.files.coverUrlFile[0] ? '/webUI/image/' + req.files.coverUrlFile[0].filename : (dataSrcCoverUrl ? dataSrcCoverUrl : null),
+                    headImgUrl: Object.keys(req.files).length > 0 && req.files.headImgUrlFile &&  req.files.headImgUrlFile[0] ? '/webUI/image/' + req.files.headImgUrlFile[0].filename : (dataSrcHeadImgUrl ? dataSrcHeadImgUrl : null),
+                    isActive:getCheckedBtn(isActive),
+                    updatedAt: moment()
+                }, {
+                    where:{
+                        id
+                    }
+                }, { transaction: t })
+    
+                await TourCategory.destroy({
+                    where:{
+                        tourId:id
+                    }
+                }, { transaction: t })
+    
+                for (let i = 0; i < category.length; i++) {
+                    const item = category[i];
+                    await TourCategory.create({
+                        tourId:id,
+                        categoryId:item
+                    }, { transaction: t })
+                }
+                return tour
+            })
+            await res.send({isSuccess:true, message:'Tur başarıyla güncellendi'})
+        } catch (err) {
+            console.log(err)
+            await res.send({isSuccess:false, message:'Bir hata oluştu'})
+        }
+    }
+   
+}
+
+
+
+
 
 
 function isChildren(item){
@@ -237,5 +362,6 @@ export default {
     createOrUpdateNavAjax,
     deleteNavigationAjax,
     pages,
-    createOrUpdatePage
+    createOrUpdatePage,
+    createOrUpdatePageAjax
 }

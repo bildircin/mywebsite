@@ -61,9 +61,9 @@
                         <div class="mb-10 border">
                             <label class="form-label">Header</label>
                             <div id="toolbar_container_header"></div>
-                            <div id="page_header">
+                            <textarea id="page_header" name="pageHeader">
                                 
-                            </div>
+                            </textarea>
     
                             <div class="d-none" id="page_header_hidden">
                                 <%= page.header %>
@@ -72,9 +72,9 @@
                         <div class="mb-10 border">
                             <label class="form-label">Content</label>
                             <div id="toolbar_container_content"></div>
-                            <div id="page_content">
+                            <textarea id="page_content" name="pageContent">
                                 
-                            </div>
+                            </textarea>
     
                             <div class="d-none" id="page_content_hidden">
                                 <%= page.content %>
@@ -126,19 +126,9 @@
 
     <script src="../assets/global/plugins/jquery-form/jquery.form.js"></script>
     <script src="../assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js" type="text/javascript"></script>
-    <!-- <script src="../assets/plugins/custom/ckeditor/ckeditor-document.bundle.js"></script> -->
-   
-   
-    <script type="module" src="../main.js">
-        import SourceEditing  from '../main.js';
-    
-    </script>
-
+    <script src="../assets/plugins/custom/ckeditor/ckeditor-document.bundle.js"></script>
     
 <script>
-
-    //const SourceEditing = require('@ckeditor/ckeditor5-source-editing/src/sourceediting')
-    
     $(document).ready(function(){
         $('#day, #sequence, #persons').inputmask({
             mask: '9',
@@ -162,8 +152,7 @@
 
         DecoupledEditor
             .create(document.querySelector('#page_content'), {
-        plugins: [ SourceEditing],
-        toolbar: [ 'sourceEditing']
+        //plugins: [ SourceEditing]
     })
             .then(editor => {
                 const toolbarContainer = document.querySelector( '#toolbar_container_content' );
@@ -193,27 +182,9 @@
         },
         beforeSend: function (e) {
 
-            if ($('#category').val() == "") {
-                toastr.warning("Kategori seçiniz");
-                $('#category').focus();
-                //global.hideLoader()
-                return false;
-            }
             if ($('#title').val() == "") {
                 toastr.warning("Başlık giriniz");
                 $('#title').focus();
-                //global.hideLoader()
-                return false;
-            }
-            if ($('#started_at').val() == "") {
-                toastr.warning("Başlama tarihi giriniz");
-                $('#started_at').focus();
-                //global.hideLoader()
-                return false;
-            }
-            if ($('#finished_at').val() == "") {
-                toastr.warning("Bitiş tarihi giriniz");
-                $('#finished_at').focus();
                 //global.hideLoader()
                 return false;
             }
