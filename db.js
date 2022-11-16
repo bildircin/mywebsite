@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize')
+import Sequelize from 'sequelize'
 // const db = new Sequelize('SimpleDataDB', 'IAmSimpleDataDBUser', 'Nneq69?56', {
 //     host:"185.86.155.130",
 //     dialect:"mssql",
@@ -16,4 +16,4 @@ const db = new Sequelize('VideoDataDB', 'root', '12345678', {
 })
 
 
-module.exports = db;
+export default db;

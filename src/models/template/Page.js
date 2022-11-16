@@ -1,5 +1,5 @@
-const Sequelize = require('sequelize')
-const db = require('../../../db')
+import Sequelize from 'sequelize'
+import db from '../../../db.js'
 
 const Page = db.define('Page', {
     id:{
@@ -56,4 +56,4 @@ const Page = db.define('Page', {
     through: 'VideoCategory' 
 }) */
 
-module.exports = Page
+export default Page

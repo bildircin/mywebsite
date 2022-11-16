@@ -1,5 +1,5 @@
-const Sequelize = require('sequelize')
-const db = require('../../../db')
+import Sequelize from 'sequelize'
+import db from '../../../db.js'
 
 const Tour = db.define('Tour', {
     id:{
@@ -75,4 +75,4 @@ const Tour = db.define('Tour', {
     through: 'VideoCategory' 
 }) */
 
-module.exports = Tour
+export default Tour

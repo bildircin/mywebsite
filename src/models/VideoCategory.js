@@ -1,7 +1,7 @@
-const Sequelize = require('sequelize')
-const db = require('../../db')
-const Category = require('./Category')
-const Video = require('./Video')
+import Sequelize from 'sequelize'
+import db from '../../db.js'
+import Category from './Category.js'
+import Video from './Video.js'
 
 const VideoCategory = db.define('VideoCategory', {
     id:{
@@ -37,4 +37,4 @@ const VideoCategory = db.define('VideoCategory', {
     tableName: 'videosCategories'
 })
 
-module.exports = VideoCategory
+export default VideoCategory

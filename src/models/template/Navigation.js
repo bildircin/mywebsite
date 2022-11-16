@@ -1,5 +1,5 @@
-const Sequelize = require('sequelize')
-const db = require('../../../db')
+import Sequelize from  'sequelize'
+import db  from '../../../db.js'
 
 const Navigation = db.define('Navigation', {
     id:{
@@ -51,4 +51,4 @@ const Navigation = db.define('Navigation', {
 })
 
 
-module.exports = Navigation
+export default Navigation

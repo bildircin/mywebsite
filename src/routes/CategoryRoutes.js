@@ -1,6 +1,6 @@
-const express = require('express')
+import express from 'express'
 const router = express.Router()
-const categoryController = require('../controllers/CategoryController')
+import categoryController from '../controllers/CategoryController.js'
 
 router.get('/kategoriler', categoryController.allCategories)
 router.get('/kategori-ekle', categoryController.addCategory)
@@ -12,4 +12,4 @@ router.post('/deleteCategoryAjax', categoryController.deleteCategoryAjax)
 router.get('/kategori-siralama', categoryController.sequenceCategory)
 router.post('/seqenceCategoryUpdateAjax', categoryController.seqenceCategoryUpdateAjax)
 
-module.exports = router;
+export default router;

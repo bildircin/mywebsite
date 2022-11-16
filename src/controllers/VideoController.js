@@ -1,11 +1,11 @@
 import {Op} from "sequelize"
 import sequelize from "sequelize"
-import Video from '../models/Video'
-import Category from '../models/Category'
-import VideoCategory from '../models/VideoCategory'
+import Video from '../models/Video.js'
+import Category from '../models/Category.js'
+import VideoCategory from '../models/VideoCategory.js'
 import moment from 'moment'
-import db from '../../db'
-import { getCheckedBtn } from "../../globalFunctions"
+import db from '../../db.js'
+import { getCheckedBtn } from "../../globalFunctions.js"
 
 
 const allVideos = async (req,res)=>{
@@ -349,7 +349,7 @@ function adjustCategoryList(arr, id) {
 }
 
 
-module.exports = {
+export default {
     allVideos,
     addVideo,
     updateVideo,

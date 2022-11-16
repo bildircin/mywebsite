@@ -1,7 +1,7 @@
 import { Op } from "sequelize"
-import User from '../models/User'
+import User from '../models/User.js'
 import moment from 'moment'
-import { getCheckedBtn } from "../../globalFunctions"
+import { getCheckedBtn } from "../../globalFunctions.js"
 
 
 const allUsers = async (req,res)=>{
@@ -185,7 +185,7 @@ const deleteUserAjax = async (req,res)=>{
 
 
 
-module.exports = {
+export default {
     allUsers,
     addUser,
     updateUser,

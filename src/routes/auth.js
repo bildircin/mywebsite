@@ -1,11 +1,9 @@
-var express = require('express')
-var passport = require('passport')
-var LocalStrategy = require('passport-local')
-const User = require('../models/User')
-const LogUserSession = require('../models/log/LogUserSession')
-const bcrypt = require('bcryptjs')
-const db = require('../../db')
-
+import express from 'express'
+import passport from 'passport'
+import LocalStrategy from 'passport-local'
+import User from '../models/User.js'
+import LogUserSession from '../models/log/LogUserSession.js'
+import bcrypt from 'bcryptjs'
 
 var router = express.Router();
 
@@ -89,4 +87,4 @@ function setLogUserSession(userId, description, isSuccess, ipAddress){
   })
 }
 
-module.exports = router;
+export default router;

@@ -1,7 +1,7 @@
-const Sequelize = require('sequelize')
-const db = require('../../../db')
-const Category = require('../Category')
-const Tour = require('./Tour')
+import Sequelize from 'sequelize'
+import db from '../../../db.js'
+import Category from '../Category.js'
+import Tour from './Tour.js'
 
 const TourCategory = db.define('TourCategory', {
     id:{
@@ -37,4 +37,4 @@ const TourCategory = db.define('TourCategory', {
     tableName: 'toursCategories'
 })
 
-module.exports = TourCategory
+export default TourCategory

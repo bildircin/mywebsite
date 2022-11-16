@@ -1,8 +1,8 @@
 import { Op }  from "sequelize"
-import Category  from '../models/Category'
+import Category  from '../models/Category.js'
 import moment  from 'moment'
-import db  from '../../db'
-import { getCheckedBtn }  from "../../globalFunctions"
+import db  from '../../db.js'
+import { getCheckedBtn }  from "../../globalFunctions.js"
 
 
 
@@ -293,7 +293,7 @@ function deserializeList(arr, id) {
     return result
 }
 
-module.exports = {
+export default {
     allCategories,
     addCategory,
     updateCategory,

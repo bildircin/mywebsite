@@ -1,7 +1,7 @@
-const express = require('express')
+import express from 'express'
 const router = express.Router()
-const path = require('path')
-const multer  = require('multer')
+import multer  from 'multer'
+import tourController from '../controllers/TourController.js'
 
 const storage = multer.diskStorage({
     destination:(req, file, cb)=>{
@@ -13,10 +13,9 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({storage:storage})
-const tourController = require('../controllers/TourController')
 
 router.get('/turlar', tourController.allTour)
 router.get('/tur-kaydet/:id?', tourController.createOrUpdateTour)
 router.post('/createOrUpdateTourAjax', upload.fields([{ name: 'coverUrlFile' }, { name: 'headImgUrlFile' }]), tourController.createOrUpdateTourAjax)
 
-module.exports = router;
+export default router;

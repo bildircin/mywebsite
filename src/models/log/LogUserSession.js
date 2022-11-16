@@ -1,5 +1,5 @@
-const Sequelize = require('sequelize')
-const db = require('../../../db')
+import Sequelize from 'sequelize'
+import db from '../../../db.js'
 
 const LogUserSession = db.define('LogUserSession', {
     id:{
@@ -35,4 +35,4 @@ const LogUserSession = db.define('LogUserSession', {
     through: 'VideoCategory' 
 }) */
 
-module.exports = LogUserSession
+export default LogUserSession

@@ -1,11 +1,10 @@
 import {Op} from "sequelize"
-import sequelize from "sequelize"
-import Tour from "../models/template/Tour"
-import Category from '../models/Category'
-import TourCategory from '../models/template/TourCategory'
+import Tour from "../models/template/Tour.js"
+import Category from '../models/Category.js'
+import TourCategory from '../models/template/TourCategory.js'
 import moment from 'moment'
-import db from '../../db'
-import { getCheckedBtn } from "../../globalFunctions"
+import db from '../../db.js'
+import { getCheckedBtn } from "../../globalFunctions.js"
 
 
 const allTour = async (req,res)=>{
@@ -525,7 +524,7 @@ function adjustCategoryList(arr, id) {
 }
 
 
-module.exports = {
+export default {
     allTour,
     createOrUpdateTour,
     createOrUpdateTourAjax,

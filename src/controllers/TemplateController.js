@@ -1,10 +1,10 @@
 import {Op} from "sequelize"
 import sequelize from "sequelize"
-import Navigation from '../models/template/Navigation'
-import Page from '../models/template/Page'
+import Navigation from '../models/template/Navigation.js'
+import Page from '../models/template/Page.js'
 import moment from 'moment'
-import db from '../../db'
-import { getCheckedBtn, deserializeList } from "../../globalFunctions"
+import db from '../../db.js'
+import { getCheckedBtn, deserializeList } from "../../globalFunctions.js"
 
 
 // navigation
@@ -231,7 +231,7 @@ function getIdsSubcategories(arr, list){
 }
 
 
-module.exports = {
+export default {
     navigations,
     sequenceNavigationUpdateAjax,
     createOrUpdateNavAjax,

@@ -1,6 +1,6 @@
-const express = require('express')
+import express from 'express'
 const router = express.Router()
-const userController = require('../controllers/UserController')
+import userController from '../controllers/UserController.js'
 
 //router.get('/', userController.allUsers)
 router.get('/kullanicilar', userController.allUsers)
@@ -11,4 +11,4 @@ router.post('/updateUserAjax', userController.updateUserAjax)
 router.post('/deleteUserAjax', userController.deleteUserAjax)
 
 
-module.exports = router;
+export default router;

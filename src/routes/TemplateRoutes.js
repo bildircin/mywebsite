@@ -1,7 +1,7 @@
-const express = require('express')
+import express from 'express'
 const router = express.Router()
-const path = require('path')
-const templateController = require('../controllers/TemplateController')
+import path from 'path'
+import templateController from '../controllers/TemplateController.js'
 
 router.get('/navigasyonlar', templateController.navigations)
 router.post('/sequenceNavigationUpdateAjax', templateController.sequenceNavigationUpdateAjax)
@@ -17,4 +17,4 @@ router.get('/sayfa-kaydet/:id?', templateController.createOrUpdatePage)
 
 
 
-module.exports = router;
+export default router;

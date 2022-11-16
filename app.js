@@ -10,7 +10,7 @@ import i18next from 'i18next'
 import Backend from 'i18next-fs-backend'
 import middleware from 'i18next-http-middleware'
 import fs from 'fs'
-import Page from './src/models/template/Page'
+//import Page from './src/models/template/Page.js'
 
 
 i18next.use(Backend).use(middleware.LanguageDetector).init({
@@ -54,12 +54,12 @@ app.locals.moment = moment;
 app.locals.shortDateFormat = shortDateFormat;
 app.locals.datatableViewDateFormat = "YYYY.MM.DD";
 
-const userRoutes = require('./src/routes/UserRoutes.js')
-const categoryRoutes = require('./src/routes/CategoryRoutes.js')
-const videoRoutes = require('./src/routes/VideoRoutes.js') 
-const tourRoutes = require('./src/routes/TourRoutes.js') 
-const templateRoutes = require('./src/routes/TemplateRoutes')
-const authRouter = require('./src/routes/auth')
+import userRoutes from './src/routes/UserRoutes.js'
+import categoryRoutes from './src/routes/CategoryRoutes.js'
+import videoRoutes from './src/routes/VideoRoutes.js'
+import tourRoutes from './src/routes/TourRoutes.js'
+import templateRoutes from './src/routes/TemplateRoutes.js'
+import authRouter from './src/routes/auth.js'
 
 app.use('/', authRouter)
 
@@ -68,7 +68,7 @@ app.get('/', (req, res)=>{
     res.render('webUI/home', {layout:'webUI/layout'})
 })
 
-
+/* 
 app.use(async (req,res,next)=>{
     const url = req.originalUrl
     let page = await getPages(url)
@@ -89,7 +89,7 @@ async function getPages(url){
     })
 }
 
-
+ */
 
 
 

@@ -63,7 +63,7 @@ function deserializeList(arr, id) {
     return result
 }
 
-module.exports = {
+export {
     getCheckedBtn,
     bundleTogetherCategory,
     deserializeList

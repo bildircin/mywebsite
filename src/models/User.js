@@ -1,7 +1,8 @@
-const Sequelize = require('sequelize')
-const db = require('../../db')
+import Sequelize from 'sequelize'
+import db from '../../db.js'
 
-module.exports = db.define('User', {
+
+export default db.define('User', {
     id:{
         type:Sequelize.INTEGER,
         allowNull:false,
