@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize'
 import db from '../../../db.js'
 
-const Page = db.define('Page', {
+export default db.define('Page', {
     id:{
         type:Sequelize.INTEGER,
         allowNull:false,
@@ -56,4 +56,3 @@ const Page = db.define('Page', {
     through: 'VideoCategory' 
 }) */
 
-export default Page

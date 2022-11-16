@@ -126,15 +126,18 @@
 
     <script src="../assets/global/plugins/jquery-form/jquery.form.js"></script>
     <script src="../assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js" type="text/javascript"></script>
-    <script src="../assets/plugins/custom/ckeditor/ckeditor-document.bundle.js"></script>
+    <!-- <script src="../assets/plugins/custom/ckeditor/ckeditor-document.bundle.js"></script> -->
    
    
-   <!-- <script type="module" src='/@ckeditor/ckeditor5-source-editing/src/sourceediting'></script> -->
-<script>
+    <script type="module" src="../main.js">
+        import SourceEditing  from '../main.js';
     
-    //import SourceEditing  from './@ckeditor/ckeditor5-source-editing/src/sourceediting';
+    </script>
 
-    const SourceEditing = require('@ckeditor/ckeditor5-source-editing/src/sourceediting')
+    
+<script>
+
+    //const SourceEditing = require('@ckeditor/ckeditor5-source-editing/src/sourceediting')
     
     $(document).ready(function(){
         $('#day, #sequence, #persons').inputmask({
