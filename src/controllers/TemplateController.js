@@ -219,17 +219,14 @@ const createOrUpdatePageAjax = async (req,res)=>{
         }
         const t = await db.transaction()
         try{
-            const tour = await Tour.create({
+            const page = await Page.create({
                 title,
-                sequence,
-                description,
-                day,
-                persons,
-                price,
-                startedAt,
-                finishedAt,
+                url,
+                seoKeywords,
+                seoDescription,
+                pageHeader,
+                pageContent,
                 coverUrl: Object.keys(req.files).length > 0 && req.files.coverUrlFile && req.files.coverUrlFile[0] ? '/webUI/image/' + req.files.coverUrlFile[0].filename : null,
-                headImgUrl: Object.keys(req.files).length > 0 && req.files.headImgUrlFile && req.files.headImgUrlFile[0] ? '/webUI/image/' + req.files.headImgUrlFile[0].filename : null,
                 isActive:getCheckedBtn(isActive),
                 isDeleted:false,
                 createdAt:moment(),
