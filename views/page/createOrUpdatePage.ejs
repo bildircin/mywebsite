@@ -61,23 +61,23 @@
                         <div class="mb-10 border">
                             <label class="form-label">Header</label>
                             <div id="toolbar_container_header"></div>
-                            <textarea id="page_header" name="pageHeader">
-                                
+                            <textarea id="page_header" name="pageHeader" class="tox-target">
+                                <%= page.pageHeader %>
                             </textarea>
     
                             <div class="d-none" id="page_header_hidden">
-                                <%= page.header %>
+                                
                             </div>
                         </div>
                         <div class="mb-10 border">
                             <label class="form-label">Content</label>
                             <div id="toolbar_container_content"></div>
                             <textarea id="page_content" name="pageContent">
-                                
+                                <%= page.pageContent %>
                             </textarea>
     
                             <div class="d-none" id="page_content_hidden">
-                                <%= page.content %>
+                                
                             </div>
                         </div>
 
@@ -126,10 +126,9 @@
 
     <script src="../assets/global/plugins/jquery-form/jquery.form.js"></script>
     <script src="../assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js" type="text/javascript"></script>
-    <script src="../assets/plugins/custom/ckeditor/ckeditor-classic.bundle.js"></script>
+    <script src="../assets/plugins/custom/tinymce/tinymce.bundle.js"></script>
     
 <script>
-    let headerEditor, contentEditor;
     $(document).ready(function(){
         $('#day, #sequence, #persons').inputmask({
             mask: '9',
@@ -151,44 +150,33 @@
 
         $("#started_at, #finished_at").flatpickr();
 
-        ClassicEditor
-            .create(document.querySelector('#page_content'))
-            .then(editor => {
-                const toolbarContainer = document.querySelector( '#toolbar_container_content' );
-                toolbarContainer.appendChild( editor.ui.view.toolbar.element );
-                editor.setData( document.getElementById('page_content_hidden').innerText );
-
-                contentEditor = editor
-            })
-            .catch(error => {
-                console.error(error);
-            });
-            ClassicEditor
-            .create(document.querySelector('#page_header'))
-            .then(editor => {
-                const toolbarContainer = document.querySelector( '#toolbar_container_header' );
-                toolbarContainer.appendChild( editor.ui.view.toolbar.element );
-                editor.setData( document.getElementById('page_header_hidden').innerText );
-
-                headerEditor = editor
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        tinymce.init({
+            selector: "#page_header",
+            height:'480',
+            plugins: "code",
+            setup: function (editor) {
+                editor.on('change', function () {
+                    editor.save();
+                });
+            }
+        })
+        tinymce.init({
+            selector: "#page_content",
+            height:'480',
+            plugins: "code",
+            setup: function (editor) {
+                editor.on('change', function () {
+                    editor.save();
+                });
+            }
+        })
     })
 
-    function updateAllMessageForms(editor){
-         for (instance in editor.instances) {
-            editor.instances[instance].updateElement();
-         }
-    }
- 
     $('#item_save_form').ajaxForm({
         beforeSubmit: function (arr) {
             //global.showLoader()
             $('#save_btn').attr("data-kt-indicator", "on")
             $('#save_btn').attr("disabled", "disabled")
-
         },
         beforeSend: function (e) {
 
@@ -198,8 +186,6 @@
                 //global.hideLoader()
                 return false;
             }
-
-
         },
         complete: function (result) {
             //global.hideLoader();

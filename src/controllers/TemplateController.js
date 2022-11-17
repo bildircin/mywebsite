@@ -1,11 +1,42 @@
 import {Op} from "sequelize"
-import sequelize from "sequelize"
 import Navigation from '../models/template/Navigation.js'
 import Page from '../models/template/Page.js'
 import moment from 'moment'
 import db from '../../db.js'
 import { getCheckedBtn, deserializeList } from "../../globalFunctions.js"
 
+let adminNavigations = [
+    '/',
+    '/login',
+    '/logout',
+    //categories
+    '/kategoriler',
+    '/kategori-ekle',
+    '/kategori-guncelle',
+    '/updateCategoryAjax',
+    '/deleteCategoryAjax',
+    '/kategori-siralama',
+    '/seqenceCategoryUpdateAjax',
+    //tempalte
+    '/navigasyonlar',
+    '/sequenceNavigationUpdateAjax',
+    '/createOrUpdateNavAjax',
+    '/deleteNavigationAjax',
+    '/sayfalar',
+    '/sayfa-kaydet',
+    '/createOrUpdatePageAjax',
+    //tours
+    '/turlar',
+    '/tur-kaydet',
+    '/createOrUpdateTourAjax',
+    //users
+    '/kullanicilar',
+    '/kullanici-ekle',
+    '/kullanici-guncelle',
+    '/addUserAjax',
+    '/updateUserAjax',
+    '/deleteUserAjax'
+]
 
 // navigation
 const navigations = async (req,res)=>{
@@ -91,7 +122,23 @@ const sequenceNavigationUpdateAjax = async (req,res)=>{
 
 const createOrUpdateNavAjax = async (req,res)=>{
     
-    const {id ,title, link, description, isActive } = req.body
+    const {id, description, isActive } = req.body
+    let title = req.body.title
+    let link = req.body.link
+    
+    if (title == "" || title == null || title == undefined || title.trim() == "") {
+        return res.status(400).send({isSuccess:false, message: "Lütfen başlık giriniz"})
+    }
+    if (link == "" || link == null || link == undefined || link.trim() == "") {
+        return res.status(400).send({isSuccess:false, message: "Lütfen link giriniz"})
+    }
+    title = title.trim()
+    link = link.trim()
+
+    let isAdminUrl = adminNavigations.find(el => el == link)
+    if (isAdminUrl) {
+        return res.send({isSuccess:false, message: "Bu link admin tarafından kullanılıyor. Lütfen farklı bir link giriniz"})
+    }
 
     const t = await db.transaction()
     try {
@@ -191,7 +238,7 @@ const createOrUpdatePage = async (req,res)=>{
                 isDeleted:false
             }
         })
-        res.locals.title = page.title
+        res.locals.title = page.title + ' Güncelleme'
     
         await res.render('page/createOrUpdatePage', {page})
     }
@@ -200,8 +247,8 @@ const createOrUpdatePage = async (req,res)=>{
 const createOrUpdatePageAjax = async (req,res)=>{
 
     const {id, seoKeywords, seoDescription, pageHeader, pageContent, dataSrcCoverUrl, isActive} = req.body
-    const title = req.body.title
-    const url = req.body.url
+    let title = req.body.title
+    let url = req.body.url
     
     if (title == "" || title == null || title == undefined || title.trim() == "") {
         return res.status(400).send({isSuccess:false, message: "Lütfen başlık giriniz"})
@@ -209,10 +256,16 @@ const createOrUpdatePageAjax = async (req,res)=>{
     if (url == "" || url == null || url == undefined || url.trim() == "") {
         return res.status(400).send({isSuccess:false, message: "Lütfen url giriniz"})
     }
-    
+    title = title.trim()
+    url = url.trim()
+
+    let isAdminUrl = adminNavigations.find(el => el == url)
+    if (isAdminUrl) {
+        return res.send({isSuccess:false, message: "Bu url admin tarafından kullanılıyor. Lütfen farklı bir url giriniz"})
+    }
     /* create */
     if(id == null || id == undefined || id == ""){
-        
+
         const samePage = await Page.findOne({
             where:{
                 url,
@@ -289,6 +342,8 @@ const createOrUpdatePageAjax = async (req,res)=>{
     }
    
 }
+
+
 
 
 

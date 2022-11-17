@@ -10,7 +10,7 @@ import i18next from 'i18next'
 import Backend from 'i18next-fs-backend'
 import middleware from 'i18next-http-middleware'
 import fs from 'fs'
-//import Page from './src/models/template/Page.js'
+import Page from './src/models/template/Page.js'
 
 
 i18next.use(Backend).use(middleware.LanguageDetector).init({
@@ -68,13 +68,13 @@ app.get('/', (req, res)=>{
     res.render('webUI/home', {layout:'webUI/layout'})
 })
 
-/* 
+
 app.use(async (req,res,next)=>{
     const url = req.originalUrl
     let page = await getPages(url)
 
     if(page){
-        res.render('webUI/content', {layout:'webUI/layout', header:page.header, content:page.content})
+        res.render('webUI/content', {layout:'webUI/layout', header:page.pageHeader, content:page.pageContent})
     }else{
         next()
     }
@@ -89,7 +89,7 @@ async function getPages(url){
     })
 }
 
- */
+
 
 
 
