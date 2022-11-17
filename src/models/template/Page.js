@@ -14,10 +14,10 @@ export default db.define('Page', {
     url:{
         type:Sequelize.STRING
     },
-    header:{
+    pageHeader:{
         type:Sequelize.TEXT('long')
     },
-    content:{
+    pageContent:{
         type:Sequelize.TEXT('long')
     },
     seoKeywords:{

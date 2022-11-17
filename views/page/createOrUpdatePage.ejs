@@ -126,9 +126,10 @@
 
     <script src="../assets/global/plugins/jquery-form/jquery.form.js"></script>
     <script src="../assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js" type="text/javascript"></script>
-    <script src="../assets/plugins/custom/ckeditor/ckeditor-document.bundle.js"></script>
+    <script src="../assets/plugins/custom/ckeditor/ckeditor-classic.bundle.js"></script>
     
 <script>
+    let headerEditor, contentEditor;
     $(document).ready(function(){
         $('#day, #sequence, #persons').inputmask({
             mask: '9',
@@ -150,35 +151,44 @@
 
         $("#started_at, #finished_at").flatpickr();
 
-        DecoupledEditor
-            .create(document.querySelector('#page_content'), {
-        //plugins: [ SourceEditing]
-    })
+        ClassicEditor
+            .create(document.querySelector('#page_content'))
             .then(editor => {
                 const toolbarContainer = document.querySelector( '#toolbar_container_content' );
                 toolbarContainer.appendChild( editor.ui.view.toolbar.element );
                 editor.setData( document.getElementById('page_content_hidden').innerText );
+
+                contentEditor = editor
             })
             .catch(error => {
                 console.error(error);
             });
-        DecoupledEditor
+            ClassicEditor
             .create(document.querySelector('#page_header'))
             .then(editor => {
                 const toolbarContainer = document.querySelector( '#toolbar_container_header' );
                 toolbarContainer.appendChild( editor.ui.view.toolbar.element );
                 editor.setData( document.getElementById('page_header_hidden').innerText );
+
+                headerEditor = editor
             })
             .catch(error => {
                 console.error(error);
             });
     })
+
+    function updateAllMessageForms(editor){
+         for (instance in editor.instances) {
+            editor.instances[instance].updateElement();
+         }
+    }
  
     $('#item_save_form').ajaxForm({
         beforeSubmit: function (arr) {
             //global.showLoader()
             $('#save_btn').attr("data-kt-indicator", "on")
             $('#save_btn').attr("disabled", "disabled")
+
         },
         beforeSend: function (e) {
 
@@ -188,6 +198,8 @@
                 //global.hideLoader()
                 return false;
             }
+
+
         },
         complete: function (result) {
             //global.hideLoader();

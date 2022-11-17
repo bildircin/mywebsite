@@ -199,22 +199,27 @@ const createOrUpdatePage = async (req,res)=>{
 
 const createOrUpdatePageAjax = async (req,res)=>{
 
-    const {id, title, url, seoKeywords, seoDescription, pageHeader, pageContent, dataSrcCoverUrl, isActive} = req.body
-
-    if (title == "" || title == null || title == undefined) {
+    const {id, seoKeywords, seoDescription, pageHeader, pageContent, dataSrcCoverUrl, isActive} = req.body
+    const title = req.body.title
+    const url = req.body.url
+    
+    if (title == "" || title == null || title == undefined || title.trim() == "") {
         return res.status(400).send({isSuccess:false, message: "Lütfen başlık giriniz"})
+    }
+    if (url == "" || url == null || url == undefined || url.trim() == "") {
+        return res.status(400).send({isSuccess:false, message: "Lütfen url giriniz"})
     }
     
     /* create */
     if(id == null || id == undefined || id == ""){
         
-        const sameUrl = await Page.findOne({
+        const samePage = await Page.findOne({
             where:{
                 url,
                 isDeleted:false
             }
         })
-        if (sameUrl) {
+        if (samePage) {
             return res.send({isSuccess:false, message: "Bu sayfada url var. Lütfen farklı bir url giriniz"})
         }
         const t = await db.transaction()
@@ -233,15 +238,8 @@ const createOrUpdatePageAjax = async (req,res)=>{
                 updatedAt: moment()
             }, { transaction: t })
             
-            for (let i = 0; i < category.length; i++) {
-                const item = category[i];
-                await TourCategory.create({
-                    tourId:tour.id,
-                    categoryId:item
-                }, { transaction: t })
-            }
             await t.commit()
-            await res.send({isSuccess:true, message:'Tur başarıyla eklendi'})
+            await res.send({isSuccess:true, message:'Sayfa başarıyla eklendi'})
         } catch(err){
             console.log(err)
             await t.rollback()
@@ -249,34 +247,30 @@ const createOrUpdatePageAjax = async (req,res)=>{
         }
         /* update */
     }else{ 
-        const title = req.body.title.trim()
-        
-        const sameTour = await Tour.findOne({
+        const samePage = await Page.findOne({
             where:{
-                title,
+                url,
                 id:{
                     [Op.ne]: id,
-                }
+                },
+                isDeleted:false
             }
         })
 
-        if (sameTour && id != sameTour.id) {
-            return res.status(400).send({isSuccess:false, message: "Bu başlıkta tur var. Lütfen farklı bir başlık giriniz"})
+        if (samePage && id != samePage.id) {
+            return res.status(400).send({isSuccess:false, message: "Bu url ile sayfa var. Lütfen farklı bir url giriniz"})
         }
         
         try {
             const result = await db.transaction(async (t) => {
-                const tour = await Tour.update({
+                const page = await Page.update({
                     title,
-                    description,
-                    sequence,
-                    day,
-                    persons,
-                    price,
-                    startedAt,
-                    finishedAt,
+                    url,
+                    seoKeywords,
+                    seoDescription,
+                    pageHeader,
+                    pageContent,
                     coverUrl: Object.keys(req.files).length > 0 && req.files.coverUrlFile && req.files.coverUrlFile[0] ? '/webUI/image/' + req.files.coverUrlFile[0].filename : (dataSrcCoverUrl ? dataSrcCoverUrl : null),
-                    headImgUrl: Object.keys(req.files).length > 0 && req.files.headImgUrlFile &&  req.files.headImgUrlFile[0] ? '/webUI/image/' + req.files.headImgUrlFile[0].filename : (dataSrcHeadImgUrl ? dataSrcHeadImgUrl : null),
                     isActive:getCheckedBtn(isActive),
                     updatedAt: moment()
                 }, {
@@ -285,22 +279,9 @@ const createOrUpdatePageAjax = async (req,res)=>{
                     }
                 }, { transaction: t })
     
-                await TourCategory.destroy({
-                    where:{
-                        tourId:id
-                    }
-                }, { transaction: t })
-    
-                for (let i = 0; i < category.length; i++) {
-                    const item = category[i];
-                    await TourCategory.create({
-                        tourId:id,
-                        categoryId:item
-                    }, { transaction: t })
-                }
-                return tour
+                return page
             })
-            await res.send({isSuccess:true, message:'Tur başarıyla güncellendi'})
+            await res.send({isSuccess:true, message:'Sayfa başarıyla güncellendi'})
         } catch (err) {
             console.log(err)
             await res.send({isSuccess:false, message:'Bir hata oluştu'})

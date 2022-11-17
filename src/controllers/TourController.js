@@ -79,7 +79,7 @@ const createOrUpdateTourAjax = async (req,res)=>{
     if(category == undefined || category == null || category == ""){
         return res.status(400).send({isSuccess:false, message: "Lütfen kategori seçiniz"})
     }
-    if (title == "" || title == null || title == undefined) {
+    if (title == "" || title == null || title == undefined || title.trim() == "") {
         return res.status(400).send({isSuccess:false, message: "Lütfen başlık giriniz"})
     }
     
@@ -137,7 +137,8 @@ const createOrUpdateTourAjax = async (req,res)=>{
                 title,
                 id:{
                     [Op.ne]: id,
-                }
+                },
+                isDeleted:false
             }
         })
 
