@@ -5,11 +5,9 @@ import cookieParser from "cookie-parser"
 import session from 'express-session'
 import passport from 'passport'
 import flash from 'connect-flash'
-import path from 'path'
 import i18next from 'i18next'
 import Backend from 'i18next-fs-backend'
 import middleware from 'i18next-http-middleware'
-import fs from 'fs'
 import Page from './src/models/template/Page.js'
 
 
@@ -95,13 +93,11 @@ async function getPages(url){
 
 
 app.get('*', (req,res, next)=>{
-    console.log('GİRİŞ YAPTI')
 
     if(req.isAuthenticated()){
         app.locals.username = req.user.name
         next()
     }else{
-    console.log('GİRİŞ YAPMADI')
 
         res.redirect('/login')
         app.locals.user = {}
