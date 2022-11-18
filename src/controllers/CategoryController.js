@@ -54,15 +54,17 @@ const updateCategory = async (req,res)=>{
 
 const addCategoryAjax = async (req,res)=>{
     
-    const name = req.body.name.trim()
+    let name = req.body.name
 
-    if (name == "" || name == null || name == undefined) {
+    if (name == "" || name == null || name == undefined || name.trim() == "") {
         return res.status(400).send({isSuccess:false, message: "Lütfen isim giriniz"})
     }
+    name = name.trim()
 
     const sameCategory = await Category.findOne({
         where:{
-            name
+            name,
+            isDeleted:false
         }
     })
 
@@ -84,24 +86,25 @@ const addCategoryAjax = async (req,res)=>{
 
 const updateCategoryAjax = async (req,res)=>{
     
-    const id = req.body.id
-    const name = req.body.name.trim()
-    const isActive = req.body.isActive
+    const {id, isActive} = req.body.id
+    let name = req.body.name
    
-    if (name == "" || name == null || name == undefined) {
+    if (name == "" || name == null || name == undefined || name.tirm() == "") {
         return res.status(400).send({isSuccess:false, message: "Lütfen isim giriniz"})
     }
+    name = name.trim()
     
-    const isCategoryName = await Category.findOne({
+    const sameCategory = await Category.findOne({
         where:{
             name,
+            isDeleted:false,
             id:{
                 [Op.ne]: id,
             }
         }
     })
 
-    if (isCategoryName) {
+    if (sameCategory) {
         return res.status(400).send({isSuccess:false, message: "Bu isimde kategori var. Lütfen farklı bir isim giriniz"})
     }
 

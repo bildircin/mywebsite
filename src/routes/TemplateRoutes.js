@@ -3,6 +3,13 @@ const router = express.Router()
 import templateController from '../controllers/TemplateController.js'
 import multer  from 'multer'
 
+const whitelist = [
+    'image/png',
+    'image/jpeg',
+    'image/jpg',
+    'image/webp'
+]
+
 const storage = multer.diskStorage({
     destination:(req, file, cb)=>{
         cb(null, 'public/webUI/image')
@@ -12,7 +19,14 @@ const storage = multer.diskStorage({
     }
 })
 
-const upload = multer({storage:storage})
+const fileFilter = (req, file, cb) => {
+    if (!whitelist.includes(file.mimetype)) {
+      //return cb(new Error('file is not allowed'))
+      cb(null, false)
+    }
+}
+
+const upload = multer({storage:storage, fileFilter:fileFilter})
 
 router.get('/navigasyonlar', templateController.navigations)
 router.post('/sequenceNavigationUpdateAjax', templateController.sequenceNavigationUpdateAjax)

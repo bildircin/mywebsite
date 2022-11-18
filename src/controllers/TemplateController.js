@@ -4,6 +4,7 @@ import Page from '../models/template/Page.js'
 import moment from 'moment'
 import db from '../../db.js'
 import { getCheckedBtn, deserializeList } from "../../globalFunctions.js"
+import {fileTypeFromStream} from 'file-type'
 
 let adminNavigations = [
     '/',
@@ -263,6 +264,13 @@ const createOrUpdatePageAjax = async (req,res)=>{
     if (isAdminUrl) {
         return res.send({isSuccess:false, message: "Bu url admin tarafından kullanılıyor. Lütfen farklı bir url giriniz"})
     }
+
+    //onst meta = await fileTypeFromStream(req.files)
+    console.log('meta.mime')
+    console.log('req.files')
+    console.log(JSON.stringify(req.files))
+    //console.log(meta.ext)
+
     /* create */
     if(id == null || id == undefined || id == ""){
 
