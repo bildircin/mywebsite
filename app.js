@@ -9,7 +9,7 @@ import i18next from 'i18next'
 import Backend from 'i18next-fs-backend'
 import middleware from 'i18next-http-middleware'
 import Page from './src/models/template/Page.js'
-
+import fileUpload from 'express-fileupload'
 
 i18next.use(Backend).use(middleware.LanguageDetector).init({
     fallbackLng:'en',
@@ -44,6 +44,7 @@ app.set("layout extractStyles", true)
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(flash())
+app.use(fileUpload());
 
 
 // moment locals add

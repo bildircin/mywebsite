@@ -1,7 +1,6 @@
 import express from 'express'
 const router = express.Router()
 import templateController from '../controllers/TemplateController.js'
-import multer  from 'multer'
 
 
 
