@@ -239,6 +239,7 @@ const createOrUpdatePage = async (req,res)=>{
     if(id == undefined || id == null || id == ""){
         res.locals.title="Yeni Sayfa Ekle"
         const page = Page.build()
+        page.isActive = true
         await res.render('page/createOrUpdatePage', {page})
     }else{
         const page = await Page.findByPk(id, {
@@ -284,52 +285,77 @@ const createOrUpdatePageAjax = async (req,res, next)=>{
         if (samePage) {
             return res.send({isSuccess:false, message: "Bu sayfada url var. Lütfen farklı bir url giriniz"})
         }
-        const t = await db.transaction()
-        try{
-            
-            let fileUrl = null;
+        let fileUrl = null;
 
-            if(req.files != null && req.files.coverUrlFile){
-                let fileType = mime.extension(req.files.coverUrlFile.mimetype)
-                let fileName = Date.now() + '.' + fileType
-                fileUrl = '/webUI/image/' + fileName;
+        if(req.files != null && req.files.coverUrlFile){
+            let fileType = mime.extension(req.files.coverUrlFile.mimetype)
+            let fileName = Date.now() + '.' + fileType
+            fileUrl = '/webUI/image/' + fileName;
 
-                if (req.files.coverUrlFile.size > 3000001) {
-                    return res.status(400).send({isSuccess:false, message: "Dosya boyutu en fazla 5 MB olmalıdır!"})
-                }else if(!whitelist.includes(req.files.coverUrlFile.mimetype)){
-                    return res.status(400).send({isSuccess:false, message: "Dosya image türünde olmalıdır!"})
-                }else{
-                    req.files.coverUrlFile.mv('public/webUI/image/' + fileName, async function(err) {
-                        if (err)
-                            return await res.status(500).send({isSuccess:false, message: err})
-                    
-                        next()
-                    })
-                }
+            if (req.files.coverUrlFile.size > 3000001) {
+                return res.status(400).send({isSuccess:false, message: "Dosya boyutu en fazla 5 MB olmalıdır!"})
+            }else if(!whitelist.includes(req.files.coverUrlFile.mimetype)){
+                return res.status(400).send({isSuccess:false, message: "Dosya image türünde olmalıdır!"})
             }else{
+                req.files.coverUrlFile.mv('public/webUI/image/' + fileName, async function(err) {
+                    if (err){
+                        return res.status(500).send({isSuccess:false, message: err})
+                    }
+                    const t = await db.transaction()
+                    try{
+                        const page = await Page.create({
+                            title,
+                            url,
+                            seoKeywords,
+                            seoDescription,
+                            pageHeader,
+                            pageContent,
+                            coverUrl: fileUrl,
+                            isActive:getCheckedBtn(isActive),
+                            isDeleted:false,
+                            createdAt:moment(),
+                            updatedAt: moment()
+                        }, { transaction: t })
+                        
+                        await t.commit()
+                        await res.send({isSuccess:true, message:'Sayfa başarıyla eklendi'})
+                    } catch(err){
+                        console.log(err)
+                        await t.rollback()
+                        await res.send({isSuccess:false, message:'Bir hata oluştu'})
+                    }
+                })
+            }
+        }else{
+            if (dataSrcCoverUrl != null && dataSrcCoverUrl != "" && dataSrcCoverUrl != undefined) {
                 fileUrl = dataSrcCoverUrl
+            }else{
+                fileUrl = null
             }
 
-            const page = await Page.create({
-                title,
-                url,
-                seoKeywords,
-                seoDescription,
-                pageHeader,
-                pageContent,
-                coverUrl: fileUrl,
-                isActive:getCheckedBtn(isActive),
-                isDeleted:false,
-                createdAt:moment(),
-                updatedAt: moment()
-            }, { transaction: t })
-            
-            await t.commit()
-            await res.send({isSuccess:true, message:'Sayfa başarıyla eklendi'})
-        } catch(err){
-            console.log(err)
-            await t.rollback()
-            await res.send({isSuccess:false, message:'Bir hata oluştu'})
+            const t = await db.transaction()
+            try{
+                const page = await Page.create({
+                    title,
+                    url,
+                    seoKeywords,
+                    seoDescription,
+                    pageHeader,
+                    pageContent,
+                    coverUrl: fileUrl,
+                    isActive:getCheckedBtn(isActive),
+                    isDeleted:false,
+                    createdAt:moment(),
+                    updatedAt: moment()
+                }, { transaction: t })
+                
+                await t.commit()
+                await res.send({isSuccess:true, message:'Sayfa başarıyla eklendi'})
+            } catch(err){
+                console.log(err)
+                await t.rollback()
+                await res.send({isSuccess:false, message:'Bir hata oluştu'})
+            }
         }
         
     }else{ //update
@@ -346,55 +372,69 @@ const createOrUpdatePageAjax = async (req,res, next)=>{
         if (samePage && id != samePage.id) {
             return res.status(400).send({isSuccess:false, message: "Bu url ile sayfa var. Lütfen farklı bir url giriniz"})
         }
-        
-        try {
+        let fileUrl = null;
 
-            let fileUrl = null;
+        if(req.files != null && req.files.coverUrlFile){
+            let fileType = mime.extension(req.files.coverUrlFile.mimetype)
+            let fileName = Date.now() + '.' + fileType
+            fileUrl = '/webUI/image/' + fileName;
 
-            if(req.files != null && req.files.coverUrlFile){
-                let fileType = mime.extension(req.files.coverUrlFile.mimetype)
-                let fileName = Date.now() + '.' + fileType
-                fileUrl = '/webUI/image/' + fileName;
-
-                if (req.files.coverUrlFile.size > 3000001) {
-                    return res.status(400).send({isSuccess:false, message: "Dosya boyutu en fazla 5 MB olmalıdır!"})
-                }else if(!whitelist.includes(req.files.coverUrlFile.mimetype)){
-                    return res.status(400).send({isSuccess:false, message: "Dosya image türünde olmalıdır!"})
-                }else{
-                    req.files.coverUrlFile.mv('public/webUI/image/' + fileName, async function(err) {
-                        if (err)
-                            return await res.status(500).send({isSuccess:false, message: err})
-                    
-                        next()
-                    })
-                }
+            if (req.files.coverUrlFile.size > 3000001) {
+                return res.status(400).send({isSuccess:false, message: "Dosya boyutu en fazla 5 MB olmalıdır!"})
+            }else if(!whitelist.includes(req.files.coverUrlFile.mimetype)){
+                return res.status(400).send({isSuccess:false, message: "Dosya image türünde olmalıdır!"})
             }else{
+                req.files.coverUrlFile.mv('public/webUI/image/' + fileName, function(err) {
+                    if (err){
+                        return res.send({isSuccess:false, message:err})
+                    }
+                    const page = Page.update({
+                        title,
+                        url,
+                        seoKeywords,
+                        seoDescription,
+                        pageHeader,
+                        pageContent,
+                        coverUrl: fileUrl,
+                        isActive:getCheckedBtn(isActive),
+                        updatedAt: moment()
+                    }, {
+                        where:{
+                            id
+                        }
+                    }).then(page=>{
+                        res.send({isSuccess:true, message:'Sayfa başarıyla güncellendi'})
+                    }).catch(err=>{
+                        res.send({isSuccess:false, message:err})
+                    })
+                })
+            }
+        }else{
+            if (dataSrcCoverUrl != null && dataSrcCoverUrl != "" && dataSrcCoverUrl != undefined) {
                 fileUrl = dataSrcCoverUrl
+            }else{
+                fileUrl = null
             }
 
-            const result = await db.transaction(async (t) => {
-                const page = await Page.update({
-                    title,
-                    url,
-                    seoKeywords,
-                    seoDescription,
-                    pageHeader,
-                    pageContent,
-                    coverUrl: fileUrl,
-                    isActive:getCheckedBtn(isActive),
-                    updatedAt: moment()
-                }, {
-                    where:{
-                        id
-                    }
-                }, { transaction: t })
-    
-                return page
+            const page = await Page.update({
+                title,
+                url,
+                seoKeywords,
+                seoDescription,
+                pageHeader,
+                pageContent,
+                coverUrl: fileUrl,
+                isActive:getCheckedBtn(isActive),
+                updatedAt: moment()
+            }, {
+                where:{
+                    id
+                }
+            }).then(page=>{
+                res.send({isSuccess:true, message:'Sayfa başarıyla güncellendi'})
+            }).catch(err=>{
+                res.send({isSuccess:false, message:err})
             })
-            await res.send({isSuccess:true, message:'Sayfa başarıyla güncellendi'})
-        } catch (err) {
-            console.log(err)
-            await res.send({isSuccess:false, message:'Bir hata oluştu'})
         }
     }
 } 

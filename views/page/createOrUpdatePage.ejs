@@ -91,7 +91,7 @@
                                 <% } %>
                             </div>
                             <label class="required form-label">Cover İmage</label>
-                            <input type="file" name="coverUrlFile" accept="image/png, image/gif, image/jpeg" />
+                            <input type="file" name="coverUrlFile" accept=".jpg, .png, .jpeg, .webp" />
                         </div>
                       
                         <div class="form-check form-switch form-check-custom form-check-solid my-10">
@@ -174,21 +174,25 @@
 
     $('#item_save_form').ajaxForm({
         beforeSubmit: function (arr) {
-            //global.showLoader()
+            
+            if ($('#title').val() == "") {
+                toastr.warning("Başlık giriniz");
+                $('#title').focus();
+                return false;
+            }
+            if ($('#url').val() == "") {
+                toastr.warning("Url giriniz");
+                $('#url').focus();
+                return false;
+            }
+
             $('#save_btn').attr("data-kt-indicator", "on")
             $('#save_btn').attr("disabled", "disabled")
         },
         beforeSend: function (e) {
-
-            if ($('#title').val() == "") {
-                toastr.warning("Başlık giriniz");
-                $('#title').focus();
-                //global.hideLoader()
-                return false;
-            }
+          
         },
         complete: function (result) {
-            //global.hideLoader();
             console.log(result.responseJSON)
 
             if (result.responseJSON.isSuccess) {

@@ -5,7 +5,14 @@ import TourCategory from '../models/template/TourCategory.js'
 import moment from 'moment'
 import db from '../../db.js'
 import { getCheckedBtn } from "../../globalFunctions.js"
+import mime from 'mime-types'
 
+const whitelist = [
+    'image/png',
+    'image/jpeg',
+    'image/jpg',
+    'image/webp'
+]
 
 const allTour = async (req,res)=>{
     res.locals.title="Videolar"
@@ -95,6 +102,31 @@ const createOrUpdateTourAjax = async (req,res)=>{
         if (sameTour) {
             return res.send({isSuccess:false, message: "Bu isimde tur var. Lütfen farklı bir isim giriniz"})
         }
+
+        let fileArr = {}
+
+        if(req.files != null){
+            for (let key in req.files) {
+                const file = req.files[key];
+
+                if (file.size > 3000001) {
+                    return res.status(400).send({isSuccess:false, message: "Dosya boyutu en fazla 5 MB olmalıdır!"})
+                }else if(!whitelist.includes(file.mimetype)){
+                    return res.status(400).send({isSuccess:false, message: "Dosya image türünde olmalıdır!"})
+                }
+            }
+            for (let key in req.files) {
+                const file = req.files[key];
+                let fileType = mime.extension(file.mimetype)
+                let fileName = Date.now() + '.' + fileType
+                let fileUrl = '/webUI/image/' + fileName;
+                
+                console.log(key)
+                await file.mv('public/webUI/image/' + fileName)
+                fileArr =  {...fileArr, [key]:fileUrl}
+            }
+        }
+        console.log(fileArr)
         const t = await db.transaction()
         try{
             const tour = await Tour.create({
@@ -106,8 +138,8 @@ const createOrUpdateTourAjax = async (req,res)=>{
                 price,
                 startedAt,
                 finishedAt,
-                coverUrl: Object.keys(req.files).length > 0 && req.files.coverUrlFile && req.files.coverUrlFile[0] ? '/webUI/image/' + req.files.coverUrlFile[0].filename : null,
-                headImgUrl: Object.keys(req.files).length > 0 && req.files.headImgUrlFile && req.files.headImgUrlFile[0] ? '/webUI/image/' + req.files.headImgUrlFile[0].filename : null,
+                coverUrl: fileArr.coverUrlFile ? fileArr.coverUrlFile : dataSrcCoverUrl ? dataSrcCoverUrl : null,
+                headImgUrl: fileArr.headImgUrlFile ? fileArr.headImgUrlFile : dataSrcHeadImgUrl ? dataSrcHeadImgUrl : null,
                 isActive:getCheckedBtn(isActive),
                 isDeleted:false,
                 createdAt:moment(),
@@ -128,6 +160,16 @@ const createOrUpdateTourAjax = async (req,res)=>{
             await t.rollback()
             await res.send({isSuccess:false, message:'Bir hata oluştu'})
         }
+
+
+
+
+
+
+
+
+
+       
         /* update */
     }else{ 
         const title = req.body.title.trim()
