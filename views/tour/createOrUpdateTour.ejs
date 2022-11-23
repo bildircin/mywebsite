@@ -4,7 +4,7 @@
     <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
         <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
             <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
-                <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Yeni Ekle</h1>
+                <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0"><%= tour.title ? tour.title : 'Yeni Ekle' %></h1>
                 <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
                     <li class="breadcrumb-item text-muted">
                         <a href="/admin" class="text-muted text-hover-primary">Anasayfa</a>
@@ -22,7 +22,7 @@
                     <li class="breadcrumb-item">
                         <span class="bullet bg-gray-400 w-5px h-2px"></span>
                     </li>
-                    <li class="breadcrumb-item text-muted">Yeni Ekle</li>
+                    <li class="breadcrumb-item text-muted"><%= tour.title ? tour.title : 'Yeni Ekle' %></li>
                 </ul>
             </div>
         </div>
@@ -51,19 +51,19 @@
                             <input type="text" class="form-control" id="title" name="title" value="<%= tour.title %>" />
                         </div>
                         <div class="mb-10">
-                            <label class="required form-label">Sıra</label>
+                            <label class="form-label">Sıra</label>
                             <input type="text" class="form-control" id="sequence" name="sequence" value="<%= tour.sequence %>"  />
                         </div>
                         <div class="mb-10">
-                            <label class="required form-label">Gün</label>
+                            <label class="form-label">Gün</label>
                             <input type="text" class="form-control" id="day" name="day" value="<%= tour.day %>"  />
                         </div>
                         <div class="mb-10">
-                            <label class="required form-label">Kişi</label>
+                            <label class="form-label">Kişi</label>
                             <input type="text" class="form-control" id="persons" name="persons" value="<%= tour.persons %>"  />
                         </div>
                         <div class="mb-10">
-                            <label class="required form-label">Fiyat</label>
+                            <label class="form-label">Fiyat</label>
                             <input type="text" class="form-control" id="price" name="price" value="<%= tour.price %>"  />
                         </div>
                         <div class="mb-10">
@@ -75,7 +75,7 @@
                                     <img src="/webUI/image/no_image.png" alt="" style="width:100%;">
                                 <% } %>
                             </div>
-                            <label class="required form-label">Cover İmage</label>
+                            <label class="form-label">Cover İmage</label>
                             <input type="file" name="coverUrlFile" accept="image/png, image/gif, image/jpeg" />
                         </div>
                         <div class="mb-10">
@@ -87,11 +87,11 @@
                                     <img src="/webUI/image/catalog/demo/product/travel/tour-detail.jpg" alt="" style="width:100%;">
                                 <% } %>
                             </div>
-                            <label class="required form-label">Head İmage</label>
+                            <label class="form-label">Head İmage</label>
                             <input type="file" name="headImgUrlFile" accept="image/png, image/gif, image/jpeg" />
                         </div>
                         <div class="mb-10">
-                            <label class="required form-label">Açıklama</label>
+                            <label class="form-label">Açıklama</label>
                             <div class="form-floating">
                                 <textarea class="form-control" placeholder="Leave a comment here" id="description" name="description" style="height: 100px"  value="<%= tour.description %>" ></textarea>
                             </div>
@@ -164,38 +164,35 @@
  
     $('#item_save_form').ajaxForm({
         beforeSubmit: function (arr) {
-            //global.showLoader()
-            $('#save_btn').attr("data-kt-indicator", "on")
-        },
-        beforeSend: function (e) {
 
             if ($('#category').val() == "") {
                 toastr.warning("Kategori seçiniz");
                 $('#category').focus();
-                //global.hideLoader()
                 return false;
             }
             if ($('#title').val() == "") {
                 toastr.warning("Başlık giriniz");
                 $('#title').focus();
-                //global.hideLoader()
                 return false;
             }
             if ($('#started_at').val() == "") {
                 toastr.warning("Başlama tarihi giriniz");
                 $('#started_at').focus();
-                //global.hideLoader()
                 return false;
             }
             if ($('#finished_at').val() == "") {
                 toastr.warning("Bitiş tarihi giriniz");
                 $('#finished_at').focus();
-                //global.hideLoader()
                 return false;
             }
+
+            $('#save_btn').attr("data-kt-indicator", "on")
+            $('#save_btn').attr("disabled", "disabled")
+        },
+        beforeSend: function (e) {
+
         },
         complete: function (result) {
-            //global.hideLoader();
             console.log(result.responseJSON)
 
             if (result.responseJSON.isSuccess) {

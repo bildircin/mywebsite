@@ -30,20 +30,18 @@ const createOrUpdateTour = async (req,res)=>{
     const id = req.params.id
 
     if(id == undefined || id == null || id == ""){
-
-        res.locals.title="Yeni Ekle"
-
+        res.locals.title="Yeni Tur Ekle"
         let categories = await Category.findAll({
             where:{
                 isDeleted:false,
                 isActive:true
             }
         })
-        await res.render('tour/createOrUpdateTour', {isSuccess:false, tour:{}, categories, categoryIds:[]})
+        const tour = Tour.build()
+        tour.isActive = true
+        await res.render('tour/createOrUpdateTour', {isSuccess:false, tour, categories, categoryIds:[]})
     }else{
 
-        res.locals.title = ""
-        
         let categoryIds = await TourCategory.findAll({
             where:{
                 tourId:id            
@@ -70,7 +68,7 @@ const createOrUpdateTour = async (req,res)=>{
                 isDeleted:false
             }
         }).then(tour=>{
-            res.locals.title = tour.title
+            res.locals.title = tour.title + ' Güncelleme'
             res.render('tour/createOrUpdateTour', {isSuccess:true, tour, categories, categoryIds})
         }).catch(err=>{
             res.render('tour/createOrUpdateTour', {isSuccess:false, tour:{}, categories:[], categoryIds:[]})
@@ -80,8 +78,8 @@ const createOrUpdateTour = async (req,res)=>{
 
 const createOrUpdateTourAjax = async (req,res)=>{
     
-    const {id, title, category, description, sequence, day, dataSrcCoverUrl,
-        dataSrcHeadImgUrl, persons, price, startedAt, finishedAt, isActive} = req.body
+    const {id, category, description, sequence, day, dataSrcCoverUrl, dataSrcHeadImgUrl, persons, price, startedAt, finishedAt, isActive} = req.body
+    let title = req.body.title
 
     if(category == undefined || category == null || category == ""){
         return res.status(400).send({isSuccess:false, message: "Lütfen kategori seçiniz"})
@@ -89,7 +87,14 @@ const createOrUpdateTourAjax = async (req,res)=>{
     if (title == "" || title == null || title == undefined || title.trim() == "") {
         return res.status(400).send({isSuccess:false, message: "Lütfen başlık giriniz"})
     }
-    
+    if (startedAt == "" || startedAt == null || startedAt == undefined) {
+        return res.status(400).send({isSuccess:false, message: "Lütfen başlama tarihi giriniz"})
+    }
+    if (finishedAt == "" || finishedAt == null || finishedAt == undefined) {
+        return res.status(400).send({isSuccess:false, message: "Lütfen bitiş tarihi giriniz"})
+    }
+    title = title.trim()
+
     /* create */
     if(id == null || id == undefined || id == ""){
         
@@ -126,8 +131,8 @@ const createOrUpdateTourAjax = async (req,res)=>{
                 fileArr =  {...fileArr, [key]:fileUrl}
             }
         }
-        console.log(fileArr)
         const t = await db.transaction()
+
         try{
             const tour = await Tour.create({
                 title,
@@ -161,18 +166,8 @@ const createOrUpdateTourAjax = async (req,res)=>{
             await res.send({isSuccess:false, message:'Bir hata oluştu'})
         }
 
-
-
-
-
-
-
-
-
-       
         /* update */
     }else{ 
-        const title = req.body.title.trim()
         
         const sameTour = await Tour.findOne({
             where:{
@@ -187,6 +182,30 @@ const createOrUpdateTourAjax = async (req,res)=>{
         if (sameTour && id != sameTour.id) {
             return res.status(400).send({isSuccess:false, message: "Bu başlıkta tur var. Lütfen farklı bir başlık giriniz"})
         }
+
+        let fileArr = {}
+
+        if(req.files != null){
+            for (let key in req.files) {
+                const file = req.files[key];
+
+                if (file.size > 3000001) {
+                    return res.status(400).send({isSuccess:false, message: "Dosya boyutu en fazla 5 MB olmalıdır!"})
+                }else if(!whitelist.includes(file.mimetype)){
+                    return res.status(400).send({isSuccess:false, message: "Dosya image türünde olmalıdır!"})
+                }
+            }
+            for (let key in req.files) {
+                const file = req.files[key];
+                let fileType = mime.extension(file.mimetype)
+                let fileName = Date.now() + '.' + fileType
+                let fileUrl = '/webUI/image/' + fileName;
+                
+                console.log(key)
+                await file.mv('public/webUI/image/' + fileName)
+                fileArr =  {...fileArr, [key]:fileUrl}
+            }
+        }
         
         try {
             const result = await db.transaction(async (t) => {
@@ -199,8 +218,8 @@ const createOrUpdateTourAjax = async (req,res)=>{
                     price,
                     startedAt,
                     finishedAt,
-                    coverUrl: Object.keys(req.files).length > 0 && req.files.coverUrlFile && req.files.coverUrlFile[0] ? '/webUI/image/' + req.files.coverUrlFile[0].filename : (dataSrcCoverUrl ? dataSrcCoverUrl : null),
-                    headImgUrl: Object.keys(req.files).length > 0 && req.files.headImgUrlFile &&  req.files.headImgUrlFile[0] ? '/webUI/image/' + req.files.headImgUrlFile[0].filename : (dataSrcHeadImgUrl ? dataSrcHeadImgUrl : null),
+                    coverUrl: fileArr.coverUrlFile ? fileArr.coverUrlFile : dataSrcCoverUrl ? dataSrcCoverUrl : null,
+                    headImgUrl: fileArr.headImgUrlFile ? fileArr.headImgUrlFile : dataSrcHeadImgUrl ? dataSrcHeadImgUrl : null,
                     isActive:getCheckedBtn(isActive),
                     updatedAt: moment()
                 }, {
