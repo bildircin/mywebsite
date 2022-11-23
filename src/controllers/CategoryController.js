@@ -3,21 +3,11 @@ import Category  from '../models/Category.js'
 import moment  from 'moment'
 import db  from '../../db.js'
 import { getCheckedBtn }  from "../../globalFunctions.js"
-
+import i18next from "i18next"
 
 
 
 const allCategories = async (req,res)=>{
-
-   /*  req.session.lng = 'es'
-    req.session.merhaba = 'merhaba'
-    //await req.i18n.changeLanguage("es")
-    console.log(req.i18n.languages)
-    console.log(req.t('Hello'))
-    console.log(req.session)
- */
-
-
 
     res.locals.title="Kategoriler"
     const categories = await Category.findAll({
@@ -25,13 +15,11 @@ const allCategories = async (req,res)=>{
             isDeleted:false
         }
     })
-
     await res.render('category/categories', {categories})
 }
 
 const addCategory = async (req,res)=>{
-    /* console.log(req.session)
-    console.log(req.t('Hello')) */
+
     res.locals.title="Yeni Ekle"
     await res.render('category/addCategory')
 }

@@ -11,13 +11,6 @@ import middleware from 'i18next-http-middleware'
 import Page from './src/models/template/Page.js'
 import fileUpload from 'express-fileupload'
 
-i18next.use(Backend).use(middleware.LanguageDetector).init({
-    fallbackLng:'en',
-    backend:{
-        loadPath:'./resources/locales/{{lng}}/translation.json'
-    }
-})
-
 
 const app = express()
 app.use(session({
@@ -25,9 +18,8 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }))
-app.use(middleware.handle(i18next))
-const port = 3002;
 
+const port = 3002;
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
@@ -39,13 +31,27 @@ app.set('view engine', 'ejs')
 app.set('layout', './layouts/layout')
 app.set("layout extractScripts", true)
 app.set("layout extractStyles", true)
-
-
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(flash())
 app.use(fileUpload());
 
+
+app.use(middleware.handle(i18next))
+i18next.use(Backend).use(middleware.LanguageDetector).init({
+    fallbackLng:'en',
+    backend:{
+        loadPath:'./resources/locales/{{lng}}/translation.json'
+    }
+})
+
+app.use(async (req,res,next) => {
+    if(req.cookies.lng){
+        let lng = req.cookies.lng
+        await req.i18n.changeLanguage(lng)
+    }
+    next()
+})
 
 // moment locals add
 var shortDateFormat = 'DD.MM.YYYY';
@@ -58,6 +64,7 @@ import categoryRoutes from './src/routes/CategoryRoutes.js'
 import videoRoutes from './src/routes/VideoRoutes.js'
 import tourRoutes from './src/routes/TourRoutes.js'
 import templateRoutes from './src/routes/TemplateRoutes.js'
+import webUIRoutes from './src/routes/WebUIRoutes.js'
 import authRouter from './src/routes/auth.js'
 
 app.use('/', authRouter)
@@ -67,6 +74,7 @@ app.get('/', (req, res)=>{
     res.render('webUI/home', {layout:'webUI/layout'})
 })
 
+app.use(webUIRoutes)
 
 app.use(async (req,res,next)=>{
     const url = req.originalUrl
