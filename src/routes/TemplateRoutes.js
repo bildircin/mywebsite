@@ -14,6 +14,8 @@ router.get('/sayfalar', templateController.pages)
 router.get('/sayfa-kaydet/:id?', templateController.createOrUpdatePage)
 router.post('/createOrUpdatePageAjax', templateController.createOrUpdatePageAjax)
 
+router.get('/dil-deger-guncelleme', templateController.createOrUpdateLanguageItem)
+router.post('/createOrUpdateLanguageItemAjax', templateController.createOrUpdateLanguageItemAjax)
 
 
 

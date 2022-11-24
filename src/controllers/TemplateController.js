@@ -5,6 +5,8 @@ import moment from 'moment'
 import db from '../../db.js'
 import { getCheckedBtn, deserializeList } from "../../globalFunctions.js"
 import mime from 'mime-types'
+import LanguageItem from "../models/template/LanguageItem.js"
+import LanguageCode from "../models/template/LanguageCode.js"
 
 let adminNavigations = [
     '/',
@@ -439,8 +441,25 @@ const createOrUpdatePageAjax = async (req,res, next)=>{
     }
 } 
 
+//LanuageItem
+const createOrUpdateLanguageItem = async (req,res)=>{
+    
+    const languageCodes = await LanguageCode.findAll()
+    res.locals.title = 'Dil Kod Değerleini Güncelleme'
+    await res.render('languageItem/createOrUpdateLanguageItem', {languageCodes})
+}
 
+const createOrUpdateLanguageItemAjax = async (req,res, next)=>{
+    
+    const lng = req.body.lng
 
+    const languageItems = await LanguageItem.findAll({
+        where:{
+            lng
+        }
+    })
+    await res.send({isSuccess:true, message:'Değerler başarıyla yüklendi', languageItems})
+} 
 
 
 
@@ -492,5 +511,7 @@ export default {
     deleteNavigationAjax,
     pages,
     createOrUpdatePage,
-    createOrUpdatePageAjax
+    createOrUpdatePageAjax,
+    createOrUpdateLanguageItem,
+    createOrUpdateLanguageItemAjax
 }
