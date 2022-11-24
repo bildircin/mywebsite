@@ -28,18 +28,18 @@
         <div id="kt_app_content_container" class="app-container container-fluid">
             <div class="card card-docs flex-row-fluid mb-2">
                 <div class="card-body fs-6 py-15 px-10 py-lg-15 px-lg-15 text-gray-700">
-
-                    <div class="form-floating border rounded">
-                        <select class="form-select form-select-transparent" placeholder="..." id="language_select">
+                    
+                    <div class="mb-10">
+                        <label class="form-label" for="language_select">Dil</label>
+                        <select class="form-select form-select-solid" data-placeholder="Seçim Yapınız" id="language_select">
                             <option></option>
                             <% languageCodes.forEach(item =>{ %>
                                 <option value="<%= item.lng %>" data-kt-select2-country="webUI/image/flags/<%= item.lng %>.svg"><%= item.name %></option>
                             <% }) %>
                         </select>
-                        <label for="language_select">Dil</label>
                     </div>
 
-                    <table class="table table-striped table-row-bordered gy-5 gs-7 border rounded" id="item_list">
+                    <table class="table table-row-bordered gy-5 gs-7 border rounded mb-10" id="item_list">
                         <thead>
                             <tr class="fw-bold fs-6 text-gray-800 px-7">
                                 <th>Anahtar</th>
@@ -51,7 +51,9 @@
                             
                         </tbody>
                     </table>
-
+                    <div class="d-flex justify-content-end">
+                        <button id="save_btn" class="btn btn-success">Kaydet</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -87,7 +89,7 @@
         });
 
 
-        $('#language_select').on('change', function(){
+        $('#language_select').on('select2:select', function(){
             const lng = $(this).val()
             console.log(lng)
             $.post("/createOrUpdateLanguageItemAjax", {lng}, function(result) {
@@ -98,27 +100,50 @@
 
                 list.forEach(item => {
                     
-                    let tr = `<tr data-bs-toggle="tooltip" data-bs-placement="top" title="${item.title}">
-                                <td>${item.key}</td>
-                                <td>${item.value}</td>
+                    let tr = `<tr class="lang-item" data-key="${item.key}">
+                                <td>
+                                    ${item.key}
+                                    <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="${item.title}"></i>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control form-control-solid" value="${item.value}" />
+                                </td>
                             </tr>`
                     $('#language_result_list').append(tr)
                 });
 
-
-
                 $('#item_list').DataTable()
 
-                
-
+                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
             })
             .fail(function(err) {
                 console.log(err)
             })
-                
-
         })
 
+    })
+
+    $('#save_btn').on('click', function(){
+        let updateList = {}
+        let lng = $('#language_select').val()
+        let domList = $('#language_result_list > tr')
+
+        for (let i = 0; i < domList.length; i++) {
+            const item = $(domList[i])
+            updateList[item.data('key')] = item.find('input').val()
+        }
+
+        $.post("/createOrUpdateLanguageItemSaveAjax", {updateList, lng}, function(result) {
+            if (result.isSuccess) {
+                toastr.success(result.message)
+            }else{
+                toastr.error(result.message)
+            }
+        })
+        .fail(function(err) {
+            toastr.error(err)
+        })
     })
 
 </script>

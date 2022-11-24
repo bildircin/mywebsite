@@ -461,6 +461,38 @@ const createOrUpdateLanguageItemAjax = async (req,res, next)=>{
     await res.send({isSuccess:true, message:'Değerler başarıyla yüklendi', languageItems})
 } 
 
+const createOrUpdateLanguageItemSaveAjax = async (req,res, next)=>{
+    
+    const updateList = req.body.updateList
+    const lng = req.body.lng
+
+    const t = await db.transaction()
+
+    try {
+
+        console.log(updateList)
+        console.log(lng)
+        for (const key in updateList) {
+            const value = updateList[key];
+    
+            await LanguageItem.update({
+                value
+            },{
+                where:{
+                    lng,
+                    key
+                }
+            }, { transaction: t })
+        }
+
+        await t.commit()
+        await res.send({isSuccess:true, message:'Güncelleme Başarılı'})
+    } catch (error) {
+        await t.rollback()
+        await res.send({isSuccess:false, message:'Bir hata oluştu'})
+    }
+} 
+
 
 
 
@@ -513,5 +545,6 @@ export default {
     createOrUpdatePage,
     createOrUpdatePageAjax,
     createOrUpdateLanguageItem,
-    createOrUpdateLanguageItemAjax
+    createOrUpdateLanguageItemAjax,
+    createOrUpdateLanguageItemSaveAjax
 }
