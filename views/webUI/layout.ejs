@@ -56,18 +56,13 @@
             
             <header id="header" class=" typeheader-1">
                 <!-- Header Top -->
+
+                
                 <div class="header-bonus">
                     <div class="container">
-                        <ul class="bonus-phone pull-left">
-                            <li><i class="fa fa-phone" aria-hidden="true"></i> <a href="tel:0123456789">+11 02 81 17 51</a></li>
-                            <li><i class="fa fa-map-marker" aria-hidden="true"></i> 135-137 Traction Blvd, New York</li>
-                        </ul>
-                        <ul class="bonus-social pull-left">
-                            <li><a href="#"><i class="fa fa-pinterest-p" aria-hidden="true"></i></a></li>
-                            <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-                            <li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-                            <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-                        </ul>
+                        <%- contents.layoutHeaderBonusLeft %>
+
+                        
                         <div class="bonus-language pull-right">
                             <form action="#" method="post" enctype="multipart/form-data">
                                 <div class="btn-group">
@@ -93,6 +88,9 @@
                         </div>		
                     </div>
                 </div>
+
+
+
                 <div class="header-top hidden-compact">
                     <div class="container">
                         <div class="row">
@@ -135,27 +133,34 @@
                                                     <div class="megamenu-pattern">
                                                         <div class="container">
                                                             <ul class="megamenu" data-transition="slide" data-animationtime="500">
-                                                                <li class="menu-home with-sub-menu hover">
-                                                                    <p class="close-menu"></p>
-                                                                    <a href="#" class="clearfix">
-                                                                        <strong>
-                                                                            Home
-                                                                        </strong>
-                                                                    </a>
-                                                                    <div class="sub-menu" style="width: 40%;">
-                                                                        <div class="content">
-                                                                            <div class="row">
-                                                                                <div class="col-md-12">
-                                                                                    <ul class="row-list">
-                                                                                        <li><a class="subcategory_item" href="index.html">Home Page 1</a></li>
-                                                                                        <li><a class="subcategory_item" href="home2.html">Home Page 2</a></li>
-                                                                                        <li><a class="subcategory_item" href="home3.html">Home Page 3</a></li>
-                                                                                    </ul>
+                                                                
+                                                                <% navigations.forEach(item =>{ %>
+                                                                
+                                                                    <li class="menu-home with-sub-menu hover">
+                                                                        <p class="close-menu"></p>
+                                                                        <a href="<%= item.children ? '#' : item.link %>" class="clearfix">
+                                                                            <strong>
+                                                                                <%= item.title %>
+                                                                            </strong>
+                                                                        </a>
+                                                                        <% if(item.children){ %>
+                                                                            <div class="sub-menu" style="width: 40%;">
+                                                                                <div class="content">
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-12">
+                                                                                            <ul class="row-list">
+                                                                                                <% item.children.forEach(el =>{ %>
+                                                                                                    <li><a class="subcategory_item" href="<%= el.link %>"><%= el.title %></a></li>
+                                                                                                <% }) %>
+                                                                                            </ul>
+                                                                                        </div>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </li>
+                                                                        <% } %>
+                                                                    </li>
+                                                            
+                                                                <% }) %>
                                                                 <li class="style-page with-sub-menu hover">
                                                                     <p class="close-menu"></p>
                                                                     <a  class="clearfix">

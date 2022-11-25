@@ -63,8 +63,73 @@ function deserializeList(arr, id) {
     return result
 }
 
+function serializeList(arr){
+    let geciciDizi = []
+
+    arr.forEach(item => {  // parentid ye sahip olanları gecici dizide parentid olusturup içine ekedik
+        if (item.parentId == 0)
+        return
+        
+        if (geciciDizi[ item.parentId ] === undefined)
+        geciciDizi[ item.parentId ] = []
+        
+        geciciDizi[ item.parentId ].push(item)
+    })
+    
+    arr.forEach(item => {
+        if (item.id == 0)
+            return
+
+        if (geciciDizi[ item.id ] === undefined)  // gecici dizide yoksa bu en tepede bir parenttır yani parent id si 0 dır
+            return
+
+        item["children"] = geciciDizi[ item.id ] // degerini gecici diziden alıp içine ekleyeim
+    })
+
+    let ret = []
+
+    arr.forEach(item => { // son olarak en tepe parent ları ret e ekleyelim
+        if (item.parentId !== 0)
+            return
+
+        ret.push(item)
+    })
+
+    //sıralamak için
+    arr.forEach(item =>{
+        isChildren(item)
+    })
+    sirala(ret)
+
+    return ret
+}
+
+function isChildren(item){
+    if(item.children){
+        for (let i = 0; i < item.children.length; i++) {
+            isChildren(item.children[i])
+        }
+        sirala(item.children)
+    }
+}
+
+function sirala(arr){
+    for (let i = 0; i < arr.length; i++) {
+        for (let j = 0; j < arr.length - 1; j++) {
+            if(arr[j].sequence > arr[j + 1].sequence){
+                let temp = arr[j]
+                arr[j] = arr[j + 1]
+                arr[j + 1] = temp
+            }
+        }
+    }
+}
+
+
+
 export {
     getCheckedBtn,
     bundleTogetherCategory,
-    deserializeList
+    deserializeList,
+    serializeList
 }

@@ -18,6 +18,9 @@ router.get('/dil-deger-guncelleme', templateController.createOrUpdateLanguageIte
 router.post('/createOrUpdateLanguageItemAjax', templateController.createOrUpdateLanguageItemAjax)
 router.post('/createOrUpdateLanguageItemSaveAjax', templateController.createOrUpdateLanguageItemSaveAjax)
 
+router.get('/icerik-guncelleme', templateController.createOrUpdatePageContent)
+router.post('/createOrUpdatePageContentGetValueAjax', templateController.createOrUpdatePageContentGetValueAjax)
+router.post('/createOrUpdatePageContentSetValueAjax', templateController.createOrUpdatePageContentSetValueAjax)
 
 
 

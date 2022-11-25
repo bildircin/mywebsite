@@ -7,6 +7,7 @@ import { getCheckedBtn, deserializeList } from "../../globalFunctions.js"
 import mime from 'mime-types'
 import LanguageItem from "../models/template/LanguageItem.js"
 import LanguageCode from "../models/template/LanguageCode.js"
+import PageContent from "../models/template/PageContent.js"
 
 let adminNavigations = [
     '/',
@@ -494,6 +495,61 @@ const createOrUpdateLanguageItemSaveAjax = async (req,res, next)=>{
 } 
 
 
+//PageContent
+const createOrUpdatePageContent = async (req,res)=>{
+    
+    const keys = await PageContent.findAll({
+        attributes:[[db.literal('DISTINCT `key`'), 'key']]
+    })
+    const languageCodes = await LanguageCode.findAll()
+    res.locals.title = 'İçerik Güncelleme'
+
+    await res.render('pageContent/createOrUpdatePageContent', {keys, languageCodes})
+}
+
+const createOrUpdatePageContentGetValueAjax = async (req,res, next)=>{
+    
+    const key = req.body.key
+    const languageCode = req.body.languageCode
+
+    const pageContent = await PageContent.findOne({
+        where:{
+            key,
+            languageCode
+        }
+    })
+    await res.send({isSuccess:true, message:'İçerik yüklendi', pageContent})
+} 
+
+const createOrUpdatePageContentSetValueAjax = async (req,res, next)=>{
+    
+    const {key, languageCode, value} = req.body
+
+    const t = await db.transaction()
+    try {
+        const pageContent = await PageContent.update({
+            value
+        },{
+            where:{
+                key,
+                languageCode
+            }
+        }, { transaction: t})
+        
+        await t.commit()
+        await res.send({isSuccess:true, message:'İçerik güncellendi'})
+    } catch (error) {
+        await t.rollback()
+        await res.send({isSuccess:false, message:error})
+    }
+} 
+
+
+
+
+
+
+
 
 
 
@@ -546,5 +602,8 @@ export default {
     createOrUpdatePageAjax,
     createOrUpdateLanguageItem,
     createOrUpdateLanguageItemAjax,
-    createOrUpdateLanguageItemSaveAjax
+    createOrUpdateLanguageItemSaveAjax,
+    createOrUpdatePageContent,
+    createOrUpdatePageContentGetValueAjax,
+    createOrUpdatePageContentSetValueAjax
 }
