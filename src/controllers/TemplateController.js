@@ -156,6 +156,15 @@ const createOrUpdateNavAjax = async (req,res)=>{
         
         // create
         if(id == "" || id == null || id == undefined){
+            const isSameLink = await Navigation.findOne({
+                where:{
+                    link
+                }
+            })
+            if (isSameLink) {
+                return res.send({isSuccess:false, message: "Bu link kullanılıyor. Lütfen farklı bir link giriniz"})
+            }
+
             const navigation = await Navigation.create({
                 title,
                 link,
@@ -167,6 +176,18 @@ const createOrUpdateNavAjax = async (req,res)=>{
             await res.send({isSuccess:true, message:'Navigasyon başarıyla eklendi', navigation})
         // update
         }else{
+            const isSameLink = await Navigation.findOne({
+                where:{
+                    link,
+                    id:{
+                        [Op.ne]: id,
+                    },
+                }
+            })
+            if (isSameLink) {
+                return res.send({isSuccess:false, message: "Bu link kullanılıyor. Lütfen farklı bir link giriniz"})
+            }
+
             const navigation = await Navigation.update({
                 title,
                 link,

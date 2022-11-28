@@ -70,7 +70,7 @@ const homePage = async (req,res)=>{
 
     const pageContents = await PageContent.findAll({
         where:{
-            key:['layoutSlider'],
+            key:['homeSlider'],
             languageCode:lang.lng
         }
 
@@ -78,7 +78,7 @@ const homePage = async (req,res)=>{
         console.log(err)
     })
     if(pageContents.length > 0 ){
-        contents.layoutSlider = pageContents.find(el=>el.key == 'layoutSlider').value
+        contents.homeSlider = pageContents.find(el=>el.key == 'homeSlider').value
     }
 
     await res.render('webUI/home', {layout:'webUI/layout', lang, contents, navigations})
@@ -93,6 +93,18 @@ const aboutPage = async (req,res)=>{
 const contactPage = async (req,res)=>{
     res.locals.title="İletişim"
 
+    const languages = await LanguageItem.findAll({
+        where:{
+            key:['messageHeader'],
+            lng:lang.lng
+        }
+
+    }).catch(err=>{
+        console.log(err)
+    })
+    languages.forEach(item => {
+        lang[item.key] = item.value
+    });
     await res.render('webUI/contact', {layout:'webUI/layout', lang, contents, navigations})
 }
 
