@@ -1,5 +1,5 @@
 import { Op } from "sequelize"
-import Page from '../models/template/Page.js'
+import Tour from '../models/template/Tour.js'
 import moment from 'moment'
 import { getCheckedBtn, serializeList } from "../../globalFunctions.js"
 import LanguageItem from '../models/template/LanguageItem.js'
@@ -37,7 +37,7 @@ const setLang = async (req,res,next)=>{
 
     next()
 }
-//middleware
+//middleware -> only layout contents and navigations
 const setContents = async (req,res,next)=>{
 
     const layoutHeaderBonusLeft = await PageContent.findOne({
@@ -49,7 +49,7 @@ const setContents = async (req,res,next)=>{
         console.log(err)
     })
     if(layoutHeaderBonusLeft){
-        contents.headerBonusLeft = layoutHeaderBonusLeft.value
+        contents.layoutHeaderBonusLeft = layoutHeaderBonusLeft.value
     }
 
     const list = await Navigation.findAll({
@@ -93,19 +93,27 @@ const aboutPage = async (req,res)=>{
 const contactPage = async (req,res)=>{
     res.locals.title="İletişim"
 
-    const languages = await LanguageItem.findAll({
+    await res.render('webUI/contact', {layout:'webUI/layout', lang, contents, navigations})
+}
+
+const toursPage = async (req,res)=>{
+    res.locals.title="Turlar"
+
+    const pageContents = await PageContent.findAll({
         where:{
-            key:['messageHeader'],
-            lng:lang.lng
+            key:['toursBreadcrumb', 'toursAside'],
+            languageCode:lang.lng
         }
 
     }).catch(err=>{
         console.log(err)
     })
-    languages.forEach(item => {
-        lang[item.key] = item.value
+
+    await pageContents.forEach(item => {
+        contents[item.key] = item.value
     });
-    await res.render('webUI/contact', {layout:'webUI/layout', lang, contents, navigations})
+
+    await res.render('webUI/home', {layout:'webUI/layout', lang, contents, navigations})
 }
 
 
@@ -114,5 +122,6 @@ export default {
     homePage,
     aboutPage,
     contactPage,
-    setContents
+    setContents,
+    toursPage
 }
