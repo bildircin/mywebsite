@@ -1,4 +1,5 @@
 
+
 <%- contents.toursBreadcrumb %>
 
 <div class="container product-detail">
@@ -7,23 +8,23 @@
             <span id="close-sidebar" class="fa fa-times"></span>
             <div class="module-search clearfix">
                 <h3 class="modtitle"><%= lang.toursPageSearchContentTitle %></h3>
-                <form method="get" class="search-pr">
+                <form action="/turlar" method="get" class="search-pr" id="item_search_form">
                     <div class="search-item item-select">
-                        <select name="category">
-                            <option value="1"><%= lang.toursPageSearchContentCategory %></option>
-                            <option value="2">2 people</option>
-                            <option value="3">3 people</option>
-                            <option value="4">4 people</option>
+                        <select name="category" id="category">
+                            <option value="null"><%= lang.toursPageSearchContentCategory %></option>
+                            <%_ categories.forEach(item =>{ _%>
+                                <option value="<%= item.id %>"><%= item.name %></option>
+                            <%_ }) _%>
                         </select>
                     </div>
                     <div class="search-item date">
-                        <input type="text" class="tour-search-input datepicker hasDatepicker" id="date_from" placeholder="<%= lang.toursPageSearchContentDateStart %>">
+                        <input type="text" class="tour-search-input datepicker hasDatepicker" name="startedAt" id="date_start" autocomplete="false" placeholder="<%= lang.toursPageSearchContentDateStart %>">
                     </div>
                     <div class="search-item date">
-                        <input type="text" class="tour-search-input datepicker hasDatepicker" id="date_to" placeholder="<%= lang.toursPageSearchContentDateEnd %>">
+                        <input type="text" class="tour-search-input datepicker hasDatepicker" name="finishedAt" id="date_end" autocomplete="false" placeholder="<%= lang.toursPageSearchContentDateEnd %>">
                     </div>
                     <div class="search-item item-select">
-                        <select name="people">
+                        <select name="persons" id="persons">
                             <option value="1"><%= lang.toursPageSearchContentPersons %></option>
                             <option value="2">2 people</option>
                             <option value="3">3 people</option>
@@ -31,12 +32,11 @@
                         </select>
                     </div>
                     <div class="search-item item-budget">
-                        <input type="number" class="hotel-budget-input" id="budget" placeholder="<%= lang.toursPageSearchContentMaxPrice %>">
+                        <input type="number" class="hotel-budget-input" name="price" id="price" placeholder="<%= lang.toursPageSearchContentMaxPrice %>">
                     </div>
                     <div class="button-submit">
                         <button type="submit" class="button"><%= lang.toursPageSearchContentButton %> <i class="fa fa-angle-right" aria-hidden="true"></i></button>
-                        <input type="hidden" name="s">
-                        <input type="hidden" name="search_tour" value="1">
+                        <input type="hidden" name="searchTour" value="1">
                     </div>
                 </form>					
             </div>
@@ -73,7 +73,7 @@
                 <h3>popular tours</h3>
                 <div class="item clearfix">
                     <div class="image">
-                        <a href="tour-detail.html"><img src="image/catalog/demo/product/travel/p1.jpg" alt="Bougainvilleas on Lombard Street" class="img-responsive"></a>
+                        <a href="tour-detail.html"><img src="webUI/image/catalog/demo/product/travel/p1.jpg" alt="Bougainvilleas on Lombard Street" class="img-responsive"></a>
                     </div>
                     <div class="content">
                         <h4><a href="tour-detail.html">7-Day Great Britain Tour Packag...</a></h4>
@@ -82,7 +82,7 @@
                 </div>
                 <div class="item clearfix">
                     <div class="image">
-                        <a href="tour-detail.html"><img src="image/catalog/demo/product/travel/p2.jpg" alt="Bougainvilleas on Lombard Street" class="img-responsive"></a>
+                        <a href="tour-detail.html"><img src="webUI/image/catalog/demo/product/travel/p2.jpg" alt="Bougainvilleas on Lombard Street" class="img-responsive"></a>
                     </div>
                     <div class="content">
                         <h4><a href="tour-detail.html">7-Day Great Britain Tour Packag...</a></h4>
@@ -124,40 +124,46 @@
                     </div>
                 </div>
                 <div class="section-style4 products-list grid row number-col-3 so-filter-gird">
-                    <div class="product-layout col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                        <div class="product-item-container item">
-                            <div class="item-block so-quickview">
-                                <div class="image">
-                                    <a href="tour-detail.html" target="_self">
-                                        <img src="image/catalog/demo/product/travel/p1.jpg" alt="Bougainvilleas on Lombard Street,  San Francisco, Tokyo" class="img-responsive">
-                                    </a>
-                                    <span class="label-hot"><i class="fa fa-fire" aria-hidden="true"></i>Hot tour</span>
-                                    <span class="label-rate style2"><i class="fa fa-star" aria-hidden="true"></i>high rate</span>
-                                </div>
-                                <div class="item-content clearfix">
-                                    <h3><a href="tour-detail.html">Sapa Trip, 2 days 1 night Sapa Trip, 2 days  1 night</a></h3>
-                                    <div class="reviews-content">
-                                        <div class="star">
-                                            <span style="width: 60px"></span>	
-                                        </div>
-                                        <a href="#" class="review-link" rel="nofollow">(15 reviews)</a>
+                    
+                    <% tours.forEach(item =>{ %>
+
+                        <div class="product-layout col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <div class="product-item-container item">
+                                <div class="item-block so-quickview">
+                                    <div class="image">
+                                        <a href="tour-detail.html" target="_self">
+                                            <img src="webUI/image/catalog/demo/product/travel/p1.jpg" alt="Bougainvilleas on Lombard Street,  San Francisco, Tokyo" class="img-responsive">
+                                        </a>
+                                        <span class="label-hot"><i class="fa fa-fire" aria-hidden="true"></i>Hot tour</span>
+                                        <span class="label-rate style2"><i class="fa fa-star" aria-hidden="true"></i>high rate</span>
                                     </div>
-                                    <ul>
-                                        <li><i class="fa fa-map-marker" aria-hidden="true"></i> New Zealand</li>
-                                        <li><i class="fa fa-clock-o" aria-hidden="true"></i> 2 Day</li>
-                                        <li><i class="fa fa-user-circle" aria-hidden="true"></i> 4 persons</li>
-                                    </ul>
-                                    <div class="des">Sed ut perspiciatis unde omnis iste natus error sit volup tatem accusantium dolorem que laudantium, ...</div>
-                                    <div class="item-bot clearfix">
-                                        <div class="price pull-left">
-                                            from <label>$230</label><span>person</span>
+                                    <div class="item-content clearfix">
+                                        <h3><a href="tour-detail.html"><%= item.title %></a></h3>
+                                        <div class="reviews-content">
+                                            <div class="star">
+                                                <span style="width: 60px"></span>	
+                                            </div>
+                                            <a href="#" class="review-link" rel="nofollow">(15 reviews)</a>
                                         </div>
-                                        <a href="booking-step.html" class="book-now btn-quickview quickview quickview_handler pull-right" title="Quick View" data-title="Quick View" data-fancybox-type="iframe">Book now</a>
+                                        <ul>
+                                            <li><i class="fa fa-map-marker" aria-hidden="true"></i> New Zealand</li>
+                                            <li><i class="fa fa-clock-o" aria-hidden="true"></i> 2 Day</li>
+                                            <li><i class="fa fa-user-circle" aria-hidden="true"></i> <%= item.person %> kişi</li>
+                                        </ul>
+                                        <div class="des"><%= item.description %></div>
+                                        <div class="item-bot clearfix">
+                                            <div class="price pull-left">
+                                                from <label>$<%= item.price %></label>
+                                            </div>
+                                            <a href="booking-step.html" class="book-now btn-quickview quickview quickview_handler pull-right" title="Quick View" data-title="Quick View" data-fancybox-type="iframe">Book now</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+
+                    <% }) %>
+
                 </div>
                 <div class="product-filter product-filter-bottom filters-panel">
                     <ul class="pagination">
@@ -173,3 +179,54 @@
         </div>
     </div>
 </div>
+
+<script>
+    $('#item_search_form').ajaxForm({
+        beforeSubmit: function (arr) {
+
+            if ($('#category').val() == "") {
+                toastr.warning("Kategori seçiniz");
+                $('#category').focus();
+                return false;
+            }
+            if ($('#date_start').val() == "") {
+                toastr.warning("Başlama tarihi giriniz");
+                $('#date_start').focus();
+                return false;
+            }
+            if ($('#date_end').val() == "") {
+                toastr.warning("Bitiş tarihi giriniz");
+                $('#date_end').focus();
+                return false;
+            }
+            if ($('#persons').val() == "") {
+                toastr.warning("Kişi sayısı giriniz");
+                $('#persons').focus();
+                return false;
+            }
+            if ($('#price').val() == "") {
+                toastr.warning("Fiyat giriniz");
+                $('#price').focus();
+                return false;
+            }
+
+            $('#save_btn').attr("data-kt-indicator", "on")
+            $('#save_btn').attr("disabled", "disabled")
+        },
+        beforeSend: function (e) {
+
+        },
+        complete: function (result) {
+            console.log(result.responseJSON)
+
+            if (result.responseJSON.isSuccess) {
+                toastr.success(result.responseJSON.message);
+            }
+            else {
+                toastr.error(result.responseJSON.message)
+            }
+
+            $('#save_btn').removeAttr('data-kt-indicator')
+        },
+    });
+</script>

@@ -64,19 +64,24 @@
                 <div class="row">
                     <form method="get" class="travl-search-advanced clearfix">
                         <div class="search-item city pull-left">
-                            <p>Destinations</p>
-                            <input type="text" class="tour-search-input" id="city" placeholder="City, region or anywhere">
+                            <p><%= lang.toursPageSearchContentCategory %></p>
+                            <select name="category">
+                                <option value="1">1 people</option>
+                                <option value="2">2 people</option>
+                                <option value="3">3 people</option>
+                                <option value="4">4 people</option>
+                            </select>
                         </div>
                         <div class="search-item date pull-left">
-                            <p>Check in</p>
+                            <p><%= lang.toursPageSearchContentDateStart %></p>
                             <input type="text" class="tour-search-input datepicker hasDatepicker" id="date_from" placeholder="DD/MM/YY">
                         </div>
                         <div class="search-item date pull-left">
-                            <p>Check out</p>
+                            <p><%= lang.toursPageSearchContentDateEnd %></p>
                             <input type="text" class="tour-search-input datepicker hasDatepicker" id="date_to" placeholder="DD/MM/YY">
                         </div>
                         <div class="search-item item-select pull-left">
-                            <p>People</p>
+                            <p><%= lang.toursPageSearchContentPersons %></p>
                             <select name="people">
                                 <option value="1">1 people</option>
                                 <option value="2">2 people</option>
@@ -85,12 +90,12 @@
                             </select>
                         </div>
                         <div class="search-item item-budget pull-left">
-                            <p>Max Budget</p>
-                            <input type="number" class="hotel-budget-input" id="budget" placeholder="$1000">
+                            <p><%= lang.toursPageSearchContentMaxPrice %></p>
+                            <input type="number" class="hotel-budget-input" id="budget" >
                         </div>
                         <div class="search-item button-submit pull-left">
                             <p>.</p>
-                            <button type="submit" class="button">Search Tour <i class="fa fa-angle-right" aria-hidden="true"></i></button>
+                            <button type="submit" class="button"><%= lang.toursPageSearchContentButton %> <i class="fa fa-angle-right" aria-hidden="true"></i></button>
                             <input type="hidden" name="s">
                             <input type="hidden" name="search_tour" value="1">
                         </div>

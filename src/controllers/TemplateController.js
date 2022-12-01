@@ -30,7 +30,7 @@ let adminNavigations = [
     '/sayfa-kaydet',
     '/createOrUpdatePageAjax',
     //tours
-    '/turlar',
+    '/tur-listesi',
     '/tur-kaydet',
     '/createOrUpdateTourAjax',
     //users

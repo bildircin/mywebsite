@@ -5,6 +5,8 @@ import { getCheckedBtn, serializeList } from "../../globalFunctions.js"
 import LanguageItem from '../models/template/LanguageItem.js'
 import PageContent from '../models/template/PageContent.js'
 import Navigation from "../models/template/Navigation.js"
+import Category from "../models/Category.js"
+import TourCategory from "../models/template/TourCategory.js"
 
 
 let lang = {
@@ -17,7 +19,7 @@ let adminNavigations = [
         id:Date.now(),
         parentId:0,
         title:'Turlar',
-        link:'/turlar',
+        link:'/tur-listesi',
         sequence:0,
         description:'',
         isActive:true,
@@ -113,12 +115,53 @@ const contactPage = async (req,res)=>{
 const toursPage = async (req,res)=>{
     res.locals.title="Turlar"
 
+    //query
+    const q = req.query;
+    let tours = []
+
+    if(q.hasOwnProperty('searchTour')){
+
+        const tourCategories = await TourCategory.findAll({
+            where:{
+                categoryId:q.category == 'null' ? {[Op.ne]:null} : q.category
+            }
+        }).catch(err=>{
+            console.log(err)
+        })
+        let tourIds = tourCategories.map(el => el.tourId)
+        q.startedAt = q.startedAt != '' ? moment(q.startedAt, "MM/DD/YYYY").format('YYYY-MM-DD') : ''
+        q.finishedAt = q.finishedAt != '' ? moment(q.finishedAt, "MM/DD/YYYY").format('YYYY-MM-DD') : ''
+        console.log(q)
+        tours = await Tour.findAll({
+            where:{
+                isActive:true,
+                isDeleted:false,
+                id:tourIds,
+                startedAt: '2022-11-03', //q.startedAt != '' ? { [Op.gte]: q.startedAt} : {[Op.ne]: null},
+                finishedAt: '2022-11-30' //q.finishedAt != '' ? { [Op.lte]: q.finishedAt} : {[Op.ne]: null}
+            }
+        })
+    }else{
+        tours = await Tour.findAll({
+            where:{
+                isActive:true,
+                isDeleted:false
+            }
+        })
+    }
+    
+    const categories = await Category.findAll({
+        where:{
+            isActive:true,
+            isDeleted:false
+        }
+    })
+
     const pageContents = await PageContent.findAll({
         where:{
             key:['toursBreadcrumb'],
             languageCode:lang.lng
         }
-
     }).catch(err=>{
         console.log(err)
     })
@@ -127,7 +170,7 @@ const toursPage = async (req,res)=>{
         contents[item.key] = item.value
     });
 
-    await res.render('webUI/home', {layout:'webUI/layout', lang, contents, navigations})
+    await res.render('webUI/tours', {layout:'webUI/layout', lang, contents, navigations, categories, tours})
 }
 
 
