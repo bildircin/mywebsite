@@ -169,7 +169,11 @@
             .done(function(result) {
 
                 let pageContent = result.pageContent
-                $('#content_area').text(pageContent.value)
+                if (pageContent && pageContent.value) {
+                    $('#content_area').val(pageContent.value)
+                }else{
+                    $('#content_area').val('')
+                }
 
                 $('#selected_key').text(key)
                 $('#selected_language').text(languageCode)

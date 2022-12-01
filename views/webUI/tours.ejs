@@ -1,14 +1,3 @@
-<div class="breadcrumbs">
-    <div class="container">
-        <div class="title-breadcrumb">   
-            Tour
-        </div>
-        <ul class="breadcrumb-cate">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="#">Tour</a></li>
-        </ul>
-    </div>
-</div>
 
 <%- contents.toursBreadcrumb %>
 
@@ -17,30 +6,35 @@
         <aside class="col-md-3 col-sm-4 col-xs-12 content-aside left_column sidebar-offcanvas">
             <span id="close-sidebar" class="fa fa-times"></span>
             <div class="module-search clearfix">
-                <h3 class="modtitle">Tour searching</h3>
+                <h3 class="modtitle"><%= lang.toursPageSearchContentTitle %></h3>
                 <form method="get" class="search-pr">
-                    <div class="search-item city">
-                        <input type="text" class="tour-search-input" id="city" placeholder="Your Destination">
+                    <div class="search-item item-select">
+                        <select name="category">
+                            <option value="1"><%= lang.toursPageSearchContentCategory %></option>
+                            <option value="2">2 people</option>
+                            <option value="3">3 people</option>
+                            <option value="4">4 people</option>
+                        </select>
                     </div>
                     <div class="search-item date">
-                        <input type="text" class="tour-search-input datepicker hasDatepicker" id="date_from" placeholder="Day start">
+                        <input type="text" class="tour-search-input datepicker hasDatepicker" id="date_from" placeholder="<%= lang.toursPageSearchContentDateStart %>">
                     </div>
                     <div class="search-item date">
-                        <input type="text" class="tour-search-input datepicker hasDatepicker" id="date_to" placeholder="Day end">
+                        <input type="text" class="tour-search-input datepicker hasDatepicker" id="date_to" placeholder="<%= lang.toursPageSearchContentDateEnd %>">
                     </div>
                     <div class="search-item item-select">
                         <select name="people">
-                            <option value="1">Number</option>
+                            <option value="1"><%= lang.toursPageSearchContentPersons %></option>
                             <option value="2">2 people</option>
                             <option value="3">3 people</option>
                             <option value="4">4 people</option>
                         </select>
                     </div>
                     <div class="search-item item-budget">
-                        <input type="number" class="hotel-budget-input" id="budget" placeholder="Max budget">
+                        <input type="number" class="hotel-budget-input" id="budget" placeholder="<%= lang.toursPageSearchContentMaxPrice %>">
                     </div>
                     <div class="button-submit">
-                        <button type="submit" class="button">Search Tour <i class="fa fa-angle-right" aria-hidden="true"></i></button>
+                        <button type="submit" class="button"><%= lang.toursPageSearchContentButton %> <i class="fa fa-angle-right" aria-hidden="true"></i></button>
                         <input type="hidden" name="s">
                         <input type="hidden" name="search_tour" value="1">
                     </div>
@@ -97,8 +91,6 @@
                 </div>
             </div>
         </aside>
-
-        <%- contents.toursAside %>
 
         <div id="content" class="col-md-9 col-sm-12 col-xs-12">
             <a href="javascript:void(0)" class="open-sidebar hidden-lg hidden-md"><i class="fa fa-bars"></i>Sidebar</a>

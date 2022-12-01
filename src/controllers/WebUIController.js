@@ -12,6 +12,20 @@ let lang = {
     languageTitle:'Türkçe'
 }
 let contents = {}
+let adminNavigations = [
+    {
+        id:Date.now(),
+        parentId:0,
+        title:'Turlar',
+        link:'/turlar',
+        sequence:0,
+        description:'',
+        isActive:true,
+        isDeleted:false,
+        createdAt:'2022-01-01',
+        updatedAt:'2022-01-01'
+    }
+]
 let navigations = []
 
 //middleware
@@ -61,7 +75,7 @@ const setContents = async (req,res,next)=>{
         console.log(err)
     })
 
-    navigations = serializeList(list)
+    navigations = [...adminNavigations, ...serializeList(list)]
     next()
 }
 
@@ -101,7 +115,7 @@ const toursPage = async (req,res)=>{
 
     const pageContents = await PageContent.findAll({
         where:{
-            key:['toursBreadcrumb', 'toursAside'],
+            key:['toursBreadcrumb'],
             languageCode:lang.lng
         }
 
