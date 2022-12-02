@@ -19,7 +19,7 @@ let adminNavigations = [
         id:Date.now(),
         parentId:0,
         title:'Turlar',
-        link:'/tur-listesi',
+        link:'/turlar',
         sequence:0,
         description:'',
         isActive:true,
@@ -32,29 +32,31 @@ let navigations = []
 
 //middleware
 const setLang = async (req,res,next)=>{
+    
     if(req.cookies.lng){
         lang.lng = req.cookies.lng
-
-        const languages = await LanguageItem.findAll({
-            where:{
-                lng:lang.lng
-            }
-        }).catch(err=>{
-            console.log(err)
-        })
-
-        languages.forEach(item => {
-            lang[item.key] = item.value
-        });
     }
+
+    const languages = await LanguageItem.findAll({
+        where:{
+            lng:lang.lng
+        }
+    }).catch(err=>{
+        console.log(err)
+    })
+
+    languages.forEach(item => {
+        lang[item.key] = item.value
+    })
+
     if(req.cookies.languageTitle){
         lang.languageTitle = req.cookies.languageTitle
     }
 
     next()
 }
-//middleware -> only layout contents and navigations
-const setContents = async (req,res,next)=>{
+//middleware
+const setLayoutContents = async (req,res,next)=>{
 
     const layoutHeaderBonusLeft = await PageContent.findOne({
         where:{
@@ -67,6 +69,11 @@ const setContents = async (req,res,next)=>{
     if(layoutHeaderBonusLeft){
         contents.layoutHeaderBonusLeft = layoutHeaderBonusLeft.value
     }
+    next()
+}
+
+//middleware
+const setNavigations = async (req,res,next)=>{
 
     const list = await Navigation.findAll({
         where:{
@@ -118,6 +125,7 @@ const toursPage = async (req,res)=>{
     //query
     const q = req.query;
     let tours = []
+    console.log(q)
 
     if(q.hasOwnProperty('searchTour')){
 
@@ -132,13 +140,17 @@ const toursPage = async (req,res)=>{
         q.startedAt = q.startedAt != '' ? moment(q.startedAt, "MM/DD/YYYY").format('YYYY-MM-DD') : ''
         q.finishedAt = q.finishedAt != '' ? moment(q.finishedAt, "MM/DD/YYYY").format('YYYY-MM-DD') : ''
         console.log(q)
+        console.log(tourIds)
+
         tours = await Tour.findAll({
             where:{
                 isActive:true,
                 isDeleted:false,
-                id:tourIds,
-                startedAt: '2022-11-03', //q.startedAt != '' ? { [Op.gte]: q.startedAt} : {[Op.ne]: null},
-                finishedAt: '2022-11-30' //q.finishedAt != '' ? { [Op.lte]: q.finishedAt} : {[Op.ne]: null}
+                //id:tourIds,
+                //startedAt:  q.startedAt != '' ? { [Op.gte]: moment(q.startedAt)} : {[Op.ne]: null},
+                //finishedAt: q.finishedAt != '' ? { [Op.lte]: moment(q.finishedAt) } : {[Op.ne]: null},
+                //persons: q.persons != '0' ? q.persons : {[Op.ne]: null}
+                price: q.price != '' ? { [Op.lte]: q.price } : {[Op.ne]: null}
             }
         })
     }else{
@@ -170,15 +182,16 @@ const toursPage = async (req,res)=>{
         contents[item.key] = item.value
     });
 
-    await res.render('webUI/tours', {layout:'webUI/layout', lang, contents, navigations, categories, tours})
+    await res.render('webUI/tours', {layout:'webUI/layout', lang, contents, q, navigations, categories, tours})
 }
 
 
 export default {
     setLang,
+    setLayoutContents,
+    setNavigations,
     homePage,
     aboutPage,
     contactPage,
-    setContents,
     toursPage
 }

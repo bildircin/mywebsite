@@ -3,7 +3,8 @@ const router = express.Router()
 import webUIController from '../controllers/WebUIController.js'
 
 router.use(webUIController.setLang)
-router.use(webUIController.setContents)
+router.use(webUIController.setLayoutContents)
+router.use(webUIController.setNavigations)
 router.get('/', webUIController.homePage)
 router.get('/hakkimizda', webUIController.aboutPage)
 router.get('/iletisim', webUIController.contactPage)
