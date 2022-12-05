@@ -172,12 +172,15 @@
                 </div>
                 <div class="product-filter product-filter-bottom filters-panel">
                     <ul class="pagination">
-                        <li><%= paginatedResults.tourCount %></li>
-                        <li><a href="#"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
-                        <% for(let i = 0; i < paginatedResults.tourCount; i++){ %>
-                            <li class=<%= i + 1 == paginatedResults.page ? 'active' : '' %>><a href="javascript:;" class="paginate-btn" data-value="<%= i %>"><%= i + 1 %></a></li>
+                        <% if(paginatedResults.previous){ %>
+                            <li><a href="javascript:;" class="paginate-btn" data-value="<%= paginatedResults.previous.page %>"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
                         <% } %>
-                        <li><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                        <% for(let i = 0; i < paginatedResults.pageCount; i++){ %>
+                            <li class=<%= i + 1 == paginatedResults.page ? 'active' : '' %>><a href="javascript:;" class="paginate-btn" data-value="<%= i + 1 %>"><%= i + 1 %></a></li>
+                        <% } %>
+                        <% if(paginatedResults.next){ %>
+                            <li><a href="javascript:;" class="paginate-btn" data-value="<%= paginatedResults.next.page %>"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                        <% } %>
                     </ul>
                 </div>
             </div>
@@ -204,7 +207,7 @@
         let input = $("<input>")
         .attr("type", "hidden")
         .attr("name", "page").val(val)
-        $("#item_search_form input[name=sort]").remove()
+        $("#item_search_form input[name=page]").remove()
         $('#item_search_form').append(input)
 
         $("#item_search_form").submit()

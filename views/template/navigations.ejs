@@ -109,6 +109,16 @@
 
                     <input type="hidden" id="update_navigation_id" name="id" value="">
 
+                    <div class="mb-10" id="navigation_content">
+                        <label class="required form-label">Navigasyon</label>
+                        <select class="form-select form-select-solid" id="selected_parent_navigation" name="selectedParentNavigation" data-control="select2" data-placeholder="Seçim yapınız">
+                            <option></option>
+                            <% parentNavigations.forEach(item =>{ %>
+                                <option value="<%= item.id %>"><%= item.title %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+
                     <div class="mb-10">
                         <label class="required form-label">Başlık</label>
                         <input type="text" id="title" name="title" class="form-control" />
@@ -214,6 +224,13 @@
             $('#update_navigation_id').val(id)
             $('#update-item-modal .modal-title').text(item.title)
 
+            if(item.parentId == 0){
+                $('#selected_parent_navigation').val('').trigger('change')
+                $('#navigation_content').css('display', 'none')
+            }else{
+                $('#selected_parent_navigation option[value=' + item.parentId + ']').prop('selected', true).trigger('change')
+                $('#navigation_content').css('display', 'block')
+            }
             $('#title').val(item.title)
             $('#link').val(item.link)
             $('#description').text(item.description)
@@ -306,21 +323,21 @@
             if (result.responseJSON.isSuccess) {
 
                 const id = $('#update_navigation_id').val()
+                const process = result.responseJSON.process
 
                 // create
-                if(id == undefined || id == null || id == ""){
+                if(process == 'create'){
 
                     let navigation = result.responseJSON.navigation
-              
+
                     let createItem = {
                         id: navigation.id,
+                        parentId: navigation.parentId,
                         title: navigation.title,
                         link: navigation.link,
                         description: navigation.description,
                         isActive: navigation.isActive
                     }
-                    console.log('navigation.id')
-                    console.log(navigation.id)
                     tempNavigations.push(createItem)
 
                     let ddItem = `<li class="dd-item handle_${navigation.id}" data-name="${navigation.title}" data-id="${navigation.id}">
@@ -333,19 +350,29 @@
                                         </span>
                                     </div>
                                 </li>`
+                    if(createItem.parentId == 0){
+                        $('#nestable_list_editable > .dd-list').append(ddItem)
+                    }else{
 
-                    $('#nestable_list_editable > .dd-list').append(ddItem)
+                        if($('.handle_' + createItem.parentId + ' .dd-list').html()){
+                            $('.handle_' + createItem.parentId + ' .dd-list').append(ddItem)
+                        }else{
+                            let ddList = `<ol class="dd-list">
+                                    ${ddItem}
+                                </ol>`
+                            $('.handle_' + createItem.parentId).append(ddList)
+                        }
+                    }
                     
                 // update
-                }else{
-                    let title = $('#title').val()
-                    let link = $('#link').val()
-                    let description = $('#description').text()
-                    let isActive = $('#update_navigation_isActive').prop('checked')
+                }else if(process == 'update'){
 
+                    const {id, parentId, title, link, description, isActive} = result.responseJSON.updatedNavigation
+                    console.log(result.responseJSON.updatedNavigation)
                     let filteredArray =  tempNavigations.filter(el => el.id != id)
                     let updatedItem = {
                         id,
+                        parentId,
                         title,
                         link,
                         description,
@@ -368,8 +395,6 @@
             else {
                 toastr.error(result.responseJSON.message)
             }
-            
-            //global.hideLoader()
         },
     })
 

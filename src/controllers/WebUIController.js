@@ -126,35 +126,33 @@ const toursPage = async (req,res)=>{
     //query
     const q = req.query;
     let tours = []
-
-    /********************* */
-   const page = !req.query.page ? '1' : req.query.page
+    const page = req.query.page ? parseInt(req.query.page) : 1
     const limit = 4
- /* 
     const startIndex = (page - 1) * limit
     const endIndex = page * limit
 
-    const results = {}
+    const tourCount = await Tour.count({
+        where:{
+            isActive:true,
+            isDeleted:false
+        }
+    })
+    const paginatedResults = {
+        pageCount:Math.ceil(tourCount / limit),
+        page
+    }
 
-    if (endIndex < tour.length) {
-        results.next = {
-            page: page + 1,
-            limit: limit
+    if (endIndex < tourCount) {
+        paginatedResults.next = {
+            page: page + 1
         }
     }
 
     if (startIndex > 0) {
-        results.previous = {
-            page: page - 1,
-            limit: limit
+        paginatedResults.previous = {
+            page: page - 1
         }
     }
-
-    results.results = model.slice()
-
-    res.paginatedResults = results */
-    /********************* */
-    console.log(q)
 
     if(q.hasOwnProperty('searchTour')){
 
@@ -196,23 +194,22 @@ const toursPage = async (req,res)=>{
             },
             order:[
                 orderSort
-            ]
+            ],
+            offset:startIndex,
+            limit:limit
         })
     }else{
         tours = await Tour.findAll({
             where:{
                 isActive:true,
                 isDeleted:false
-            }
+            },
+            offset:startIndex,
+            limit:limit
         })
     }
 
-    const tourCount = await Tour.count({
-        where:{
-            isActive:true,
-            isDeleted:false
-        }
-    })
+
     
     const categories = await Category.findAll({
         where:{
@@ -234,7 +231,7 @@ const toursPage = async (req,res)=>{
         contents[item.key] = item.value
     });
     
-    await res.render('webUI/tours', {layout:'webUI/layout', lang, contents, q, navigations, categories, tours, paginatedResults:{tourCount:Math.ceil(tourCount / limit), page}})
+    await res.render('webUI/tours', {layout:'webUI/layout', lang, contents, q, navigations, categories, tours, paginatedResults})
 }
 
 

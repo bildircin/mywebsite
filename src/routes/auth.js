@@ -71,7 +71,7 @@ router.post('/logout', function(req, res, next) {
   });
 
 router.post('/user-ajax', passport.authenticate('local', {
-    successRedirect: '/',
+    successRedirect: '/navigasyonlar',
     failureRedirect: '/login',
     failureFlash: true
 }))

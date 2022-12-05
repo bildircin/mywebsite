@@ -58,7 +58,7 @@ const navigations = async (req,res)=>{
             isDeleted:false
         }
     })
-
+    const parentNavigations = await navigations.filter(el => el.parentId == 0)
     let geciciDizi = []
 
     navigations.forEach(item => {  // parentid ye sahip olanları gecici dizide parentid olusturup içine ekedik
@@ -97,7 +97,7 @@ const navigations = async (req,res)=>{
     })
     sirala(ret)
 
-    await res.render('template/navigations', {navigations:ret, tempNavigations:navigations})
+    await res.render('template/navigations', {navigations:ret, tempNavigations:navigations, parentNavigations})
 }
 
 const sequenceNavigationUpdateAjax = async (req,res)=>{
@@ -133,7 +133,7 @@ const sequenceNavigationUpdateAjax = async (req,res)=>{
 
 const createOrUpdateNavAjax = async (req,res)=>{
     
-    const {id, description, isActive } = req.body
+    const {id, selectedParentNavigation, description, isActive } = req.body
     let title = req.body.title
     let link = req.body.link
     
@@ -143,6 +143,7 @@ const createOrUpdateNavAjax = async (req,res)=>{
     if (link == "" || link == null || link == undefined || link.trim() == "") {
         return res.status(400).send({isSuccess:false, message: "Lütfen link giriniz"})
     }
+
     title = title.trim()
     link = link.trim()
 
@@ -156,6 +157,10 @@ const createOrUpdateNavAjax = async (req,res)=>{
         
         // create
         if(id == "" || id == null || id == undefined){
+
+            if (selectedParentNavigation == "" || selectedParentNavigation == null || selectedParentNavigation == undefined) {
+                return res.status(400).send({isSuccess:false, message: "Lütfen Navigasyon seçiniz"})
+            }
             const isSameLink = await Navigation.findOne({
                 where:{
                     link
@@ -164,8 +169,8 @@ const createOrUpdateNavAjax = async (req,res)=>{
             if (isSameLink) {
                 return res.send({isSuccess:false, message: "Bu link kullanılıyor. Lütfen farklı bir link giriniz"})
             }
-
             const navigation = await Navigation.create({
+                parentId:selectedParentNavigation,
                 title,
                 link,
                 description,
@@ -173,7 +178,7 @@ const createOrUpdateNavAjax = async (req,res)=>{
             })
 
             await t.commit()
-            await res.send({isSuccess:true, message:'Navigasyon başarıyla eklendi', navigation})
+            await res.send({isSuccess:true, process:'create', message:'Navigasyon başarıyla eklendi', navigation})
         // update
         }else{
             const isSameLink = await Navigation.findOne({
@@ -189,6 +194,7 @@ const createOrUpdateNavAjax = async (req,res)=>{
             }
 
             const navigation = await Navigation.update({
+                parentId:selectedParentNavigation,
                 title,
                 link,
                 description,
@@ -198,8 +204,10 @@ const createOrUpdateNavAjax = async (req,res)=>{
                     id
                 }
             })
+            const updatedNavigation = await Navigation.findByPk(id)
+            
             await t.commit()
-            await res.send({isSuccess:true, message:'Navigasyon başarıyla güncellendi', navigation})
+            await res.send({isSuccess:true, process:'update', message:'Navigasyon başarıyla güncellendi', updatedNavigation})
         }
     } catch (error) {
         console.log(error)
