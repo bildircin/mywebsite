@@ -104,7 +104,26 @@ const sequenceNavigationUpdateAjax = async (req,res)=>{
     let nestList = JSON.parse(req.body.EditableJSONList)
     let id = 0
     let navigationList = deserializeList(nestList, id)
-    
+
+    const parentNavigations = await Navigation.findAll({
+        where:{
+            parentId:0,
+            isDeleted:false
+        }
+    })
+    let parentList = parentNavigations.map(el=> el.id)
+    let navList = navigationList.filter(el=>el.parentId == 0).map(el=> el.id)
+    let invalidNavigationInclude = false
+    await navList.forEach(item => {
+        if(!parentList.includes(item)){
+            console.log('not include => ' + item)
+            invalidNavigationInclude = true
+            return
+        }
+    })
+    if(invalidNavigationInclude){
+        return res.status(400).send({isSuccess:false, message: "Ana Navigasyon Ekleme yetkiniz yok. Lütfen alt navigasyon ekleyiniz"})
+    }
     const t = await db.transaction()
     
     try{
@@ -178,7 +197,7 @@ const createOrUpdateNavAjax = async (req,res)=>{
             })
 
             await t.commit()
-            await res.send({isSuccess:true, process:'create', message:'Navigasyon başarıyla eklendi', navigation})
+            await res.send({isSuccess:true, process:'create', message:'Navigasyon başarıyla eklendi', updatedNavigation:navigation})
         // update
         }else{
             const isSameLink = await Navigation.findOne({
@@ -205,7 +224,7 @@ const createOrUpdateNavAjax = async (req,res)=>{
                 }
             })
             const updatedNavigation = await Navigation.findByPk(id)
-            
+
             await t.commit()
             await res.send({isSuccess:true, process:'update', message:'Navigasyon başarıyla güncellendi', updatedNavigation})
         }

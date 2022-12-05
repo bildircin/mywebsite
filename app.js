@@ -844,6 +844,7 @@ import userRoutes from './src/routes/UserRoutes.js'
 import categoryRoutes from './src/routes/CategoryRoutes.js'
 import videoRoutes from './src/routes/VideoRoutes.js'
 import tourRoutes from './src/routes/TourRoutes.js'
+import imageRoutes from './src/routes/ImageRoutes.js'
 import templateRoutes from './src/routes/TemplateRoutes.js'
 import webUIRoutes from './src/routes/WebUIRoutes.js'
 import authRouter from './src/routes/auth.js'
@@ -904,6 +905,7 @@ app.use(userRoutes)
 app.use(categoryRoutes)
 app.use(videoRoutes)
 app.use(tourRoutes)
+app.use(imageRoutes)
 app.use(templateRoutes)
 
 

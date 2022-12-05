@@ -65,10 +65,12 @@
                                     <div class="dd-<%= cssClass %> dd-container">
 
                                         <span class="item-title"><%= item.title %></span>
-                                        <span class="dd-item-btn-group">
-                                            <a href="javascript:;" class="badge light badge-secondary edit-button"><i class="fa-solid fa-pen-to-square"></i></a>
-                                            <a href="javascript:;" class="badge light badge-danger delete-item"><i class="fa-solid fa-trash"></i></a>
-                                        </span>
+                                        <% if(item.parentId != 0){ %>
+                                            <span class="dd-item-btn-group">
+                                                <a href="javascript:;" class="badge light badge-secondary edit-button"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                <a href="javascript:;" class="badge light badge-danger delete-item"><i class="fa-solid fa-trash"></i></a>
+                                            </span>
+                                        <% } %>
                                     </div>
                                      
                                       <%  if (item.hasOwnProperty('children')){ %>
@@ -322,67 +324,35 @@
             
             if (result.responseJSON.isSuccess) {
 
-                const id = $('#update_navigation_id').val()
-                const process = result.responseJSON.process
-
-                // create
-                if(process == 'create'){
-
-                    let navigation = result.responseJSON.navigation
-
-                    let createItem = {
-                        id: navigation.id,
-                        parentId: navigation.parentId,
-                        title: navigation.title,
-                        link: navigation.link,
-                        description: navigation.description,
-                        isActive: navigation.isActive
-                    }
-                    tempNavigations.push(createItem)
-
-                    let ddItem = `<li class="dd-item handle_${navigation.id}" data-name="${navigation.title}" data-id="${navigation.id}">
-                                    <div class="dd-handle dd-container">
-
-                                        <span class="item-title">${navigation.title}</span>
-                                        <span class="dd-item-btn-group">
-                                            <a href="javascript:;" class="badge light badge-secondary edit-button"><i class="fa-solid fa-pen-to-square"></i></a>
-                                            <a href="javascript:;" class="badge light badge-danger delete-item"><i class="fa-solid fa-trash"></i></a>
-                                        </span>
-                                    </div>
-                                </li>`
-                    if(createItem.parentId == 0){
-                        $('#nestable_list_editable > .dd-list').append(ddItem)
-                    }else{
-
-                        if($('.handle_' + createItem.parentId + ' .dd-list').html()){
-                            $('.handle_' + createItem.parentId + ' .dd-list').append(ddItem)
-                        }else{
-                            let ddList = `<ol class="dd-list">
-                                    ${ddItem}
-                                </ol>`
-                            $('.handle_' + createItem.parentId).append(ddList)
-                        }
-                    }
-                    
-                // update
-                }else if(process == 'update'){
-
-                    const {id, parentId, title, link, description, isActive} = result.responseJSON.updatedNavigation
-                    console.log(result.responseJSON.updatedNavigation)
-                    let filteredArray =  tempNavigations.filter(el => el.id != id)
-                    let updatedItem = {
-                        id,
-                        parentId,
-                        title,
-                        link,
-                        description,
-                        isActive
-                    }
-                    tempNavigations = [...filteredArray, updatedItem]
-
-                    $('.handle_' + id + ' > .dd-handle > .item-title').text(title)
+                const {id, parentId, title, link, sequence, description, isActive} = result.responseJSON.updatedNavigation
+                
+                let filteredArray =  tempNavigations.filter(el => el.id != id)
+                let updatedItem = {
+                    id,
+                    parentId,
+                    title,
+                    link,
+                    sequence,
+                    description,
+                    isActive
                 }
+                tempNavigations = [...filteredArray, updatedItem]
 
+                console.log(tempNavigations)
+
+                $('#nestable_list_editable').empty()
+                //$('#nestable_list_editable').append('<ol class="dd-list"></ol>')
+                $('#nestable_list_editable').append(nested(serializeList(tempNavigations), 'handle'))
+                
+                
+                // activate Nestable for list 2
+                $('#nestable_list_editable').nestable({
+                    maxDepth: 2
+                }).on('change', updateOutput);
+                
+                // output initial serialised data
+                updateOutput($('#nestable_list_editable').data('output', $('#nestable_list_editable_output')));
+                    
                 $(".dd a").on("mousedown", function (event) { // mousedown prevent nestable click
                     event.preventDefault();
                     return false;
@@ -395,7 +365,7 @@
             else {
                 toastr.error(result.responseJSON.message)
             }
-        },
+        }
     })
 
     $('#update-item-modal').on('hidden.bs.modal', function () {
@@ -419,6 +389,92 @@
         $("#navigation_update_form").submit()
     }
 
-    
+    function serializeList(arr){
+        let geciciDizi = []
+
+        arr.forEach(item => {  // parentid ye sahip olanları gecici dizide parentid olusturup içine ekedik
+            if (item.parentId == 0)
+            return
+            
+            if (geciciDizi[ item.parentId ] === undefined)
+            geciciDizi[ item.parentId ] = []
+            
+            geciciDizi[ item.parentId ].push(item)
+        })
+        
+        arr.forEach(item => {
+            if (item.id == 0)
+                return
+
+            if (geciciDizi[ item.id ] === undefined)  // gecici dizide yoksa bu en tepede bir parenttır yani parent id si 0 dır
+                return
+
+            item["children"] = geciciDizi[ item.id ] // degerini gecici diziden alıp içine ekleyeim
+        })
+
+        let ret = []
+
+        arr.forEach(item => { // son olarak en tepe parent ları ret e ekleyelim
+            if (item.parentId !== 0)
+                return
+
+            ret.push(item)
+        })
+
+        //sıralamak için
+        arr.forEach(item =>{
+            isChildren(item)
+        })
+        sirala(ret)
+
+        return ret
+    }
+
+    function isChildren(item){
+        if(item.children){
+            for (let i = 0; i < item.children.length; i++) {
+                isChildren(item.children[i])
+            }
+            sirala(item.children)
+        }
+    }
+
+    function sirala(arr){
+        for (let i = 0; i < arr.length; i++) {
+            for (let j = 0; j < arr.length - 1; j++) {
+                if(arr[j].sequence > arr[j + 1].sequence){
+                    let temp = arr[j]
+                    arr[j] = arr[j + 1]
+                    arr[j + 1] = temp
+                }
+            }
+        }
+    }
+
+    function nested(list, cssClass){
+
+        let ddList = $('<ol>').addClass('dd-list')
+        
+        list.forEach(item=>{
+
+            let li = $(`<li class="dd-item handle_${item.id}" data-name="${item.title}" data-id="${item.id}">`)
+            li.append(`<div class="dd-handle dd-container">
+
+                <span class="item-title">${item.title}</span>
+                <span class="dd-item-btn-group">
+                    <a href="javascript:;" class="badge light badge-secondary edit-button"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <a href="javascript:;" class="badge light badge-danger delete-item"><i class="fa-solid fa-trash"></i></a>
+                </span>
+            </div>`)
+
+            if (item.hasOwnProperty('children')) {
+                li.append(nested(item.children, cssClass))
+            }
+
+            ddList.append(li)
+        })
+
+        return ddList.get(0)
+    }
 
 </script>

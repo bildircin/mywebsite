@@ -15,20 +15,6 @@ let lang = {
     languageTitle:'Türkçe'
 }
 let contents = {}
-let adminNavigations = [
-    {
-        id:Date.now(),
-        parentId:0,
-        title:'Turlar',
-        link:'/turlar',
-        sequence:0,
-        description:'',
-        isActive:true,
-        isDeleted:false,
-        createdAt:'2022-01-01',
-        updatedAt:'2022-01-01'
-    }
-]
 let navigations = []
 
 //middleware
@@ -85,7 +71,7 @@ const setNavigations = async (req,res,next)=>{
         console.log(err)
     })
 
-    navigations = [...adminNavigations, ...serializeList(list)]
+    navigations = [...serializeList(list)]
     next()
 }
 
