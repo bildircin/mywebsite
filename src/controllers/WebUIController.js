@@ -1,4 +1,4 @@
-import { Op } from "sequelize"
+import { Op, Sequelize } from "sequelize"
 import Tour from '../models/template/Tour.js'
 import moment from 'moment'
 import { getCheckedBtn, serializeList } from "../../globalFunctions.js"
@@ -7,6 +7,7 @@ import PageContent from '../models/template/PageContent.js'
 import Navigation from "../models/template/Navigation.js"
 import Category from "../models/Category.js"
 import TourCategory from "../models/template/TourCategory.js"
+import db from '../../db.js'
 
 
 let lang = {
@@ -125,6 +126,34 @@ const toursPage = async (req,res)=>{
     //query
     const q = req.query;
     let tours = []
+
+    /********************* */
+   const page = !req.query.page ? '1' : req.query.page
+    const limit = 4
+ /* 
+    const startIndex = (page - 1) * limit
+    const endIndex = page * limit
+
+    const results = {}
+
+    if (endIndex < tour.length) {
+        results.next = {
+            page: page + 1,
+            limit: limit
+        }
+    }
+
+    if (startIndex > 0) {
+        results.previous = {
+            page: page - 1,
+            limit: limit
+        }
+    }
+
+    results.results = model.slice()
+
+    res.paginatedResults = results */
+    /********************* */
     console.log(q)
 
     if(q.hasOwnProperty('searchTour')){
@@ -139,19 +168,35 @@ const toursPage = async (req,res)=>{
         let tourIds = tourCategories.map(el => el.tourId)
         q.startedAt = q.startedAt != '' ? moment(q.startedAt, "MM/DD/YYYY").format('YYYY-MM-DD') : ''
         q.finishedAt = q.finishedAt != '' ? moment(q.finishedAt, "MM/DD/YYYY").format('YYYY-MM-DD') : ''
-        console.log(q)
-        console.log(tourIds)
+
+
+        let orderSort = ['id']
+        if(q.sort && q.sort != 'null' && q.sort == 'az')
+            orderSort = ['title', 'ASC']
+        if(q.sort && q.sort != 'null' && q.sort == 'za')
+            orderSort = ['title', 'DESC']
+        if(q.sort && q.sort != 'null' && q.sort == 'high')
+            orderSort = ['price', 'ASC']
+        if(q.sort && q.sort != 'null' && q.sort == 'low')
+            orderSort = ['price', 'DESC'] 
+        if(q.sort && q.sort != 'null' && q.sort == 'near')
+            orderSort = ['startedAt', 'ASC']
+        if(q.sort && q.sort != 'null' && q.sort == 'far')
+            orderSort = ['startedAt', 'DESC']
 
         tours = await Tour.findAll({
             where:{
                 isActive:true,
                 isDeleted:false,
-                //id:tourIds,
-                //startedAt:  q.startedAt != '' ? { [Op.gte]: moment(q.startedAt)} : {[Op.ne]: null},
-                //finishedAt: q.finishedAt != '' ? { [Op.lte]: moment(q.finishedAt) } : {[Op.ne]: null},
-                //persons: q.persons != '0' ? q.persons : {[Op.ne]: null}
+                id:tourIds,
+                startedAt:  q.startedAt != '' ? { [Op.gte]: moment(q.startedAt)} : {[Op.ne]: null},
+                finishedAt: q.finishedAt != '' ? { [Op.lte]: moment(q.finishedAt) } : {[Op.ne]: null},
+                persons: q.persons != '0' ? q.persons : {[Op.ne]: null},
                 price: q.price != '' ? { [Op.lte]: q.price } : {[Op.ne]: null}
-            }
+            },
+            order:[
+                orderSort
+            ]
         })
     }else{
         tours = await Tour.findAll({
@@ -161,6 +206,13 @@ const toursPage = async (req,res)=>{
             }
         })
     }
+
+    const tourCount = await Tour.count({
+        where:{
+            isActive:true,
+            isDeleted:false
+        }
+    })
     
     const categories = await Category.findAll({
         where:{
@@ -181,8 +233,8 @@ const toursPage = async (req,res)=>{
     await pageContents.forEach(item => {
         contents[item.key] = item.value
     });
-
-    await res.render('webUI/tours', {layout:'webUI/layout', lang, contents, q, navigations, categories, tours})
+    
+    await res.render('webUI/tours', {layout:'webUI/layout', lang, contents, q, navigations, categories, tours, paginatedResults:{tourCount:Math.ceil(tourCount / limit), page}})
 }
 
 

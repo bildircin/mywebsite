@@ -113,16 +113,16 @@
                                 <label class="control-label" for="input-limit">Show 1-6 of 8 results</label>
                             </div>
                             <div class="form-group short-by">
-                                <select id="input-sort" class="form-control" onchange="location = this.value;">
-                                    <option value="" selected="selected">Sort By</option>
-                                    <option value="">Name (A - Z)</option>
-                                    <option value="">Name (Z - A)</option>
-                                    <option value="">Price (Low &gt; High)</option>
-                                    <option value="">Price (High &gt; Low)</option>
-                                    <option value="">Rating (Highest)</option>
-                                    <option value="">Rating (Lowest)</option>
-                                    <option value="">Model (A - Z)</option>
-                                    <option value="">Model (Z - A)</option>
+                                <select id="input-sort" class="form-control">
+                                    <option value="null" selected="selected">Sort By</option>
+                                    <option value="az">Name (A - Z)</option>
+                                    <option value="za">Name (Z - A)</option>
+                                    <option value="high">Price (Low &gt; High)</option>
+                                    <option value="low">Price (High &gt; Low)</option>
+                                    <!-- <option value="highest">Rating (Highest)</option>
+                                    <option value="lowest">Rating (Lowest)</option> -->
+                                    <option value="near">Date Near</option>
+                                    <option value="far">Date Far</option>
                                 </select>
                             </div>
                         </div>
@@ -153,7 +153,7 @@
                                         <ul>
                                             <li><i class="fa fa-map-marker" aria-hidden="true"></i> New Zealand</li>
                                             <li><i class="fa fa-clock-o" aria-hidden="true"></i> 2 Day</li>
-                                            <li><i class="fa fa-user-circle" aria-hidden="true"></i> <%= item.person %> kişi</li>
+                                            <li><i class="fa fa-user-circle" aria-hidden="true"></i> <%= item.persons %> kişi</li>
                                         </ul>
                                         <div class="des"><%= item.description %></div>
                                         <div class="item-bot clearfix">
@@ -170,68 +170,43 @@
                     <% }) %>
 
                 </div>
-                <!-- <div class="product-filter product-filter-bottom filters-panel">
+                <div class="product-filter product-filter-bottom filters-panel">
                     <ul class="pagination">
+                        <li><%= paginatedResults.tourCount %></li>
                         <li><a href="#"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
-                        <li class="active"><span>1</span></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
+                        <% for(let i = 0; i < paginatedResults.tourCount; i++){ %>
+                            <li class=<%= i + 1 == paginatedResults.page ? 'active' : '' %>><a href="javascript:;" class="paginate-btn" data-value="<%= i %>"><%= i + 1 %></a></li>
+                        <% } %>
                         <li><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
                     </ul>
-                </div> -->
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+<script src="../assets/global/plugins/jquery-form/jquery.form.js"></script>
+
 <script>
-    $('#item_search_form').ajaxForm({
-        beforeSubmit: function (arr) {
 
-            if ($('#category').val() == "") {
-                toastr.warning("Kategori seçiniz");
-                $('#category').focus();
-                return false;
-            }
-            if ($('#date_start').val() == "") {
-                toastr.warning("Başlama tarihi giriniz");
-                $('#date_start').focus();
-                return false;
-            }
-            if ($('#date_end').val() == "") {
-                toastr.warning("Bitiş tarihi giriniz");
-                $('#date_end').focus();
-                return false;
-            }
-            if ($('#persons').val() == "") {
-                toastr.warning("Kişi sayısı giriniz");
-                $('#persons').focus();
-                return false;
-            }
-            if ($('#price').val() == "") {
-                toastr.warning("Fiyat giriniz");
-                $('#price').focus();
-                return false;
-            }
+    $('#input-sort').on('change', function(){
+        let val = $(this).val()
+        let input = $("<input>")
+        .attr("type", "hidden")
+        .attr("name", "sort").val(val)
+        $("#item_search_form input[name=sort]").remove()
+        $('#item_search_form').append(input)
 
-            $('#save_btn').attr("data-kt-indicator", "on")
-            $('#save_btn').attr("disabled", "disabled")
-        },
-        beforeSend: function (e) {
+        $("#item_search_form").submit()
+    })
+    $('.paginate-btn').on('click', function(){
+        let val = $(this).data('value')
+        let input = $("<input>")
+        .attr("type", "hidden")
+        .attr("name", "page").val(val)
+        $("#item_search_form input[name=sort]").remove()
+        $('#item_search_form').append(input)
 
-        },
-        complete: function (result) {
-            console.log(result.responseJSON)
-
-            if (result.responseJSON.isSuccess) {
-                toastr.success(result.responseJSON.message);
-            }
-            else {
-                toastr.error(result.responseJSON.message)
-            }
-
-            $('#save_btn').removeAttr('data-kt-indicator')
-        },
-    });
+        $("#item_search_form").submit()
+    })
 </script>
