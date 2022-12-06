@@ -14,12 +14,10 @@ module.exports = {
             autoIncrement:true
         },
         title:{
-            type:Sequelize.STRING,
-            allowNull:false
+            type:Sequelize.STRING
         },
         url:{
-            type:Sequelize.STRING,
-            allowNull:false,
+            type:Sequelize.STRING
         }
      });
      
