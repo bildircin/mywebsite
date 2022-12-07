@@ -343,7 +343,7 @@ const createOrUpdatePageAjax = async (req,res, next)=>{
             let fileName = Date.now() + '.' + fileType
             fileUrl = '/webUI/image/' + fileName;
 
-            if (req.files.coverUrlFile.size > 3000001) {
+            if (req.files.coverUrlFile.size > 5000000) {
                 return res.status(400).send({isSuccess:false, message: "Dosya boyutu en fazla 5 MB olmalıdır!"})
             }else if(!whitelist.includes(req.files.coverUrlFile.mimetype)){
                 return res.status(400).send({isSuccess:false, message: "Dosya image türünde olmalıdır!"})
@@ -430,7 +430,7 @@ const createOrUpdatePageAjax = async (req,res, next)=>{
             let fileName = Date.now() + '.' + fileType
             fileUrl = '/webUI/image/' + fileName;
 
-            if (req.files.coverUrlFile.size > 3000001) {
+            if (req.files.coverUrlFile.size > 5000000) {
                 return res.status(400).send({isSuccess:false, message: "Dosya boyutu en fazla 5 MB olmalıdır!"})
             }else if(!whitelist.includes(req.files.coverUrlFile.mimetype)){
                 return res.status(400).send({isSuccess:false, message: "Dosya image türünde olmalıdır!"})

@@ -114,7 +114,7 @@ const createOrUpdateTourAjax = async (req,res)=>{
             for (let key in req.files) {
                 const file = req.files[key];
 
-                if (file.size > 3000001) {
+                if (file.size > 5000000) {
                     return res.status(400).send({isSuccess:false, message: "Dosya boyutu en fazla 5 MB olmalıdır!"})
                 }else if(!whitelist.includes(file.mimetype)){
                     return res.status(400).send({isSuccess:false, message: "Dosya image türünde olmalıdır!"})
@@ -189,7 +189,7 @@ const createOrUpdateTourAjax = async (req,res)=>{
             for (let key in req.files) {
                 const file = req.files[key];
 
-                if (file.size > 3000001) {
+                if (file.size > 5000000) {
                     return res.status(400).send({isSuccess:false, message: "Dosya boyutu en fazla 5 MB olmalıdır!"})
                 }else if(!whitelist.includes(file.mimetype)){
                     return res.status(400).send({isSuccess:false, message: "Dosya image türünde olmalıdır!"})

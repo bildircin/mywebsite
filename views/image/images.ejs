@@ -6,19 +6,46 @@
         top: 5px;
         z-index: 1;
     }
-    .img-item:hover .remove-img-btn{
+    .item-img:hover .remove-img-btn{
         display:block !important;
     }    
     .remove-img-btn i:before{
         line-height: 1.3 !important;
-    }    
+    }
+    .copy-url:hover{
+        cursor: pointer;
+    }
 </style>
+
+<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+    <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+        <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Turlar</h1>
+            <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                <li class="breadcrumb-item text-muted">
+                    <a href="/admin" class="text-muted text-hover-primary">Anasayfa</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                </li>
+                <li class="breadcrumb-item text-muted">Tur İşlemleri</li>
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                </li>
+                <li class="breadcrumb-item text-muted">Turlar</li>
+            </ul>
+        </div>
+        <div class="d-flex align-items-center gap-2 gap-lg-3">
+            <a href="/tur-kaydet" class="btn btn-sm fw-bold btn-primary">Yeni Ekle</a>
+        </div>
+    </div>
+</div>
 
 <div class="card card-docs flex-row-fluid mb-2">
     <div class="card-body fs-6 py-15 px-10 py-lg-15 px-lg-15 text-gray-700">
         <ul class="nav nav-stretch nav-line-tabs fw-bold fs-4 border-bottom-2 border-transparent flex-nowrap mb-8 justify-content-between" role="tablist" id="kt_illustration_tabs">
             <li class="nav-item" role="presentation">
-                <a class="nav-link text-active-primary border-bottom-2 active" data-bs-toggle="tab" href="#kt_illustration_sketchy-1" role="tab" aria-selected="true">Sketchy</a>
+                <a class="nav-link text-active-primary border-bottom-2 active" data-bs-toggle="tab" href="#kt_illustration_sketchy-1" role="tab" aria-selected="true">Resimler</a>
             </li>
             <li>
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_item_modal">Yeni Ekle</button>
@@ -30,7 +57,7 @@
                 <div class="row g-10">
                     <% images.forEach(item =>{ %>
 
-                        <div class="col-lg-4 img-item">
+                        <div class="col-lg-4 item-img img-item-<%= item.id %>">
                             <style>
                                 .image-placeholder-sketchy-1-<%= item.id %> { 
                                     background-image: url('<%= item.url %>'); 
@@ -43,7 +70,7 @@
                                 <div class="card-body p-0">
                                     <div class="overlay-wrapper h-300px bgi-no-repeat bgi-size-contain bgi-position-center image-placeholder-sketchy-1-<%= item.id %>"></div>
                                     <div class="overlay-layer card-rounded bg-dark bg-opacity-10 align-items-end pb-3">
-                                        <code class="py-2 px-4"><%= item.url %></code>
+                                        <code class="py-2 px-4 copy-url"><%= item.url %></code>
                                     </div>
                                 </div>
                             </div>
@@ -51,6 +78,13 @@
 
                     <% }) %>
                 </div>
+                <ul class="pagination mt-20">
+                    <li class="page-item previous <%= !paginatedResults.previous ? 'disabled' : '' %>"><a href="#" class="page-link"><i class="previous"></i></a></li>
+                    <% for(let i = 0; i < paginatedResults.pageCount; i++){ %>
+                        <li class="page-item <%= i + 1 == paginatedResults.page ? 'active' : '' %>"><a href="javascript:;" class="page-link" data-value="<%= i + 1 %>"><%= i + 1 %></a></li>
+                    <% } %> 
+                    <li class="page-item next <%= !paginatedResults.next ? 'disabled' : '' %>"><a href="#"  class="page-link"><i class="next"></i></a></li>
+                </ul>
             </div>
         </div>
     </div>
@@ -136,7 +170,7 @@
 
                 const image = result.responseJSON.image
 
-                let imgItem = `<div class="col-lg-4 img-item">
+                let imgItem = `<div class="col-lg-4 item-img img-item-${image.id}">
                                     <style>
                                         .image-placeholder-sketchy-1-${image.id} { 
                                             background-image: url('${image.url}'); 
@@ -149,13 +183,14 @@
                                         <div class="card-body p-0">
                                             <div class="overlay-wrapper h-300px bgi-no-repeat bgi-size-contain bgi-position-center image-placeholder-sketchy-1-${image.id}"></div>
                                             <div class="overlay-layer card-rounded bg-dark bg-opacity-10 align-items-end pb-3">
-                                                <code class="py-2 px-4">${image.url}</code>
+                                                <code class="py-2 px-4 copy-url">${image.url}</code>
                                             </div>
                                         </div>
                                     </div>
                                 </div>`
 
-                $('#kt_illustration_sketchy-1 > div').append(imgItem)
+                $('#kt_illustration_sketchy-1 > div').prepend(imgItem)
+                $('#kt_illustration_sketchy-1 .item-img').last().remove()
 
                 toastr.success(result.responseJSON.message);
             }
@@ -165,21 +200,65 @@
 
             $('#add_item_modal').modal('hide')
             $('#save_btn').removeAttr('data-kt-indicator')
+            $('#save_btn').removeAttr("disabled")
         },
     });
 
-    $('.remove-img-btn').on('click', function(){
+    $('body').on('click', '.remove-img-btn', function(){
         const id = $(this).data('id')
 
         $.post('/deleteImageAjax', {id}, function(result){
 
-            const id = result.imageId
-            $('.remove-img-btn[data-id=' + id + ']').closest('img-item').remove()
-
-            toastr.success(result.message)
+            if(result.image){
+                const id = result.image.id
+                $('.img-item-' + id).remove()
+                
+                toastr.success(result.message)
+            }else{
+                toastr.error(result.message)
+            }
         })
         .fail(function() {
             toastr.error(result.message)
         })
     })
+
+    function copyToClipboard(text) {
+        if (window.clipboardData && window.clipboardData.setData) {
+            // IE specific code path to prevent textarea being shown while dialog is visible.
+            return clipboardData.setData("Text", text); 
+
+        } else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
+            var textarea = document.createElement("textarea");
+            textarea.textContent = text;
+            textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in MS Edge.
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                return document.execCommand("copy");  // Security exception may be thrown by some browsers.
+            } catch (ex) {
+                console.warn("Copy to clipboard failed.", ex);
+                return false;
+            } finally {
+                document.body.removeChild(textarea);
+            }
+        }
+    }
+
+    $('body').on('click', '.copy-url', function(){
+        let url = $(this).text()
+
+        copyToClipboard(url)
+
+        toastr.info('Link Kopyalandı')
+    })
+
+    $('body').on('click', '.page-link', function(){
+
+        const value = $(this).data('value')
+
+        window.location.href = "/resimler?page=" + value
+
+    })
+
 </script>
