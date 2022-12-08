@@ -8,6 +8,7 @@ import Navigation from "../models/template/Navigation.js"
 import Category from "../models/Category.js"
 import TourCategory from "../models/template/TourCategory.js"
 import db from '../../db.js'
+import Setting from "../models/template/Setting.js"
 
 
 let lang = {
@@ -42,7 +43,6 @@ const setLang = async (req,res,next)=>{
 
     next()
 }
-//middleware
 const setLayoutContents = async (req,res,next)=>{
 
     const layoutHeaderBonusLeft = await PageContent.findOne({
@@ -58,8 +58,6 @@ const setLayoutContents = async (req,res,next)=>{
     }
     next()
 }
-
-//middleware
 const setNavigations = async (req,res,next)=>{
 
     const list = await Navigation.findAll({
@@ -74,6 +72,21 @@ const setNavigations = async (req,res,next)=>{
     navigations = [...serializeList(list)]
     next()
 }
+const setMetas = async (req,res,next)=>{
+
+    const settings = await Setting.findAll({}).catch(err=>{
+        console.log(err)
+    })
+
+    res.locals.title = settings.find(el=>el.key == 'uiMetaTitle').value
+    res.locals.uiMetaDescription = settings.find(el=>el.key == 'uiMetaDescription').value
+    res.locals.uiMetaKeywords = settings.find(el=>el.key == 'uiMetaKeywords').value
+
+    next()
+}
+
+
+
 
 const homePage = async (req,res)=>{
     res.locals.title="Ana Sayfa"
@@ -138,7 +151,6 @@ const toursPage = async (req,res)=>{
         q.startedAt = q.startedAt != '' ? moment(q.startedAt, "MM/DD/YYYY").format('YYYY-MM-DD') : ''
         q.finishedAt = q.finishedAt != '' ? moment(q.finishedAt, "MM/DD/YYYY").format('YYYY-MM-DD') : ''
 
-
         let orderSort = ['id']
         if(q.sort && q.sort != 'null' && q.sort == 'az')
             orderSort = ['title', 'ASC']
@@ -153,7 +165,6 @@ const toursPage = async (req,res)=>{
         if(q.sort && q.sort != 'null' && q.sort == 'far')
             orderSort = ['startedAt', 'DESC']
             
-        
         let option = {
             where:{
                 isActive:true,
@@ -185,7 +196,6 @@ const toursPage = async (req,res)=>{
             offset:startIndex,
             limit:limit
         })
-        console.log(tourIds)
     }else{
         let option = {
             where:{
@@ -204,11 +214,7 @@ const toursPage = async (req,res)=>{
             limit:limit
         })
     }
-    console.log(paginatedResults)
-    //console.log(JSON.stringify(tours))
 
-
-    
     const categories = await Category.findAll({
         where:{
             isActive:true,
@@ -263,5 +269,6 @@ export default {
     homePage,
     aboutPage,
     contactPage,
-    toursPage
+    toursPage,
+    setMetas
 }

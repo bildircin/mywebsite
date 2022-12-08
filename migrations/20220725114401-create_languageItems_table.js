@@ -15,7 +15,8 @@ module.exports = {
         },
         key:{
             type:Sequelize.STRING,
-            allowNull:false
+            allowNull:false,
+            unique:true
         },
         lng:{
             type:Sequelize.STRING(10),

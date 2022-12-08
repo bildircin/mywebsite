@@ -10,7 +10,8 @@ export default db.define('LanguageItem', {
     },
     key:{
         type:Sequelize.STRING,
-        allowNull:false
+        allowNull:false,
+        unique:true
     },
     lng:{
         type:Sequelize.STRING(10),

@@ -76,11 +76,15 @@
                     <% }) %>
                 </div>
                 <ul class="pagination mt-20">
-                    <li class="page-item previous <%= !paginatedResults.previous ? 'disabled' : '' %>"><a href="#" class="page-link"><i class="previous"></i></a></li>
+                    <li class="page-item previous <%= !paginatedResults.previous ? 'disabled' : '' %>">
+                        <a href="javascript:;" class="page-link" data-value="<%= paginatedResults.previous ? paginatedResults.previous.page : '' %>"><i class="previous"></i></a>
+                    </li>
                     <% for(let i = 0; i < paginatedResults.pageCount; i++){ %>
                         <li class="page-item <%= i + 1 == paginatedResults.page ? 'active' : '' %>"><a href="javascript:;" class="page-link" data-value="<%= i + 1 %>"><%= i + 1 %></a></li>
                     <% } %> 
-                    <li class="page-item next <%= !paginatedResults.next ? 'disabled' : '' %>"><a href="#"  class="page-link"><i class="next"></i></a></li>
+                    <li class="page-item next <%= !paginatedResults.next ? 'disabled' : '' %>">
+                        <a href="javascript:;" class="page-link" data-value="<%= paginatedResults.next ? paginatedResults.next.page : '' %>"><i class="next"></i></a>
+                    </li>
                 </ul>
             </div>
         </div>
