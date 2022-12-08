@@ -62,27 +62,28 @@
         <div class="travel-search-content">
             <div class="container page-builder-ltr">
                 <div class="row">
-                    <form method="get" class="travl-search-advanced clearfix">
+                    <form action="/turlar" method="get" class="travl-search-advanced clearfix">
                         <div class="search-item city pull-left">
                             <p><%= lang.toursPageSearchContentCategory %></p>
                             <select name="category">
-                                <option value="1">1 people</option>
-                                <option value="2">2 people</option>
-                                <option value="3">3 people</option>
-                                <option value="4">4 people</option>
+                                <option value="null"><%= lang.toursPageSearchContentCategory %></option>
+                                <% categories.forEach(item => { %>
+                                    <option value="<%= item.id %>"><%= item.name %></option>
+                                <% }) %> 
                             </select>
                         </div>
                         <div class="search-item date pull-left">
                             <p><%= lang.toursPageSearchContentDateStart %></p>
-                            <input type="text" class="tour-search-input datepicker hasDatepicker" id="date_from" placeholder="DD/MM/YY">
+                            <input type="text" class="tour-search-input datepicker hasDatepicker" name="startedAt" id="date_from" placeholder="DD/MM/YY">
                         </div>
                         <div class="search-item date pull-left">
                             <p><%= lang.toursPageSearchContentDateEnd %></p>
-                            <input type="text" class="tour-search-input datepicker hasDatepicker" id="date_to" placeholder="DD/MM/YY">
+                            <input type="text" class="tour-search-input datepicker hasDatepicker" name="finishedAt" id="date_to" placeholder="DD/MM/YY">
                         </div>
                         <div class="search-item item-select pull-left">
                             <p><%= lang.toursPageSearchContentPersons %></p>
-                            <select name="people">
+                            <select name="persons">
+                                <option value="0"><%= lang.toursPageSearchContentPersons %></option>
                                 <option value="1">1 people</option>
                                 <option value="2">2 people</option>
                                 <option value="3">3 people</option>
@@ -91,12 +92,11 @@
                         </div>
                         <div class="search-item item-budget pull-left">
                             <p><%= lang.toursPageSearchContentMaxPrice %></p>
-                            <input type="number" class="hotel-budget-input" id="budget" >
+                            <input type="number" class="hotel-budget-input" name="price" id="budget" placeholder="<%= lang.toursPageSearchContentMaxPrice %>" >
                         </div>
                         <div class="search-item button-submit pull-left">
                             <p>.</p>
                             <button type="submit" class="button"><%= lang.toursPageSearchContentButton %> <i class="fa fa-angle-right" aria-hidden="true"></i></button>
-                            <input type="hidden" name="s">
                             <input type="hidden" name="search_tour" value="1">
                         </div>
                     </form>

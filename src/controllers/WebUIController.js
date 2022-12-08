@@ -78,6 +78,13 @@ const setNavigations = async (req,res,next)=>{
 const homePage = async (req,res)=>{
     res.locals.title="Ana Sayfa"
 
+    const categories = await Category.findAll({
+        where:{
+            isActive:true,
+            isDeleted:false
+        }
+    })
+
     const pageContents = await PageContent.findAll({
         where:{
             key:['homeSlider'],
@@ -91,7 +98,7 @@ const homePage = async (req,res)=>{
         contents.homeSlider = pageContents.find(el=>el.key == 'homeSlider').value
     }
 
-    await res.render('webUI/home', {layout:'webUI/layout', lang, contents, navigations})
+    await res.render('webUI/home', {layout:'webUI/layout', lang, contents, navigations, categories})
 }
 
 const aboutPage = async (req,res)=>{
@@ -116,29 +123,7 @@ const toursPage = async (req,res)=>{
     const limit = 4
     const startIndex = (page - 1) * limit
     const endIndex = page * limit
-
-    const tourCount = await Tour.count({
-        where:{
-            isActive:true,
-            isDeleted:false
-        }
-    })
-    const paginatedResults = {
-        pageCount:Math.ceil(tourCount / limit),
-        page
-    }
-
-    if (endIndex < tourCount) {
-        paginatedResults.next = {
-            page: page + 1
-        }
-    }
-
-    if (startIndex > 0) {
-        paginatedResults.previous = {
-            page: page - 1
-        }
-    }
+    let paginatedResults = {}
 
     if(q.hasOwnProperty('searchTour')){
 
@@ -167,7 +152,23 @@ const toursPage = async (req,res)=>{
             orderSort = ['startedAt', 'ASC']
         if(q.sort && q.sort != 'null' && q.sort == 'far')
             orderSort = ['startedAt', 'DESC']
-
+            
+        
+        let option = {
+            where:{
+                isActive:true,
+                isDeleted:false,
+                id:tourIds,
+                startedAt:  q.startedAt != '' ? { [Op.gte]: moment(q.startedAt)} : {[Op.ne]: null},
+                finishedAt: q.finishedAt != '' ? { [Op.lte]: moment(q.finishedAt) } : {[Op.ne]: null},
+                persons: q.persons != '0' ? q.persons : {[Op.ne]: null},
+                price: q.price != '' ? { [Op.lte]: q.price } : {[Op.ne]: null}
+            },
+            order:[
+                orderSort
+            ]
+        }
+        paginatedResults = await getPaginatedResults(Tour, option, limit, page, startIndex, endIndex)
         tours = await Tour.findAll({
             where:{
                 isActive:true,
@@ -184,7 +185,16 @@ const toursPage = async (req,res)=>{
             offset:startIndex,
             limit:limit
         })
+        console.log(tourIds)
     }else{
+        let option = {
+            where:{
+                isActive:true,
+                isDeleted:false
+            }
+        }
+        paginatedResults = await getPaginatedResults(Tour, option, limit, page, startIndex, endIndex)
+
         tours = await Tour.findAll({
             where:{
                 isActive:true,
@@ -194,6 +204,8 @@ const toursPage = async (req,res)=>{
             limit:limit
         })
     }
+    console.log(paginatedResults)
+    //console.log(JSON.stringify(tours))
 
 
     
@@ -218,6 +230,29 @@ const toursPage = async (req,res)=>{
     });
     
     await res.render('webUI/tours', {layout:'webUI/layout', lang, contents, q, navigations, categories, tours, paginatedResults})
+}
+
+
+async function getPaginatedResults(model, option, limit, page, startIndex, endIndex){
+    const modelCount = await model.count(option)
+    console.log(modelCount)
+    let paginatedResults = {
+        pageCount:Math.ceil(modelCount / limit),
+        page
+    }
+
+    if (endIndex < modelCount) {
+        paginatedResults.next = {
+            page: page + 1
+        }
+    }
+
+    if (startIndex > 0) {
+        paginatedResults.previous = {
+            page: page - 1
+        }
+    }
+    return paginatedResults
 }
 
 
