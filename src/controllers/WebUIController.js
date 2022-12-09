@@ -25,7 +25,7 @@ const setLang = async (req,res,next)=>{
         lang.lng = req.cookies.lng
     }
 
-    const languages = await LanguageItem.findAll({
+    const languageItems = await LanguageItem.findAll({
         where:{
             lng:lang.lng
         }
@@ -33,7 +33,7 @@ const setLang = async (req,res,next)=>{
         console.log(err)
     })
 
-    languages.forEach(item => {
+    languageItems.forEach(item => {
         lang[item.key] = item.value
     })
 

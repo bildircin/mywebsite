@@ -18,6 +18,10 @@ export default db.define('LanguageCode', {
     },
     nativeName:{
         type:Sequelize.STRING
+    },
+    isActive:{
+        type:Sequelize.BOOLEAN,
+        defaultValue:false
     }
 },
 {

@@ -6,27 +6,28 @@ module.exports = {
      * Add altering commands here.
      *
      * Example:*/
-     await queryInterface.createTable('languageCodes', { 
+     await queryInterface.createTable('emails', { 
         id:{
             type:Sequelize.INTEGER,
             allowNull:false,
             primaryKey:true,
             autoIncrement:true
         },
-        lng:{
-            type:Sequelize.STRING(10),
-            allowNull:false
-        },
-        name:{
-            type:Sequelize.STRING,
-            allowNull:false
-        },
-        nativeName:{
+        host:{
             type:Sequelize.STRING
         },
-        isActive:{
+        port:{
+            type:Sequelize.INTEGER
+        },
+        secure:{
             type:Sequelize.BOOLEAN,
-            defaultValue:false
+            defaultValue:true
+        },
+        email:{
+            type:Sequelize.STRING
+        },
+        password:{
+            type:Sequelize.STRING
         }
      });
      
@@ -37,7 +38,7 @@ module.exports = {
      * Add reverting commands here.
      *
      * Example:*/
-     await queryInterface.dropTable('languageCodes');
+     await queryInterface.dropTable('emails');
      
   }
 };

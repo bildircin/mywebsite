@@ -34,19 +34,12 @@
                 <li class="nav-item">
                     <a class="nav-link text-active-primary pb-5" data-bs-toggle="tab" href="#kt_ecommerce_settings_store">
                     <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm004.svg-->
-                    <span class="svg-icon svg-icon-2 me-2">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path opacity="0.3" d="M18 10V20C18 20.6 18.4 21 19 21C19.6 21 20 20.6 20 20V10H18Z" fill="currentColor" />
-                            <path opacity="0.3" d="M11 10V17H6V10H4V20C4 20.6 4.4 21 5 21H12C12.6 21 13 20.6 13 20V10H11Z" fill="currentColor" />
-                            <path opacity="0.3" d="M10 10C10 11.1 9.1 12 8 12C6.9 12 6 11.1 6 10H10Z" fill="currentColor" />
-                            <path opacity="0.3" d="M18 10C18 11.1 17.1 12 16 12C14.9 12 14 11.1 14 10H18Z" fill="currentColor" />
-                            <path opacity="0.3" d="M14 4H10V10H14V4Z" fill="currentColor" />
-                            <path opacity="0.3" d="M17 4H20L22 10H18L17 4Z" fill="currentColor" />
-                            <path opacity="0.3" d="M7 4H4L2 10H6L7 4Z" fill="currentColor" />
-                            <path d="M6 10C6 11.1 5.1 12 4 12C2.9 12 2 11.1 2 10H6ZM10 10C10 11.1 10.9 12 12 12C13.1 12 14 11.1 14 10H10ZM18 10C18 11.1 18.9 12 20 12C21.1 12 22 11.1 22 10H18ZM19 2H5C4.4 2 4 2.4 4 3V4H20V3C20 2.4 19.6 2 19 2ZM12 17C12 16.4 11.6 16 11 16H6C5.4 16 5 16.4 5 17C5 17.6 5.4 18 6 18H11C11.6 18 12 17.6 12 17Z" fill="currentColor" />
+                    <span class="svg-icon svg-icon-2 me-2"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path opacity="0.3" d="M21 19H3C2.4 19 2 18.6 2 18V6C2 5.4 2.4 5 3 5H21C21.6 5 22 5.4 22 6V18C22 18.6 21.6 19 21 19Z" fill="currentColor"/>
+                        <path d="M21 5H2.99999C2.69999 5 2.49999 5.10005 2.29999 5.30005L11.2 13.3C11.7 13.7 12.4 13.7 12.8 13.3L21.7 5.30005C21.5 5.10005 21.3 5 21 5Z" fill="currentColor"/>
                         </svg>
-                    </span>
-                   Store</a>
+                        </span>
+                   Mail</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-active-primary pb-5" data-bs-toggle="tab" href="#kt_ecommerce_settings_localization">
@@ -57,7 +50,7 @@
                             <path d="M12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2ZM19.9 11H13V8.8999C14.9 8.6999 16.7 8.00005 18.1 6.80005C19.1 8.00005 19.7 9.4 19.9 11ZM11 19.8999C9.7 19.6999 8.39999 19.2 7.39999 18.5C8.49999 17.7 9.7 17.2001 11 17.1001V19.8999ZM5.89999 6.90002C7.39999 8.10002 9.2 8.8 11 9V11.1001H4.10001C4.30001 9.4001 4.89999 8.00002 5.89999 6.90002ZM7.39999 5.5C8.49999 4.7 9.7 4.19998 11 4.09998V7C9.7 6.8 8.39999 6.3 7.39999 5.5ZM13 17.1001C14.3 17.3001 15.6 17.8 16.6 18.5C15.5 19.3 14.3 19.7999 13 19.8999V17.1001ZM13 4.09998C14.3 4.29998 15.6 4.8 16.6 5.5C15.5 6.3 14.3 6.80002 13 6.90002V4.09998ZM4.10001 13H11V15.1001C9.1 15.3001 7.29999 16 5.89999 17.2C4.89999 16 4.30001 14.6 4.10001 13ZM18.1 17.1001C16.6 15.9001 14.8 15.2 13 15V12.8999H19.9C19.7 14.5999 19.1 16.0001 18.1 17.1001Z" fill="currentColor" />
                         </svg>
                     </span>
-                   Localization</a>
+                   Lokalizasyon</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-active-primary pb-5" data-bs-toggle="tab" href="#kt_ecommerce_settings_products">
@@ -86,7 +79,7 @@
             </ul>
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="kt_ecommerce_settings_general" role="tabpanel">
-                    <form id="kt_ecommerce_settings_general_form" class="form" action="#">
+                    <form id="general_update_form" class="form" action="/generalUpdateAjax" method="post">
                         <!--begin::Heading-->
                         <div class="row mb-7">
                             <div class="col-md-9 offset-md-3">
@@ -106,7 +99,7 @@
                             </div>
                             <div class="col-md-9">
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid" name="meta_title" value="<%= settings.find(el=>el.key=='uiMetaTitle').value %>" />
+                                <input type="text" class="form-control form-control-solid" name="uiMetaTitle" value="<%= settings.find(el=>el.key=='uiMetaTitle').value %>" />
                                 <!--end::Input-->
                             </div>
                         </div>
@@ -123,7 +116,7 @@
                             </div>
                             <div class="col-md-9">
                                 <!--begin::Input-->
-                                <textarea class="form-control form-control-solid" name="meta_description"><%= settings.find(el=>el.key=='uiMetaDescription').value %></textarea>
+                                <textarea class="form-control form-control-solid" name="uiMetaDescription"><%= settings.find(el=>el.key=='uiMetaDescription').value %></textarea>
                                 <!--end::Input-->
                             </div>
                         </div>
@@ -140,63 +133,12 @@
                             </div>
                             <div class="col-md-9">
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid" name="meta_keywords" value="<%= settings.find(el=>el.key=='uiMetaKeywords').value %>" data-kt-ecommerce-settings-type="tagify" />
+                                <input type="text" class="form-control form-control-solid" name="uiMetaKeywords" value="<%= settings.find(el=>el.key=='uiMetaKeywords').value %>" data-kt-ecommerce-settings-type="tagify" />
                                 <!--end::Input-->
                             </div>
                         </div>
                         <!--end::Input group-->
-                        <!--begin::Input group-->
-                        <div class="row fv-row mb-7">
-                            <div class="col-md-3 text-md-end">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-semibold form-label mt-3">
-                                    <span>Theme</span>
-                                    <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="Set theme style for the store."></i>
-                                </label>
-                                <!--end::Label-->
-                            </div>
-                            <div class="col-md-9">
-                                <div class="w-100">
-                                    <!--begin::Select2-->
-                                    <select class="form-select form-select-solid" name="theme" data-control="select2" data-hide-search="true" data-placeholder="Select a layout">
-                                        <option></option>
-                                        <option value="Default" selected="selected">Default</option>
-                                        <option value="Minimalist">Minimalist</option>
-                                        <option value="Dark">Dark</option>
-                                        <option value="High_Contrast">High Contrast</option>
-                                    </select>
-                                    <!--end::Select2-->
-                                </div>
-                            </div>
-                        </div>
-                        <!--end::Input group-->
-                        <!--begin::Input group-->
-                        <div class="row fv-row mb-7">
-                            <div class="col-md-3 text-md-end">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-semibold form-label mt-3">
-                                    <span>Default Layout</span>
-                                    <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="Set default layout style for the store."></i>
-                                </label>
-                                <!--end::Label-->
-                            </div>
-                            <div class="col-md-9">
-                                <div class="w-100">
-                                    <!--begin::Select2-->
-                                    <select class="form-select form-select-solid" name="layout" data-control="select2" data-hide-search="true" data-placeholder="Select a layout">
-                                        <option></option>
-                                        <option value="Default" selected="selected">Default</option>
-                                        <option value="Electronics">Electronics</option>
-                                        <option value="Fashion">Fashion</option>
-                                        <option value="Home">Home</option>
-                                        <option value="Dining">Dining</option>
-                                        <option value="Interior">Interior</option>
-                                    </select>
-                                    <!--end::Select2-->
-                                </div>
-                            </div>
-                        </div>
-                        <!--end::Input group-->
+
                         <!--begin::Action buttons-->
                         <div class="row py-5">
                             <div class="col-md-9 offset-md-3">
@@ -205,7 +147,7 @@
                                     <button type="reset" data-kt-ecommerce-settings-type="cancel" class="btn btn-light me-3">Vazgeç</button>
                                     <!--end::Button-->
                                     <!--begin::Button-->
-                                    <button type="submit" data-kt-ecommerce-settings-type="submit" class="btn btn-primary">
+                                    <button type="submit" data-kt-ecommerce-settings-type="submit" class="btn btn-primary" id="general_update_save_btn">
                                         <span class="indicator-label">Kaydet</span>
                                         <span class="indicator-progress">Lütfen Bekleyin...
                                         <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
@@ -218,11 +160,11 @@
                     </form>
                 </div>
                 <div class="tab-pane fade" id="kt_ecommerce_settings_store" role="tabpanel">
-                    <form id="kt_ecommerce_settings_general_store" class="form" action="#">
+                    <form id="email_update_form" class="form" action="/emailUpdateAjax" method="post">
                         <!--begin::Heading-->
                         <div class="row mb-7">
                             <div class="col-md-9 offset-md-3">
-                                <h2>Store Settings</h2>
+                                <h2>Mail Ayarları</h2>
                             </div>
                         </div>
                         <!--end::Heading-->
@@ -231,14 +173,14 @@
                             <div class="col-md-3 text-md-end">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-semibold form-label mt-3">
-                                    <span class="required">Store Name</span>
-                                    <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="Set the name of the store"></i>
+                                    <span>Host</span>
+                                    <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="Mail transfer sunucusu"></i>
                                 </label>
                                 <!--end::Label-->
                             </div>
                             <div class="col-md-9">
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid" name="store_name" value="" />
+                                <input type="text" class="form-control form-control-solid" name="host" value="<%= email.host ? email.host : null %>" />
                                 <!--end::Input-->
                             </div>
                         </div>
@@ -248,14 +190,60 @@
                             <div class="col-md-3 text-md-end">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-semibold form-label mt-3">
-                                    <span class="required">Store Owner</span>
-                                    <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="Set the store owner's name"></i>
+                                    <span>Port</span>
+                                    <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="Port"></i>
                                 </label>
                                 <!--end::Label-->
                             </div>
                             <div class="col-md-9">
                                 <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid" name="store_owner" value="" />
+                                <input type="text" class="form-control form-control-solid" name="port" value="<%= email.port ? email.port : null %>" />
+                                <!--end::Input-->
+                            </div>
+                        </div>
+                        <!--end::Input group-->
+
+                        <!--begin::Input group-->
+                        <div class="row fv-row mb-7">
+                            <div class="col-md-3 text-md-end">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-semibold form-label mt-3">
+                                    <span>Secure</span>
+                                    <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="true for 465, false for other ports"></i>
+                                </label>
+                                <!--end::Label-->
+                            </div>
+                            <div class="col-md-9">
+                                <div class="d-flex mt-3">
+                                    <!--begin::Radio-->
+                                    <div class="form-check form-check-custom form-check-solid me-5">
+                                        <input class="form-check-input" type="radio" value="true" name="secure" id="secure_yes" <%= email.secure ? checked="checked" : '' %> />
+                                        <label class="form-check-label" for="secure_yes">Evet</label>
+                                    </div>
+                                    <div class="form-check form-check-custom form-check-solid">
+                                        <input class="form-check-input" type="radio" value="false" name="secure" id="secure_no" <%= !email.secure ? checked="checked" : '' %> />
+                                        <label class="form-check-label" for="secure_no">Hayır</label>
+                                    </div>
+                                    <!--end::Radio-->
+                                </div>
+                            </div>
+                        </div>
+                        <!--end::Input group-->
+
+
+                        <!--begin::Input group-->
+                        <div class="row fv-row mb-7">
+                            <div class="col-md-3 text-md-end">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-semibold form-label mt-3">
+                                    <span>Email</span>
+                                    <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="Email Adresi"></i>
+                                </label>
+                                <!--end::Label-->
+                            </div>
+                            <div class="col-md-9">
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" name="email" value="<%= email.email ? email.email : null %>" />
                                 <!--end::Input-->
                             </div>
                         </div>
@@ -265,94 +253,30 @@
                             <div class="col-md-3 text-md-end">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-semibold form-label mt-3">
-                                    <span class="required">Address</span>
-                                    <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="Set the store's full address."></i>
+                                    <span>Şifre</span>
+                                    <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="Email Şifresi"></i>
                                 </label>
                                 <!--end::Label-->
                             </div>
                             <div class="col-md-9">
                                 <!--begin::Input-->
-                                <textarea class="form-control form-control-solid" name="store_address"></textarea>
+                                <input type="text" class="form-control form-control-solid" name="password" value="<%= email.password ? email.password : null %>" />
                                 <!--end::Input-->
                             </div>
                         </div>
                         <!--end::Input group-->
-                        <!--begin::Input group-->
-                        <div class="row fv-row mb-7">
-                            <div class="col-md-3 text-md-end">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-semibold form-label mt-3">
-                                    <span>Geocode</span>
-                                    <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="Enter the store geocode manually (optional)"></i>
-                                </label>
-                                <!--end::Label-->
-                            </div>
-                            <div class="col-md-9">
-                                <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid" name="store_geocode" value="" />
-                                <!--end::Input-->
-                            </div>
-                        </div>
-                        <!--end::Input group-->
-                        <!--begin::Input group-->
-                        <div class="row fv-row mb-7">
-                            <div class="col-md-3 text-md-end">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-semibold form-label mt-3">
-                                    <span class="required">Email</span>
-                                </label>
-                                <!--end::Label-->
-                            </div>
-                            <div class="col-md-9">
-                                <!--begin::Input-->
-                                <input type="email" class="form-control form-control-solid" name="store_email" value="" />
-                                <!--end::Input-->
-                            </div>
-                        </div>
-                        <!--end::Input group-->
-                        <!--begin::Input group-->
-                        <div class="row fv-row mb-7">
-                            <div class="col-md-3 text-md-end">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-semibold form-label mt-3">
-                                    <span class="required">Phone</span>
-                                </label>
-                                <!--end::Label-->
-                            </div>
-                            <div class="col-md-9">
-                                <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid" name="store_phone" value="" />
-                                <!--end::Input-->
-                            </div>
-                        </div>
-                        <!--end::Input group-->
-                        <!--begin::Input group-->
-                        <div class="row fv-row mb-7">
-                            <div class="col-md-3 text-md-end">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-semibold form-label mt-3">
-                                    <span>Fax</span>
-                                </label>
-                                <!--end::Label-->
-                            </div>
-                            <div class="col-md-9">
-                                <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid" name="store_fax" value="" />
-                                <!--end::Input-->
-                            </div>
-                        </div>
-                        <!--end::Input group-->
+                       
                         <!--begin::Action buttons-->
                         <div class="row py-5">
                             <div class="col-md-9 offset-md-3">
                                 <div class="d-flex">
                                     <!--begin::Button-->
-                                    <button type="reset" data-kt-ecommerce-settings-type="cancel" class="btn btn-light me-3">Cancel</button>
+                                    <button type="reset" data-kt-ecommerce-settings-type="cancel" class="btn btn-light me-3">Vazgeç</button>
                                     <!--end::Button-->
                                     <!--begin::Button-->
-                                    <button type="submit" data-kt-ecommerce-settings-type="submit" class="btn btn-primary">
-                                        <span class="indicator-label">Save</span>
-                                        <span class="indicator-progress">Please wait...
+                                    <button type="submit" data-kt-ecommerce-settings-type="submit" class="btn btn-primary" id="email_update_save_btn">
+                                        <span class="indicator-label">Kaydet</span>
+                                        <span class="indicator-progress">Lütfen Bekleyin...
                                         <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
                                     </button>
                                     <!--end::Button-->
@@ -367,7 +291,7 @@
                         <!--begin::Heading-->
                         <div class="row mb-7">
                             <div class="col-md-9 offset-md-3">
-                                <h2>Localization Settings</h2>
+                                <h2>Lokalizasyon Ayarları</h2>
                             </div>
                         </div>
                         <!--end::Heading-->
@@ -376,13 +300,13 @@
                             <div class="col-md-3 text-md-end">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-semibold form-label mt-3">
-                                    <span class="required">Country</span>
+                                    <span>Ülke</span>
                                 </label>
                                 <!--end::Label-->
                             </div>
                             <div class="col-md-9">
                                 <!--begin::Select2-->
-                                <select id="kt_ecommerce_localization_country" class="form-select form-select-solid" name="localization_country" data-kt-ecommerce-settings-type="select2_flags" data-placeholder="Select a country">
+                                <select id="kt_ecommerce_localization_country" class="form-select form-select-solid" name="localizationCountry" data-kt-ecommerce-settings-type="select2_flags" data-placeholder="Select a country">
                                     <option></option>
                                     <option value="AF" data-kt-select2-country="assets/media/flags/afghanistan.svg">Afghanistan</option>
                                     <option value="AX" data-kt-select2-country="assets/media/flags/aland-islands.svg">Aland Islands</option>
@@ -618,61 +542,18 @@
                             <div class="col-md-3 text-md-end">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-semibold form-label mt-3">
-                                    <span class="required">Language</span>
+                                    <span>Aktif Diller</span>
                                 </label>
                                 <!--end::Label-->
                             </div>
                             <div class="col-md-9">
                                 <div class="w-100">
                                     <!--begin::Select2-->
-                                    <select class="form-select form-select-solid" name="localization_language" data-control="select2" data-placeholder="Select a language">
+                                    <select class="form-select form-select-solid" name="localizationLanguages" data-control="select2"  data-close-on-select="false" data-placeholder="Seçim Yapınız" data-allow-clear="true" multiple="multiple">
                                         <option></option>
-                                        <option value="id">Bahasa Indonesia - Indonesian</option>
-                                        <option value="msa">Bahasa Melayu - Malay</option>
-                                        <option value="ca">Català - Catalan</option>
-                                        <option value="cs">Čeština - Czech</option>
-                                        <option value="da">Dansk - Danish</option>
-                                        <option value="de">Deutsch - German</option>
-                                        <option value="en">English</option>
-                                        <option value="en-gb">English UK - British English</option>
-                                        <option value="es">Español - Spanish</option>
-                                        <option value="fil">Filipino</option>
-                                        <option value="fr">Français - French</option>
-                                        <option value="ga">Gaeilge - Irish (beta)</option>
-                                        <option value="gl">Galego - Galician (beta)</option>
-                                        <option value="hr">Hrvatski - Croatian</option>
-                                        <option value="it">Italiano - Italian</option>
-                                        <option value="hu">Magyar - Hungarian</option>
-                                        <option value="nl">Nederlands - Dutch</option>
-                                        <option value="no">Norsk - Norwegian</option>
-                                        <option value="pl">Polski - Polish</option>
-                                        <option value="pt">Português - Portuguese</option>
-                                        <option value="ro">Română - Romanian</option>
-                                        <option value="sk">Slovenčina - Slovak</option>
-                                        <option value="fi">Suomi - Finnish</option>
-                                        <option value="sv">Svenska - Swedish</option>
-                                        <option value="vi">Tiếng Việt - Vietnamese</option>
-                                        <option value="tr">Türkçe - Turkish</option>
-                                        <option value="el">Ελληνικά - Greek</option>
-                                        <option value="bg">Български език - Bulgarian</option>
-                                        <option value="ru">Русский - Russian</option>
-                                        <option value="sr">Српски - Serbian</option>
-                                        <option value="uk">Українська мова - Ukrainian</option>
-                                        <option value="he">עִבְרִית - Hebrew</option>
-                                        <option value="ur">اردو - Urdu (beta)</option>
-                                        <option value="ar">العربية - Arabic</option>
-                                        <option value="fa">فارسی - Persian</option>
-                                        <option value="mr">मराठी - Marathi</option>
-                                        <option value="hi">हिन्दी - Hindi</option>
-                                        <option value="bn">বাংলা - Bangla</option>
-                                        <option value="gu">ગુજરાતી - Gujarati</option>
-                                        <option value="ta">தமிழ் - Tamil</option>
-                                        <option value="kn">ಕನ್ನಡ - Kannada</option>
-                                        <option value="th">ภาษาไทย - Thai</option>
-                                        <option value="ko">한국어 - Korean</option>
-                                        <option value="ja">日本語 - Japanese</option>
-                                        <option value="zh-cn">简体中文 - Simplified Chinese</option>
-                                        <option value="zh-tw">繁體中文 - Traditional Chinese</option>
+                                        <% languageCodes.forEach(item => { %>
+                                            <option value="<%= item.lng %>" <%= item.isActive ? selected : '' %>> <%= item.name %> </option>
+                                        <% }) %>
                                     </select>
                                     <!--end::Select2-->
                                 </div>
@@ -684,7 +565,7 @@
                             <div class="col-md-3 text-md-end">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-semibold form-label mt-3">
-                                    <span class="required">Currency</span>
+                                    <span>Currency</span>
                                 </label>
                                 <!--end::Label-->
                             </div>
@@ -1176,3 +1057,67 @@
         </div>
     </div>
 </div>
+
+<script src="../assets/global/plugins/jquery-form/jquery.form.js"></script>
+<script src="../assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js" type="text/javascript"></script>
+
+<script>
+
+    $(document).ready(function(){
+        $('input[name=port]').inputmask({
+            mask: '9',
+            repeat: 12,
+            greedy: !1
+        })
+    })
+
+    $('#general_update_form').ajaxForm({
+        beforeSubmit: function (arr) {
+
+            $('#general_update_save_btn').attr("data-kt-indicator", "on")
+            $('#general_update_save_btn').attr("disabled", "disabled")
+        },
+        beforeSend: function (e) {
+
+        },
+        complete: function (result) {
+            console.log(result.responseJSON)
+
+            if (result.responseJSON.isSuccess) {
+                toastr.success(result.responseJSON.message);
+            }
+            else {
+                toastr.error(result.responseJSON.message)
+            }
+
+            $('#general_update_save_btn').removeAttr('data-kt-indicator')
+            $('#general_update_save_btn').removeAttr("disabled")
+        },
+    });
+    $('#email_update_form').ajaxForm({
+        beforeSubmit: function (arr) {
+
+            $('#email_update_save_btn').attr("data-kt-indicator", "on")
+            $('#email_update_save_btn').attr("disabled", "disabled")
+        },
+        beforeSend: function (e) {
+
+        },
+        complete: function (result) {
+            console.log(result.responseJSON)
+
+            if (result.responseJSON.isSuccess) {
+                toastr.success(result.responseJSON.message);
+            }
+            else {
+                toastr.error(result.responseJSON.message)
+            }
+
+            $('#email_update_save_btn').removeAttr('data-kt-indicator')
+            $('#email_update_save_btn').removeAttr("disabled")
+        },
+    });
+
+
+
+</script>
