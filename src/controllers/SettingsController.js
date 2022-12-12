@@ -14,7 +14,7 @@ const settingPage = async (req,res)=>{
     try {
         const settings = await Setting.findAll({
             where:{
-                key:['uiMetaTitle', 'uiMetaDescription', 'uiMetaKeywords']
+                key:['uiMetaTitle', 'uiMetaDescription', 'uiMetaKeywords', 'adminCountry', 'uiCurrentLanugage']
             }
         }, {transaction: t})
         const email = await Email.findByPk(1, {transaction: t})
@@ -103,10 +103,16 @@ const emailUpdateAjax = async (req,res)=>{
 }
 
 const localizationUpdateAjax = async (req,res)=>{
-    const {localizationCountry, localizationLanguages} = req.body
+
+    let {localizationCountry, defaultLanguage, localizationLanguages, isNullLocalizationLanguages} = req.body
+    localizationLanguages = Array.isArray(localizationLanguages) ? localizationLanguages : [localizationLanguages]
+
+    if(localizationLanguages == undefined && isNullLocalizationLanguages == 'false'){
+        await res.send({isSuccess:false, message:'Sayfayı yenileyip tekrar deneyiniz'})
+    }
 
     const t = await db.transaction()
-
+    
     try {
         await Setting.update({
             value:localizationCountry
@@ -115,18 +121,34 @@ const localizationUpdateAjax = async (req,res)=>{
                 key:'adminCountry'
             }
         }, {transaction: t})
-
-
-        console.log(localizationLanguages)
         
+        await Setting.update({
+            value:defaultLanguage ? defaultLanguage : ''
+        },{
+            where:{
+                key:'uiCurrentLanugage'
+            }
+        }, {transaction: t})
 
+        await LanguageCode.update({
+            isActive:true
+        },{
+            where:{
+                lng: isNullLocalizationLanguages == "true" ? {[Op.in]:[]} : localizationLanguages
+            }
+        },{ transaction: t})
+        await LanguageCode.update({
+            isActive:false
+        },{
+            where:{
+                lng: isNullLocalizationLanguages == "true" ? {[Op.notIn]: []} : {[Op.notIn]: localizationLanguages}
+            }
+        },{ transaction: t})
 
-
-        
         await t.commit()
         await res.send({isSuccess:true, message:'Lokalizasyon ayarları güncellendi'})
     } catch (error) {
-        console.log(err)
+        console.log(error)
         await t.rollback()
         await res.send({isSuccess:false, message:'Bir hata oluştu'})
     }

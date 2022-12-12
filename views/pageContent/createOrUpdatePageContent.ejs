@@ -2,6 +2,7 @@
 
 <link href="assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
 
+
     <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
         <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
             <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
@@ -35,7 +36,7 @@
                                 <input type="text" id="key_input" class="form-control form-control-solid" placeholder="Anahtar Ara"/>
                             </div>
             
-                            <div id="key_list" class="mb-3 border" style="height:450px; overflow-x: scroll;">
+                            <div id="key_list" class="mb-3 border" style="height:250px; overflow-x: scroll;">
                                 <% keys.forEach(item =>{ %>
                                         <div class="key-item form-check form-check-custom form-check-solid">
                                             <input class="form-check-input" type="radio" name="KeyGroup" value="<%= item.key %>" id="key_<%= item.key %>" />
@@ -61,7 +62,7 @@
                             </div>
                         </div>
                         <div class="col-md-9">
-                            <div>
+                            <div class="d-flex">
                                 <div class="d-flex align-items-center mb-5">
                                     <div class="mx-5 w-20">
                                         <label for="" class="form-label">Seçilen Anahtar</label>
@@ -72,8 +73,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div>
                                 <div class="d-flex align-items-center mb-5">
                                     <div class="mx-5 w-20">
                                         <label for="" class="form-label">Seçilen Dil</label>
@@ -91,7 +90,7 @@
                                         <label for="" class="form-label">İçerik</label>
                                     </div>
                                     <div class="form-floating w-100">
-                                        <textarea id="content_area" class="form-control" placeholder="Leave a comment here" style="height: 400px"></textarea>
+                                        <textarea id="content_area" class="form-control" placeholder="Leave a comment here" style="height: 300px"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -167,18 +166,18 @@
 
             $.post( "/createOrUpdatePageContentGetValueAjax", {key, languageCode})
             .done(function(result) {
-
                 let pageContent = result.pageContent
+
                 if (pageContent && pageContent.value) {
                     $('#content_area').val(pageContent.value)
+                    toastr.success(result.message)
                 }else{
                     $('#content_area').val('')
+                    toastr.info(result.message)
                 }
 
                 $('#selected_key').text(key)
                 $('#selected_language').text(languageCode)
-
-                toastr.success(result.message)
             })
             .fail(function() {
                 //alert( "error" );

@@ -3,6 +3,7 @@ import Tour from '../models/template/Tour.js'
 import moment from 'moment'
 import { getCheckedBtn, serializeList } from "../../globalFunctions.js"
 import LanguageItem from '../models/template/LanguageItem.js'
+import LanguageCode from '../models/template/LanguageCode.js'
 import PageContent from '../models/template/PageContent.js'
 import Navigation from "../models/template/Navigation.js"
 import Category from "../models/Category.js"
@@ -11,36 +12,64 @@ import db from '../../db.js'
 import Setting from "../models/template/Setting.js"
 
 
-let lang = {
+let currentLang = {
     lng:'tr',
     languageTitle:'Türkçe'
 }
 let contents = {}
 let navigations = []
+let languageCodes = []
+let currentSettings = []
 
 //middleware
-const setLang = async (req,res,next)=>{
-    
+const setSettings = async (req,res,next)=>{
+
+    const settings = await Setting.findAll({}).catch(err=>{
+        console.log(err)
+    })
+    currentSettings = settings
+
+    res.locals.title = settings.find(el=>el.key == 'uiMetaTitle').value
+    res.locals.uiMetaDescription = settings.find(el=>el.key == 'uiMetaDescription').value
+    res.locals.uiMetaKeywords = settings.find(el=>el.key == 'uiMetaKeywords').value
+
+    next()
+}
+const setCurrentLang = async (req,res,next)=>{
+    //default currentLang
+    let uiCurrentLanugage = currentSettings.find(el=>el.key == 'uiCurrentLanugage')
+    console.log(uiCurrentLanugage)
+    if(uiCurrentLanugage.value){
+        
+        const languageCode = await LanguageCode.findOne({
+            where:{
+                lng:uiCurrentLanugage.value
+            }
+        })
+        if(languageCode){
+            currentLang.languageTitle = languageCode.name
+            currentLang.lng = languageCode.lng
+        }
+    }
     if(req.cookies.lng){
-        lang.lng = req.cookies.lng
+        currentLang.lng = req.cookies.lng
+    }
+    if(req.cookies.languageTitle){
+        currentLang.languageTitle = req.cookies.languageTitle
     }
 
     const languageItems = await LanguageItem.findAll({
         where:{
-            lng:lang.lng
+            lng:currentLang.lng
         }
     }).catch(err=>{
         console.log(err)
     })
 
     languageItems.forEach(item => {
-        lang[item.key] = item.value
+        currentLang[item.key] = item.value
     })
-
-    if(req.cookies.languageTitle){
-        lang.languageTitle = req.cookies.languageTitle
-    }
-
+   
     next()
 }
 const setLayoutContents = async (req,res,next)=>{
@@ -48,7 +77,7 @@ const setLayoutContents = async (req,res,next)=>{
     const layoutHeaderBonusLeft = await PageContent.findOne({
         where:{
             key:'layoutHeaderBonusLeft',
-            languageCode:lang.lng
+            languageCode:currentLang.lng
         }
     }).catch(err=>{
         console.log(err)
@@ -72,16 +101,17 @@ const setNavigations = async (req,res,next)=>{
     navigations = [...serializeList(list)]
     next()
 }
-const setMetas = async (req,res,next)=>{
 
-    const settings = await Setting.findAll({}).catch(err=>{
+const setLanguageCode = async (req,res,next)=>{
+    const list = await LanguageCode.findAll({
+        where:{
+            isActive:true
+        }
+    }).catch(err=>{
         console.log(err)
     })
 
-    res.locals.title = settings.find(el=>el.key == 'uiMetaTitle').value
-    res.locals.uiMetaDescription = settings.find(el=>el.key == 'uiMetaDescription').value
-    res.locals.uiMetaKeywords = settings.find(el=>el.key == 'uiMetaKeywords').value
-
+    languageCodes = list
     next()
 }
 
@@ -101,7 +131,7 @@ const homePage = async (req,res)=>{
     const pageContents = await PageContent.findAll({
         where:{
             key:['homeSlider'],
-            languageCode:lang.lng
+            languageCode:currentLang.lng
         }
 
     }).catch(err=>{
@@ -111,19 +141,19 @@ const homePage = async (req,res)=>{
         contents.homeSlider = pageContents.find(el=>el.key == 'homeSlider').value
     }
 
-    await res.render('webUI/home', {layout:'webUI/layout', lang, contents, navigations, categories})
+    await res.render('webUI/home', {layout:'webUI/layout', currentLang, contents, navigations, categories, languageCodes})
 }
 
 const aboutPage = async (req,res)=>{
     res.locals.title="Hakkımızda"
 
-    await res.render('webUI/about-us', {layout:'webUI/layout', lang, contents, navigations})
+    await res.render('webUI/about-us', {layout:'webUI/layout', currentLang, contents, navigations, languageCodes})
 }
 
 const contactPage = async (req,res)=>{
     res.locals.title="İletişim"
 
-    await res.render('webUI/contact', {layout:'webUI/layout', lang, contents, navigations})
+    await res.render('webUI/contact', {layout:'webUI/layout', currentLang, contents, navigations, languageCodes})
 }
 
 const toursPage = async (req,res)=>{
@@ -225,7 +255,7 @@ const toursPage = async (req,res)=>{
     const pageContents = await PageContent.findAll({
         where:{
             key:['toursBreadcrumb'],
-            languageCode:lang.lng
+            languageCode:currentLang.lng
         }
     }).catch(err=>{
         console.log(err)
@@ -235,7 +265,7 @@ const toursPage = async (req,res)=>{
         contents[item.key] = item.value
     });
     
-    await res.render('webUI/tours', {layout:'webUI/layout', lang, contents, q, navigations, categories, tours, paginatedResults})
+    await res.render('webUI/tours', {layout:'webUI/layout', currentLang, contents, q, navigations, categories, tours, paginatedResults, languageCodes})
 }
 
 
@@ -263,12 +293,13 @@ async function getPaginatedResults(model, option, limit, page, startIndex, endIn
 
 
 export default {
-    setLang,
+    setCurrentLang,
     setLayoutContents,
     setNavigations,
+    setLanguageCode,
     homePage,
     aboutPage,
     contactPage,
     toursPage,
-    setMetas
+    setSettings
 }

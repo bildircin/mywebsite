@@ -194,7 +194,7 @@ const createOrUpdateNavAjax = async (req,res)=>{
                 link,
                 description,
                 isActive:getCheckedBtn(isActive)
-            })
+            }, { transaction: t})
 
             await t.commit()
             await res.send({isSuccess:true, process:'create', message:'Navigasyon başarıyla eklendi', updatedNavigation:navigation})
@@ -240,7 +240,7 @@ const deleteNavigationAjax = async (req,res) => {
     const id = req.body.id
 
     if(id == "" || id == null || id == undefined){
-        await res.send({isSuccess:false, message:'Bir hata oluştu \n Sayfayı yenileyip tekrar deneyiniz'})
+        return res.send({isSuccess:false, message:'Bir hata oluştu \n Sayfayı yenileyip tekrar deneyiniz'})
     }
 
     let navigations = await Navigation.findAll({
@@ -289,9 +289,9 @@ const createOrUpdatePage = async (req,res)=>{
     
     if(id == undefined || id == null || id == ""){
         res.locals.title="Yeni Sayfa Ekle"
-        const page = Page.build()
+        const page = await Page.build()
         page.isActive = true
-        await res.render('page/createOrUpdatePage', {page})
+        return res.render('page/createOrUpdatePage', {page})
     }else{
         const page = await Page.findByPk(id, {
             where:{
@@ -300,7 +300,7 @@ const createOrUpdatePage = async (req,res)=>{
         })
         res.locals.title = page.title + ' Güncelleme'
     
-        await res.render('page/createOrUpdatePage', {page})
+        return res.render('page/createOrUpdatePage', {page})
     }
 }
 
@@ -498,9 +498,13 @@ const createOrUpdateLanguageItem = async (req,res)=>{
     await res.render('languageItem/createOrUpdateLanguageItem', {languageCodes})
 }
 
-const createOrUpdateLanguageItemAjax = async (req,res, next)=>{
+const createOrUpdateLanguageItemGetAjax = async (req,res, next)=>{
     
     const lng = req.body.lng
+
+    if(lng == undefined || lng == null || lng == ""){
+        return res.send({isSuccess:false, message:'Lütfen Dil seçiniz'})
+    }
 
     const languageItems = await LanguageItem.findAll({
         where:{
@@ -515,15 +519,14 @@ const createOrUpdateLanguageItemSaveAjax = async (req,res, next)=>{
     const updateList = req.body.updateList
     const lng = req.body.lng
 
+    if(lng == undefined || lng == null || lng == ""){
+        return res.send({isSuccess:false, message:'Lütfen Dil seçiniz'})
+    }
     const t = await db.transaction()
-
     try {
-
-        console.log(updateList)
-        console.log(lng)
         for (const key in updateList) {
             const value = updateList[key];
-    
+
             await LanguageItem.update({
                 value
             },{
@@ -540,7 +543,60 @@ const createOrUpdateLanguageItemSaveAjax = async (req,res, next)=>{
         await t.rollback()
         await res.send({isSuccess:false, message:'Bir hata oluştu'})
     }
-} 
+}
+
+const createOrUpdateLanguageItemCreateAjax = async (req,res, next)=>{
+    const lng = req.body.lng
+
+    if(lng == undefined || lng == null || lng == ""){
+        return res.send({isSuccess:false, message:'Lütfen Dil seçiniz'})
+    }
+    
+    const t = await db.transaction()
+
+    try {
+        const sameLanguageItems = await LanguageItem.findAll({
+            where:{
+                lng:'tr'
+            }
+        }, {transaction:t})
+    
+        await sameLanguageItems.forEach(async item => {
+            const t1 = await db.transaction()
+    
+            try {
+                await LanguageItem.create({
+                    key:item.key,
+                    lng,
+                    title:item.title,
+                    value:item.value
+                }, {transaction: t1})
+                
+                await t1.commit()
+            } catch (error) {
+                console.log(error)
+                await t1.rollback()
+            }
+        })
+         
+       
+        const createdLanguageItems = await LanguageItem.findAll({
+            where:{
+                lng:lng
+            }
+        }, {transaction: t})
+
+        console.log(JSON.stringify(createdLanguageItems))
+
+        await t.commit()
+        await res.send({isSuccess:true, message:'Oluşturma Başarılı', createdLanguageItems})
+    } catch (error) {
+        await t.rollback()
+        await res.send({isSuccess:false, message:'Bir hata oluştu'})
+    }
+
+    
+}
 
 //PageContent
 const createOrUpdatePageContent = async (req,res)=>{
@@ -565,7 +621,12 @@ const createOrUpdatePageContentGetValueAjax = async (req,res, next)=>{
             languageCode
         }
     })
-    await res.send({isSuccess:true, message:'İçerik yüklendi', pageContent})
+    if (pageContent) {
+        await res.send({isSuccess:true, message:'İçerik yüklendi', pageContent})
+    }else{
+        await res.send({isSuccess:true, message:'Bu içeriği ilk defa oluşturacaksınız', pageContent})
+    }
+
 } 
 
 const createOrUpdatePageContentSetValueAjax = async (req,res, next)=>{
@@ -574,22 +635,41 @@ const createOrUpdatePageContentSetValueAjax = async (req,res, next)=>{
 
     const t = await db.transaction()
     try {
-        const pageContent = await PageContent.update({
-            value
-        },{
+
+        const pageContent = await PageContent.findOne({
             where:{
                 key,
                 languageCode
             }
-        }, { transaction: t})
+        })
+
+        let message = 'İçerik güncellendi' 
+        if(pageContent){
+            await PageContent.update({
+                value
+            },{
+                where:{
+                    key,
+                    languageCode
+                }
+            }, { transaction: t})
+        }else{
+            await PageContent.create({
+                key,
+                languageCode,
+                value
+            }, { transaction: t})
+            message = 'İçerik oluşturuldu'
+        }
         
         await t.commit()
-        await res.send({isSuccess:true, message:'İçerik güncellendi'})
+        await res.send({isSuccess:true, message})
     } catch (error) {
         await t.rollback()
         await res.send({isSuccess:false, message:error})
     }
-} 
+}
+
 
 
 
@@ -648,8 +728,9 @@ export default {
     createOrUpdatePage,
     createOrUpdatePageAjax,
     createOrUpdateLanguageItem,
-    createOrUpdateLanguageItemAjax,
+    createOrUpdateLanguageItemGetAjax,
     createOrUpdateLanguageItemSaveAjax,
+    createOrUpdateLanguageItemCreateAjax,
     createOrUpdatePageContent,
     createOrUpdatePageContentGetValueAjax,
     createOrUpdatePageContentSetValueAjax

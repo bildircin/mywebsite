@@ -15,8 +15,9 @@ router.get('/sayfa-kaydet/:id?', templateController.createOrUpdatePage)
 router.post('/createOrUpdatePageAjax', templateController.createOrUpdatePageAjax)
 
 router.get('/dil-deger-guncelleme', templateController.createOrUpdateLanguageItem)
-router.post('/createOrUpdateLanguageItemAjax', templateController.createOrUpdateLanguageItemAjax)
+router.post('/createOrUpdateLanguageItemGetAjax', templateController.createOrUpdateLanguageItemGetAjax)
 router.post('/createOrUpdateLanguageItemSaveAjax', templateController.createOrUpdateLanguageItemSaveAjax)
+router.post('/createOrUpdateLanguageItemCreateAjax', templateController.createOrUpdateLanguageItemCreateAjax)
 
 router.get('/icerik-guncelleme', templateController.createOrUpdatePageContent)
 router.post('/createOrUpdatePageContentGetValueAjax', templateController.createOrUpdatePageContentGetValueAjax)

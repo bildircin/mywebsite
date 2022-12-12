@@ -7,27 +7,27 @@
         <aside class="col-md-3 col-sm-4 col-xs-12 content-aside left_column sidebar-offcanvas">
             <span id="close-sidebar" class="fa fa-times"></span>
             <div class="module-search clearfix">
-                <h3 class="modtitle"><%= lang.toursPageSearchContentTitle %></h3>
+                <h3 class="modtitle"><%= currentLang.toursPageSearchContentTitle %></h3>
 
 
                 <form action="/turlar" method="get" class="search-pr" id="item_search_form">
                     <div class="search-item item-select">
                         <select name="category" id="category">
-                            <option value="null" <%= q.category == null ? 'selected=selected' : '' %>><%= lang.toursPageSearchContentCategory %></option>
+                            <option value="null" <%= q.category == null ? 'selected=selected' : '' %>><%= currentLang.toursPageSearchContentCategory %></option>
                             <%_ categories.forEach(item =>{ _%>
                                 <option value="<%= item.id %>" <%= (q.category && q.category == item.id) ? 'selected=selected' : '' %>><%= item.name %></option>
                             <%_ }) _%>
                         </select>
                     </div>
                     <div class="search-item date">
-                        <input type="text" class="tour-search-input datepicker hasDatepicker" name="startedAt" id="date_start" autocomplete="false" value="<%= q.startedAt ? moment(q.startedAt, 'YYYY-MM-DD').format('MM/DD/YYYY') : '' %>" placeholder="<%= lang.toursPageSearchContentDateStart %>">
+                        <input type="text" class="tour-search-input datepicker hasDatepicker" name="startedAt" id="date_start" autocomplete="false" value="<%= q.startedAt ? moment(q.startedAt, 'YYYY-MM-DD').format('MM/DD/YYYY') : '' %>" placeholder="<%= currentLang.toursPageSearchContentDateStart %>">
                     </div>
                     <div class="search-item date">
-                        <input type="text" class="tour-search-input datepicker hasDatepicker" name="finishedAt" id="date_end" autocomplete="false" value="<%= q.finishedAt ? moment(q.finishedAt, 'YYYY-MM-DD').format('MM/DD/YYYY') : '' %>" placeholder="<%= lang.toursPageSearchContentDateEnd %>">
+                        <input type="text" class="tour-search-input datepicker hasDatepicker" name="finishedAt" id="date_end" autocomplete="false" value="<%= q.finishedAt ? moment(q.finishedAt, 'YYYY-MM-DD').format('MM/DD/YYYY') : '' %>" placeholder="<%= currentLang.toursPageSearchContentDateEnd %>">
                     </div>
                     <div class="search-item item-select">
                         <select name="persons" id="persons">
-                            <option value="0" <%= (q.persons && q.persons == 0) ? 'selected=selected' : '' %>><%= lang.toursPageSearchContentPersons %></option>
+                            <option value="0" <%= (q.persons && q.persons == 0) ? 'selected=selected' : '' %>><%= currentLang.toursPageSearchContentPersons %></option>
                             <option value="1" <%= (q.persons && q.persons == 1) ? 'selected=selected' : '' %>>1 people</option>
                             <option value="2" <%= (q.persons && q.persons == 2) ? 'selected=selected' : '' %>>2 people</option>
                             <option value="3" <%= (q.persons && q.persons == 3) ? 'selected=selected' : '' %>>3 people</option>
@@ -35,10 +35,10 @@
                         </select>
                     </div>
                     <div class="search-item item-budget">
-                        <input type="number" class="hotel-budget-input" name="price" id="price" value="<%= q.price ? q.price : '' %>" placeholder="<%= lang.toursPageSearchContentMaxPrice %>">
+                        <input type="number" class="hotel-budget-input" name="price" id="price" value="<%= q.price ? q.price : '' %>" placeholder="<%= currentLang.toursPageSearchContentMaxPrice %>">
                     </div>
                     <div class="button-submit">
-                        <button type="submit" class="button"><%= lang.toursPageSearchContentButton %> <i class="fa fa-angle-right" aria-hidden="true"></i></button>
+                        <button type="submit" class="button"><%= currentLang.toursPageSearchContentButton %> <i class="fa fa-angle-right" aria-hidden="true"></i></button>
                         <input type="hidden" name="searchTour" value="1">
                     </div>
                 </form>					

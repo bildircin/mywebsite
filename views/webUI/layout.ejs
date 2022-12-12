@@ -67,16 +67,17 @@
                             <form action="#" method="post" enctype="multipart/form-data">
                                 <div class="btn-group">
                                     <button id="selected-language" class="btn-link dropdown-toggle" data-toggle="dropdown">
-                                        <img src="webUI/image/catalog/flags/<%= lang.lng%>.png" alt="<%= lang.languageTitle %>" title="<%= lang.languageTitle %>">
+                                        <img src="webUI/image/catalog/flags/<%= currentLang.lng%>.png" alt="<%= currentLang.languageTitle %>" title="<%= currentLang.languageTitle %>">
                                         <span class="hidden-xs hidden-sm hidden-md"></span> <i class="fa fa-angle-down"></i>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li>
-                                            <button class="btn-block language-select" type="button" name="en"><img src="webUI/image/catalog/flags/en.png" alt="English" title="English" /> İngilizce</button>
-                                        </li>
-                                        <li>
-                                            <button class="btn-block language-select" type="button" name="tr"><img src="webUI/image/catalog/flags/tr.png" alt="Türkçe" title="Türkçe" /> Türkçe</button>
-                                        </li>
+                                        <% languageCodes.forEach(item => { %>
+                                            
+                                            <li>
+                                                <button class="btn-block language-select" type="button" name="<%= item.lng %>"><img src="webUI/image/catalog/flags/<%= item.lng %>.png" alt="<%= item.name %>" title="<%= item.name %>" /> <%= item.name %></button>
+                                            </li>
+                                        <% }) %>
+
                                     </ul>
                                 </div>
                                 <input type="hidden" name="code" value="" />

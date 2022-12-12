@@ -3,6 +3,7 @@
 <link href="assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
 <link href="assets/plugins/custom/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" />
 
+
     <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
         <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
             <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
@@ -39,20 +40,51 @@
                         </select>
                     </div>
 
-                    <table class="table table-row-bordered gy-5 gs-7 border rounded mb-10" id="item_list">
-                        <thead>
-                            <tr class="fw-bold fs-6 text-gray-800 px-7">
-                                <th>Anahtar</th>
-                                <th>Değer</th>
-                            </tr>
-                        </thead>
-                        <tbody id="language_result_list">
- 
-                            
-                        </tbody>
-                    </table>
+                    <div id="table_wrapper" class="d-none">
+                        <table class="table table-row-bordered gy-5 gs-7 border rounded mb-10" id="item_list">
+                            <thead>
+                                <tr class="fw-bold fs-6 text-gray-800 px-7">
+                                    <th style="width:120px !important;">Anahtar</th>
+                                    <th>Değer</th>
+                                </tr>
+                            </thead>
+                            <tbody id="language_result_list">
+     
+                                
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="create_language_alert" class="alert alert-info d-none align-items-center p-5">
+                        <span class="svg-icon svg-icon-2hx svg-icon-info me-3">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path opacity="0.3" d="M2 4V16C2 16.6 2.4 17 3 17H13L16.6 20.6C17.1 21.1 18 20.8 18 20V17H21C21.6 17 22 16.6 22 16V4C22 3.4 21.6 3 21 3H3C2.4 3 2 3.4 2 4Z" fill="currentColor"></path>
+                                <path d="M18 9H6C5.4 9 5 8.6 5 8C5 7.4 5.4 7 6 7H18C18.6 7 19 7.4 19 8C19 8.6 18.6 9 18 9ZM16 12C16 11.4 15.6 11 15 11H6C5.4 11 5 11.4 5 12C5 12.6 5.4 13 6 13H15C15.6 13 16 12.6 16 12Z" fill="currentColor"></path>
+                            </svg>
+                        </span>
+                        <div class="d-flex flex-column">
+                            <h4 class="mb-1 text-info">Dil Değerleri Henüz Oluşturulmadı</h4>
+                            <span>Bu dilin değerleri henüz oluşturulmadı. İlk oluşturma değerler Türkçe diline göre yapılacaktır. Oluşturduktan sonra değerleri güncelleyebilirsiniz</span>
+                        </div>
+                    </div>
+
                     <div class="d-flex justify-content-end">
-                        <button id="save_btn" class="btn btn-success">Kaydet</button>
+                        <button type="button" id="save_btn" class="btn btn-success d-none">
+                            <span class="indicator-label">
+                                Kaydet
+                            </span>
+                            <span class="indicator-progress">
+                                Lütfen Bekleyin... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
+                        <button type="button" id="create_btn" class="btn btn-success d-none">
+                            <span class="indicator-label">
+                                Oluştur
+                            </span>
+                            <span class="indicator-progress">
+                                Lütfen Bekleyin... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -63,8 +95,8 @@
     <script src="assets/plugins/custom/prismjs/prismjs.bundle.js"></script>
     
 <script>
+    let myTable;
     $(document).ready(function(){
-
         // Format options
         var optionFormat = function(item) {
             if ( !item.id ) {
@@ -91,31 +123,45 @@
 
         $('#language_select').on('select2:select', function(){
             const lng = $(this).val()
-            console.log(lng)
-            $.post("/createOrUpdateLanguageItemAjax", {lng}, function(result) {
-                
+
+            $.post("/createOrUpdateLanguageItemGetAjax", {lng}, function(result) {
                 $('#language_result_list').empty()
-
-                let list = result.languageItems
-
-                list.forEach(item => {
+                
+                let languageItems = result.languageItems
+                console.log(languageItems)
+                if(languageItems.length > 0){
                     
-                    let tr = `<tr class="lang-item" data-key="${item.key}">
-                                <td>
-                                    ${item.key}
-                                    <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="${item.title}"></i>
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control form-control-solid" value="${item.value}" />
-                                </td>
-                            </tr>`
-                    $('#language_result_list').append(tr)
-                });
 
-                $('#item_list').DataTable()
+                    languageItems.forEach(item => {
+                        
+                        let tr = `<tr class="lang-item" data-key="${item.key}">
+                                    <td style="width:120px;">
+                                        ${item.key}
+                                        <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="${item.title}"></i>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-solid" value="${item.value}" />
+                                    </td>
+                                </tr>`
+                        $('#language_result_list').append(tr)
+                    });
+                    
+                    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+                    myTable = $('#item_list').DataTable()
 
-                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-                const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+                    $('#create_language_alert').removeClass('d-flex').addClass('d-none')
+                    $('#table_wrapper').removeClass('d-none').addClass('d-block')
+                    $('#create_btn').addClass('d-none')
+                    $('#save_btn').removeClass('d-none')
+                }else{
+                    $('#create_language_alert').removeClass('d-none').addClass('d-flex')
+                    $('#table_wrapper').removeClass('d-block').addClass('d-none')
+                    $('#create_btn').removeClass('d-none')
+                    $('#save_btn').addClass('d-none')
+                }
+
+
             })
             .fail(function(err) {
                 console.log(err)
@@ -125,6 +171,8 @@
     })
 
     $('#save_btn').on('click', function(){
+        $(this).attr('disabled', 'disabled')
+        $(this).attr('data-kt-indicator', 'on')
         let updateList = {}
         let lng = $('#language_select').val()
         let domList = $('#language_result_list > tr')
@@ -144,6 +192,56 @@
         .fail(function(err) {
             toastr.error(err)
         })
-    })
+        .always(function(){
+            $('#save_btn').removeAttr('disabled')
+            $('#save_btn').removeAttr('data-kt-indicator')
+        })
+    })    
 
+    $('#create_btn').on('click', function(){
+        $(this).attr('disabled', 'disabled')
+        $(this).attr('data-kt-indicator', 'on')
+        let lng = $('#language_select').val()
+
+        $.post("/createOrUpdateLanguageItemCreateAjax", {lng}, function(result) {
+            if (result.isSuccess) {
+
+                const createdLanguageItems = result.createdLanguageItems
+                createdLanguageItems.forEach(item => {
+                        
+                    let tr = `<tr class="lang-item" data-key="${item.key}">
+                                <td style="width:120px;">
+                                    ${item.key}
+                                    <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="${item.title}"></i>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control form-control-solid" value="${item.value}" />
+                                </td>
+                            </tr>`
+                    $('#language_result_list').append(tr)
+                });
+
+                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
+                myTable = $('#item_list').DataTable()
+
+                $('#create_language_alert').removeClass('d-flex').addClass('d-none')
+                $('#table_wrapper').removeClass('d-none').addClass('d-block')
+                $('#create_btn').addClass('d-none')
+                $('#save_btn').removeClass('d-none')
+
+                toastr.success(result.message)
+            }else{
+                toastr.error(result.message)
+            }
+        })
+        .fail(function(err) {
+            toastr.error(err)
+        })
+        .always(function(){
+            $('#create_btn').removeAttr('disabled')
+            $('#create_btn').removeAttr('data-kt-indicator')
+        })
+    })
 </script>
