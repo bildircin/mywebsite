@@ -12,7 +12,7 @@ const Tour = db.define('Tour', {
         type:Sequelize.STRING
     },
     description:{
-        type:Sequelize.STRING
+        type:Sequelize.TEXT('long')
     },
     sequence:{
         type:Sequelize.INTEGER,
@@ -47,6 +47,9 @@ const Tour = db.define('Tour', {
     finishedAt:{
         type:Sequelize.DATE,
         allowNull:false
+    },
+    overview:{
+        type:Sequelize.TEXT('long')
     },
     isActive:{
         type:Sequelize.BOOLEAN,

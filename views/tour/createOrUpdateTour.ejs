@@ -104,7 +104,44 @@
                             <label class="required form-label">Bitiş Tarihi</label>
                             <input type="text" class="form-control" id="finished_at" name="finishedAt"  value="<%= tour.finishedAt %>"  />
                         </div>
+                        <div class="mb-10 border">
+                            <label class="form-label">Genel Bakış</label>
+                            <div id="toolbar_container_header"></div>
+                            <textarea id="overview" name="overview" class="tox-target">
+                                 <%= tour.overview %>
+                            </textarea>
+    
+                            <div class="d-none" id="overview_hidden">
+                                
+                            </div>
+                        </div>
 
+                        <div class="mb-10 border">
+                            <div class="alert alert-dismissible bg-light-primary d-flex flex-column flex-sm-row p-5 m-10">
+                                <span class="svg-icon svg-icon-2hx svg-icon-primary me-4 mb-5 mb-sm-0">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10" fill="currentColor"/>
+                                        <path d="M10.4343 12.4343L8.75 10.75C8.33579 10.3358 7.66421 10.3358 7.25 10.75C6.83579 11.1642 6.83579 11.8358 7.25 12.25L10.2929 15.2929C10.6834 15.6834 11.3166 15.6834 11.7071 15.2929L17.25 9.75C17.6642 9.33579 17.6642 8.66421 17.25 8.25C16.8358 7.83579 16.1642 7.83579 15.75 8.25L11.5657 12.4343C11.2533 12.7467 10.7467 12.7467 10.4343 12.4343Z" fill="currentColor"/>
+                                        </svg>
+                                </span>
+
+                                <div class="d-flex flex-column pe-0 pe-sm-10">
+                                    <h4 class="fw-semibold">1. Gün</h4>
+                                    <span>The alert component can be used to highlight certain parts of your page for higher content visibility.</span>
+                                </div>
+
+                                <button type="button" class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto" data-bs-dismiss="alert">
+                                    <span class="svg-icon svg-icon-1 svg-icon-primary">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path opacity="0.3" d="M6 19.7C5.7 19.7 5.5 19.6 5.3 19.4C4.9 19 4.9 18.4 5.3 18L18 5.3C18.4 4.9 19 4.9 19.4 5.3C19.8 5.7 19.8 6.29999 19.4 6.69999L6.7 19.4C6.5 19.6 6.3 19.7 6 19.7Z" fill="currentColor"/>
+                                            <path d="M18.8 19.7C18.5 19.7 18.3 19.6 18.1 19.4L5.40001 6.69999C5.00001 6.29999 5.00001 5.7 5.40001 5.3C5.80001 4.9 6.40001 4.9 6.80001 5.3L19.5 18C19.9 18.4 19.9 19 19.5 19.4C19.3 19.6 19 19.7 18.8 19.7Z" fill="currentColor"/>
+                                            </svg>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                  
+             
                         <div class="form-check form-switch form-check-custom form-check-solid my-10">
                             <input class="form-check-input" type="checkbox" id="is_active" name="isActive" <%= tour.isActive ? 'checked=checked' : '' %> />
                             <label class="form-check-label" for="is_active">
@@ -114,7 +151,7 @@
                     
                         <div class="form-group row mt-5">
                             <div class="col-md-2">
-                                <a href="/turlar" class="btn btn-block btn-dark" id="back_btn">GERİ</a>
+                                <a href="/tur-listesi" class="btn btn-block btn-dark" id="back_btn">GERİ</a>
                             </div>
                             <div class="col-md-3">
                                 <button type="submit" class="btn btn-primary" id="save_btn">
@@ -137,6 +174,7 @@
 
     <script src="../assets/global/plugins/jquery-form/jquery.form.js"></script>
     <script src="../assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js" type="text/javascript"></script>
+    <script src="../assets/plugins/custom/tinymce/tinymce.bundle.js"></script>
 
 <script>
 
@@ -160,6 +198,17 @@
         })
 
         $("#started_at, #finished_at").flatpickr();
+
+        tinymce.init({
+            selector: "#overview",
+            height:'480',
+            plugins: "code",
+            setup: function (editor) {
+                editor.on('change', function () {
+                    editor.save();
+                });
+            }
+        })
     })
  
     $('#item_save_form').ajaxForm({

@@ -159,11 +159,13 @@ const contactPage = async (req,res)=>{
 const toursPage = async (req,res)=>{
     res.locals.title="Turlar"
 
+    let uiProductsItemsPerPage = currentSettings.find(el=>el.key == 'uiProductsItemsPerPage').value
+
     //query
     const q = req.query;
     let tours = []
     const page = req.query.page ? parseInt(req.query.page) : 1
-    const limit = 4
+    const limit = uiProductsItemsPerPage ? parseInt(uiProductsItemsPerPage) : 10
     const startIndex = (page - 1) * limit
     const endIndex = page * limit
     let paginatedResults = {}
@@ -268,10 +270,34 @@ const toursPage = async (req,res)=>{
     await res.render('webUI/tours', {layout:'webUI/layout', currentLang, contents, q, navigations, categories, tours, paginatedResults, languageCodes})
 }
 
+const tourSinglePage = async (req,res)=>{
+    const id = req.query.id
+
+    res.locals.title = ""
+    const t = await db.transaction()
+    try {
+        const tour = await Tour.findByPk(id, {transaction: t})
+        res.locals.title = tour.title
+
+        await res.render('webUI/tour-single', {layout:'webUI/layout', currentLang, contents, navigations, languageCodes, tour})
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+
+
+
+
+
+
+
+
 
 async function getPaginatedResults(model, option, limit, page, startIndex, endIndex){
     const modelCount = await model.count(option)
-    console.log(modelCount)
+    
     let paginatedResults = {
         pageCount:Math.ceil(modelCount / limit),
         page
@@ -301,5 +327,6 @@ export default {
     aboutPage,
     contactPage,
     toursPage,
-    setSettings
+    setSettings,
+    tourSinglePage
 }

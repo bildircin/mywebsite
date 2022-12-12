@@ -17,7 +17,7 @@ module.exports = {
             type:Sequelize.STRING
         },
         description:{
-            type:Sequelize.STRING
+            type:Sequelize.TEXT('long')
         },
         sequence:{
             type:Sequelize.INTEGER,
@@ -57,6 +57,9 @@ module.exports = {
             type:Sequelize.BOOLEAN,
             allowNull:false,
             defaultValue:false
+        },
+        overview:{
+            type:Sequelize.TEXT('long')
         },
         isDeleted:{
             type:Sequelize.BOOLEAN,

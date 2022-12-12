@@ -14,7 +14,7 @@ const settingPage = async (req,res)=>{
     try {
         const settings = await Setting.findAll({
             where:{
-                key:['uiMetaTitle', 'uiMetaDescription', 'uiMetaKeywords', 'adminCountry', 'uiCurrentLanugage']
+                key:['uiMetaTitle', 'uiMetaDescription', 'uiMetaKeywords', 'adminCountry', 'uiCurrentLanugage', 'uiProductsItemsPerPage']
             }
         }, {transaction: t})
         const email = await Email.findByPk(1, {transaction: t})
@@ -154,9 +154,35 @@ const localizationUpdateAjax = async (req,res)=>{
     }
 }
 
+const productsSettingsUpdateAjax = async (req,res)=>{
+
+    let {productsItemsPerPage} = req.body
+
+    const t = await db.transaction()
+    
+    try {
+        
+        await Setting.update({
+            value: productsItemsPerPage ? productsItemsPerPage : ''
+        },{
+            where:{
+                key:'uiProductsItemsPerPage'
+            }
+        }, {transaction: t})
+
+        await t.commit()
+        await res.send({isSuccess:true, message:'Ürünler ayarları güncellendi'})
+    } catch (error) {
+        console.log(error)
+        await t.rollback()
+        await res.send({isSuccess:false, message:'Bir hata oluştu'})
+    }
+}
+
 export default {
     settingPage,
     generalUpdateAjax,
     emailUpdateAjax,
-    localizationUpdateAjax
+    localizationUpdateAjax,
+    productsSettingsUpdateAjax
 }

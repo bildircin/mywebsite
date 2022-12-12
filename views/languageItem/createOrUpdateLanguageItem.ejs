@@ -126,7 +126,9 @@
 
             $.post("/createOrUpdateLanguageItemGetAjax", {lng}, function(result) {
                 $('#language_result_list').empty()
-                
+                if(myTable)
+                    myTable.clear().destroy()
+
                 let languageItems = result.languageItems
                 console.log(languageItems)
                 if(languageItems.length > 0){
@@ -135,7 +137,7 @@
                     languageItems.forEach(item => {
                         
                         let tr = `<tr class="lang-item" data-key="${item.key}">
-                                    <td style="width:120px;">
+                                    <td style="width:20%;">
                                         ${item.key}
                                         <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="${item.title}"></i>
                                     </td>
@@ -148,7 +150,8 @@
                     
                     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
                     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-                    myTable = $('#item_list').DataTable()
+                    
+                    myTable = $('#item_list').DataTable({autoWidth:false})
 
                     $('#create_language_alert').removeClass('d-flex').addClass('d-none')
                     $('#table_wrapper').removeClass('d-none').addClass('d-block')
@@ -206,11 +209,15 @@
         $.post("/createOrUpdateLanguageItemCreateAjax", {lng}, function(result) {
             if (result.isSuccess) {
 
+                $('#language_result_list').empty()
+                if(myTable)
+                    myTable.clear()
+
                 const createdLanguageItems = result.createdLanguageItems
                 createdLanguageItems.forEach(item => {
                         
                     let tr = `<tr class="lang-item" data-key="${item.key}">
-                                <td style="width:120px;">
+                                <td style="width:20%;">
                                     ${item.key}
                                     <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="${item.title}"></i>
                                 </td>
