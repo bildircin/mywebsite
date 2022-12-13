@@ -37,23 +37,20 @@
 									<div id="menu1" class="tour-plan clearfix">
 										<h3>tour plans</h3>
 										<div class="item-content">
-											<div class="title"><span>1</span>Day 1 - Departure</div>
-											<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, tota rem aperia, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt.</p>
-											<ul>
-												<li><label>09:30</label> - <span>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et.</span></li>
-												<li><label>13:30</label> - <span>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et.</span></li>
-												<li><label>17:30</label> - <span>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et.</span></li>
-												<li><label>20:30</label> - <span>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et.</span></li>
-											</ul>
-											<div class="title"><span>2</span>Day 2 - Visting The Shire - the Hobbit’s Village</div>
-											<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, tota rem aperia, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt.</p>
-											<ul>
-												<li><label>09:30</label> - <span>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et.</span></li>
-												<li><label>13:30</label> - <span>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et.</span></li>
-												<li><label>17:30</label> - <span>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et.</span></li>
-												<li><label>20:30</label> - <span>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et.</span></li>
-											</ul>
-											<div class="title"><span>3</span>Day 3 - Return</div>
+                                            <% let tourDayList = JSON.parse(tour.dayList) %>
+                                            <% tourDayList.forEach((item, i) => { %>
+                                                <div class="title"><span><%= i + 1 %></span><%= i + 1 %>. Gün</div>
+                                                <p><%= item.description %></p>
+                                                <ul>
+                                                    <% item.timeItems.forEach(element => { %>
+                                                        <% if(element.time != "" && element.timeDescription){ %>
+
+                                                        <li><label><%= element.time %></label> - <span><%= element.timeDescription %></span></li>
+                                                        <% } %>
+                                                    <% }); %>
+                                                </ul>
+                                            <% }); %>
+										
 										</div>
 									</div>
 									<div id="menu2" class="tour-map">

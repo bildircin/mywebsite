@@ -61,6 +61,9 @@ module.exports = {
         overview:{
             type:Sequelize.TEXT('long')
         },
+        dayList:{
+            type:Sequelize.TEXT('long')
+        },
         isDeleted:{
             type:Sequelize.BOOLEAN,
             allowNull:false,

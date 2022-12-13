@@ -78,7 +78,7 @@ const createOrUpdateTour = async (req,res)=>{
 
 const createOrUpdateTourAjax = async (req,res)=>{
     
-    const {id, category, description, sequence, day, dataSrcCoverUrl, dataSrcHeadImgUrl, persons, price, startedAt, finishedAt, isActive, overview, } = req.body
+    const {id, category, description, sequence, day, dataSrcCoverUrl, dataSrcHeadImgUrl, persons, price, startedAt, finishedAt, isActive, overview, dayList } = req.body
     let title = req.body.title
 
     if(category == undefined || category == null || category == ""){
@@ -94,7 +94,7 @@ const createOrUpdateTourAjax = async (req,res)=>{
         return res.status(400).send({isSuccess:false, message: "Lütfen bitiş tarihi giriniz"})
     }
     title = title.trim()
-
+    console.log( dayList)
     /* create */
     if(id == null || id == undefined || id == ""){
         
@@ -144,6 +144,7 @@ const createOrUpdateTourAjax = async (req,res)=>{
                 startedAt,
                 finishedAt,
                 overview,
+                dayList,
                 coverUrl: fileArr.coverUrlFile ? fileArr.coverUrlFile : dataSrcCoverUrl ? dataSrcCoverUrl : null,
                 headImgUrl: fileArr.headImgUrlFile ? fileArr.headImgUrlFile : dataSrcHeadImgUrl ? dataSrcHeadImgUrl : null,
                 isActive:getCheckedBtn(isActive),
@@ -220,6 +221,7 @@ const createOrUpdateTourAjax = async (req,res)=>{
                     startedAt,
                     finishedAt,
                     overview,
+                    dayList,
                     coverUrl: fileArr.coverUrlFile ? fileArr.coverUrlFile : dataSrcCoverUrl ? dataSrcCoverUrl : null,
                     headImgUrl: fileArr.headImgUrlFile ? fileArr.headImgUrlFile : dataSrcHeadImgUrl ? dataSrcHeadImgUrl : null,
                     isActive:getCheckedBtn(isActive),

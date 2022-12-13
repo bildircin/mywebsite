@@ -1,5 +1,40 @@
 
 
+<style>
+    .accordion-btn {
+        background-color: #f5f8fa;
+        color: #444;
+        cursor: pointer;
+        padding: 18px;
+        width: 100%;
+        border: none;
+        text-align: left;
+        outline: none;
+        font-size: 15px;
+        border-radius: 5px;
+    }
+    .accordion-btn.active{
+        margin-bottom: 18px;
+    }
+    .active {
+        background-color: #d2e5f1;
+    }
+
+    .panel {
+        padding: 0 18px;
+        background-color: white;
+    }
+
+    .day-item{
+        border: 1px solid #eff2f5;
+        border-radius: 5px;
+    }
+    #day_list{
+        min-height: 60px;
+        border-radius: 5px;
+    }
+
+</style>
 
     <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
         <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
@@ -116,51 +151,20 @@
                             </div>
                         </div>
 
+
                         <div class="mb-10">
+                            <textarea  name="dayList"  cols="30" rows="10" style="display: none;"></textarea>
                             <div class="d-flex justify-content-between align-items-center">
-                                <label class="form-label">Tur Planı</label>
+                                <label class="form-label"><h2>Tur Planı</h2></label>
                                 <button class="btn btn-primary" id="add_day_btn">Gün Ekle</button>
                             </div>
-                            <div class="accordion" id="kt_accordion_1">
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header d-flex align-items-center" id="kt_accordion_1_header_1">
-                                        <span class="svg-icon svg-icon-muted svg-icon-2hx">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="currentColor"/>
-                                                <rect x="7" y="15.3137" width="12" height="2" rx="1" transform="rotate(-45 7 15.3137)" fill="currentColor"/>
-                                                <rect x="8.41422" y="7" width="12" height="2" rx="1" transform="rotate(45 8.41422 7)" fill="currentColor"/>
-                                            </svg>
-                                        </span>
-                                        <button class="accordion-button fs-4 fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#kt_accordion_1_body_1" aria-expanded="true" aria-controls="kt_accordion_1_body_1">
-                                            1. Gün
-                                        </button>
-                                    </h2>
-                                    <div id="kt_accordion_1_body_1" class="accordion-collapse collapse show" aria-labelledby="kt_accordion_1_header_1" data-bs-parent="#kt_accordion_1">
-                                        <div class="accordion-body">
-                                            <div class="form-floating mb-2 tour-plan-description">
-                                                <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
-                                                <label for="floatingTextarea2">Açıklama</label>
-                                            </div>
-                                            <div class="d-flex flex-column me-2" style="width: 100%;">
-                                                <div class="d-flex justify-content-between mb-2">
-                                                    <h2>Saatler</h2>
-                                                    <button class="btn btn-primary">Ekle</button>
-                                                </div>
-                                                <div class="mb-0" style="width: 100%;">
-                                                    <input class="form-control form-control-solid" placeholder="Günün herhangi bir saatini giriniz" id="kt_datepicker_3"/>
-                                                </div>
-                                                <div class="form-floating">
-                                                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
-                                                    <label for="floatingTextarea2">Paragraf</label>
-                                                </div>
-                                            </div>
 
-                                        </div>
-                                    </div>
-                                </div>
+                            <div id="day_list" class="border">
+                              
                             </div>
                         </div>
-                  
+
+
              
                         <div class="form-check form-switch form-check-custom form-check-solid my-10">
                             <input class="form-check-input" type="checkbox" id="is_active" name="isActive" <%= tour.isActive ? 'checked=checked' : '' %> />
@@ -192,13 +196,17 @@
         </div>
     </div>
 
+    <div id="raw_day_list" style="display: none;"><%= tour.dayList %></div>
+
     <script src="../assets/global/plugins/jquery-form/jquery.form.js"></script>
     <script src="../assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js" type="text/javascript"></script>
     <script src="../assets/plugins/custom/tinymce/tinymce.bundle.js"></script>
 
 <script>
+    let rawDayList = []
 
     $(document).ready(function(){
+        
         $('#day, #sequence, #persons').inputmask({
             mask: '9',
             repeat: 12,
@@ -229,6 +237,162 @@
                 });
             }
         })
+
+        rawDayList = JSON.parse($('#raw_day_list').text())
+
+        rawDayList.forEach(item => {
+            
+            //custom accoridon item
+            let dayItem = $('<div>').addClass('day-item')
+            let accordionBtn = $('<button>').addClass('accordion-btn').append('Gün')
+            let panel = $('<div>').addClass('panel').attr('style', 'display:none;')
+
+            dayItem.append(accordionBtn).append(panel)
+
+            //textarea item
+            let textareaContent = $('<div>').addClass('form-floating mb-2')
+            let textarea = $('<textarea style="height: 100px">').addClass('form-control tour-plan-description').val(item.description)
+            let textareaLabel = $('<label>').append('Açıklama')
+            
+            textareaContent.append(textarea).append(textareaLabel)
+            panel.append(textareaContent)
+            dayItem.append(panel)
+
+            //time add btn
+            let addTimeButton = $('<button style="margin-bottom:10px;">').addClass('btn btn-light-info').append('<i class="fa-solid fa-plus me-2"></i>').append('Zaman Ekle')
+            panel.append(addTimeButton)
+
+            $('#day_list').append(dayItem)
+
+            accordionBtn.get(0).addEventListener("click", function(e) {
+                e.preventDefault()
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                
+                if (panel.style.display == 'none') {
+                    panel.style.display = 'block';
+                } else {
+                    panel.style.display = "none";
+                } 
+            });
+
+            //timeItems add
+            if(item.timeItems.length > 0){
+                let itemTimeItems = item.timeItems
+
+                itemTimeItems.forEach(element => {
+                    
+                    let timeItem = $('<div style="position:relative;">').addClass('time-item')
+                    let pickerDiv = $('<div style="position:relative;">')
+                    let timePickerInput = $('<input style="margin-bottom:5px;">').addClass('form-control form-control-solid')
+                    .attr('placeholder', 'Günün herhangi bir saatini giriniz')
+                    .val(element.time)
+                    
+                    //textarea item
+                    let textareaContent = $('<div style="margin-bottom:15px;">').addClass('rounded border d-flex flex-column p-10')
+                    let textarea = $('<textarea style="height: 100px">')
+                        .addClass('form-control time-description')
+                        .attr('data-kt-autosize', 'true')
+                        .val(element.timeDescription)
+
+                    let removeBtn = $(`<div class="remove-time-btn" style="position:absolute; right:0; z-index:1; top:45%; display:none; cursor:pointer;">
+                                        <span class="svg-icon svg-icon-5x"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path opacity="0.3" d="M12 10.6L14.8 7.8C15.2 7.4 15.8 7.4 16.2 7.8C16.6 8.2 16.6 8.80002 16.2 9.20002L13.4 12L12 10.6ZM10.6 12L7.8 14.8C7.4 15.2 7.4 15.8 7.8 16.2C8 16.4 8.3 16.5 8.5 16.5C8.7 16.5 8.99999 16.4 9.19999 16.2L12 13.4L10.6 12Z" fill="currentColor"/>
+                                        <path d="M22 12C22 17.5 17.5 22 12 22C6.5 22 2 17.5 2 12C2 6.5 6.5 2 12 2C17.5 2 22 6.5 22 12ZM13.4 12L16.2 9.20001C16.6 8.80001 16.6 8.19999 16.2 7.79999C15.8 7.39999 15.2 7.39999 14.8 7.79999L12 10.6L9.2 7.79999C8.8 7.39999 8.2 7.39999 7.8 7.79999C7.4 8.19999 7.4 8.80001 7.8 9.20001L10.6 12L7.8 14.8C7.4 15.2 7.4 15.8 7.8 16.2C8 16.4 8.3 16.5 8.5 16.5C8.7 16.5 9 16.4 9.2 16.2L12 13.4L14.8 16.2C15 16.4 15.3 16.5 15.5 16.5C15.7 16.5 16 16.4 16.2 16.2C16.6 15.8 16.6 15.2 16.2 14.8L13.4 12Z" fill="currentColor"/>
+                                        </svg></span>
+                                        </div>`)
+                    
+                    let pickerClearBtn = $('<i class="fa fa-eraser fs-2x picker-clear-btn" style="position:absolute; right:8px; top:8px; cursor:pointer;"></i>')
+                    
+                    textareaContent.append(textarea)
+                    pickerDiv.append(pickerClearBtn).append(timePickerInput)
+                    timeItem.append(removeBtn).append(pickerDiv).append(textareaContent)
+                    
+                    timeItem.hover(function(){
+                        removeBtn.css('display','block')
+                    }, function(){
+                        removeBtn.css('display','none')
+                    })
+
+                    removeBtn.on('click', function(){
+                        $(this).closest('.time-item').remove()
+                    })
+
+                    timePickerInput.flatpickr({
+                        enableTime: true,
+                        noCalendar: true,
+                        dateFormat: "H:i",
+                    })
+                    
+                    pickerClearBtn.on('click', function(){
+                        timePickerInput.flatpickr({
+                        enableTime: true,
+                        noCalendar: true,
+                        dateFormat: "H:i",
+                    }).clear()
+
+                    })
+
+                    panel.append(timeItem)
+                });
+
+            }
+
+            addTimeButton.click(function(e){
+                e.preventDefault()
+
+                let timeItem = $('<div style="position:relative;">').addClass('time-item')
+                let pickerDiv = $('<div style="position:relative;">')
+                let timePickerInput = $('<input style="margin-bottom:5px;">').addClass('form-control form-control-solid')
+                .attr('placeholder', 'Günün herhangi bir saatini giriniz')
+                
+                //textarea item
+                let textareaContent = $('<div style="margin-bottom:15px;">').addClass('rounded border d-flex flex-column p-10')
+                let textarea = $('<textarea style="height: 100px">').addClass('form-control time-description').attr('data-kt-autosize', 'true')
+                //let textareaLabel = $('<label class="form-label">').append('Açıklama').attr('for', "floatingTextarea2")
+
+                let removeBtn = $(`<div class="remove-time-btn" style="position:absolute; right:0; z-index:1; top:45%; display:none; cursor:pointer;">
+                                    <span class="svg-icon svg-icon-5x"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path opacity="0.3" d="M12 10.6L14.8 7.8C15.2 7.4 15.8 7.4 16.2 7.8C16.6 8.2 16.6 8.80002 16.2 9.20002L13.4 12L12 10.6ZM10.6 12L7.8 14.8C7.4 15.2 7.4 15.8 7.8 16.2C8 16.4 8.3 16.5 8.5 16.5C8.7 16.5 8.99999 16.4 9.19999 16.2L12 13.4L10.6 12Z" fill="currentColor"/>
+                                    <path d="M22 12C22 17.5 17.5 22 12 22C6.5 22 2 17.5 2 12C2 6.5 6.5 2 12 2C17.5 2 22 6.5 22 12ZM13.4 12L16.2 9.20001C16.6 8.80001 16.6 8.19999 16.2 7.79999C15.8 7.39999 15.2 7.39999 14.8 7.79999L12 10.6L9.2 7.79999C8.8 7.39999 8.2 7.39999 7.8 7.79999C7.4 8.19999 7.4 8.80001 7.8 9.20001L10.6 12L7.8 14.8C7.4 15.2 7.4 15.8 7.8 16.2C8 16.4 8.3 16.5 8.5 16.5C8.7 16.5 9 16.4 9.2 16.2L12 13.4L14.8 16.2C15 16.4 15.3 16.5 15.5 16.5C15.7 16.5 16 16.4 16.2 16.2C16.6 15.8 16.6 15.2 16.2 14.8L13.4 12Z" fill="currentColor"/>
+                                    </svg></span>
+                                    </div>`)
+                
+                let pickerClearBtn = $('<i class="fa fa-eraser fs-2x picker-clear-btn" style="position:absolute; right:8px; top:8px; cursor:pointer;"></i>')
+                
+                textareaContent.append(textarea)
+                pickerDiv.append(pickerClearBtn).append(timePickerInput)
+                timeItem.append(removeBtn).append(pickerDiv).append(textareaContent)
+                
+                timeItem.hover(function(){
+                    removeBtn.css('display','block')
+                }, function(){
+                    removeBtn.css('display','none')
+                })
+
+                removeBtn.on('click', function(){
+                    $(this).closest('.time-item').remove()
+                })
+
+                timePickerInput.flatpickr({
+                    enableTime: true,
+                    noCalendar: true,
+                    dateFormat: "H:i",
+                })
+                
+                pickerClearBtn.on('click', function(){
+                    timePickerInput.flatpickr({
+                    enableTime: true,
+                    noCalendar: true,
+                    dateFormat: "H:i",
+                }).clear()
+
+                })
+
+                $(this).closest('.panel').append(timeItem)
+            })
+        
+        });
     })
  
     $('#item_save_form').ajaxForm({
@@ -255,6 +419,8 @@
                 return false;
             }
 
+       
+
             $('#save_btn').attr("data-kt-indicator", "on")
             $('#save_btn').attr("disabled", "disabled")
         },
@@ -272,86 +438,155 @@
             }
 
             $('#save_btn').removeAttr('data-kt-indicator')
+            $('#save_btn').removeAttr("disabled")
         },
     });
 
-    $('#add_day_btn').on('click', function(e){
-        e.preventDefault()
-
-        let accordionItem = $('<div>').addClass('accordion-item')
-        let accordionHeader = $('<h2>').addClass('accordion-header').attr('id', 'kt_accordion_1_header_1')
-        let accordionButton = $('<button>').addClass('accordion-button fs-4 fw-semibold')
-            .attr('type', 'button')
-            .attr('data-bs-toggle', 'collapse')
-            .attr('data-bs-target', '#kt_accordion_1_body_1')
-            .attr('aria-expanded', 'true')
-            .attr('aria-controls', 'kt_accordion_1_body_1')
-            .append('Accordion Item #1')
-        let accordionCollapse =  $('<div>').addClass('accordion-collapse collapse show')
-            .attr('id', 'kt_accordion_1_body_1')
-            .attr('aria-labelledby', 'kt_accordion_1_header_1')
-            .attr('data-bs-parent', '#kt_accordion_1')
-            .append('...')
-        let accordionBody =  $('<div>').addClass('accordion-body').append('...')
-        
-        accordionHeader.append(accordionButton)
-        accordionCollapse.append(accordionBody)
-        accordionItem.append(accordionHeader).append(accordionBody)
-
-
-        let acc = `
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="kt_accordion_1_header_1">
-                                <button class="accordion-button fs-4 fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#kt_accordion_1_body_1" aria-expanded="true" aria-controls="kt_accordion_1_body_1">
-                                    Accordion Item #1
-                                </button>
-                            </h2>
-                            <div id="kt_accordion_1_body_1" class="accordion-collapse collapse show" aria-labelledby="kt_accordion_1_header_1" data-bs-parent="#kt_accordion_1">
-                                <div class="accordion-body">
-                                    ...
-                                </div>
-                            </div>
-                        </div>`
-
-        $('#kt_accordion_1').append(accordionItem)
-
-    })
-/* 
-    $('#kt_accordion_1').on('click', '.add-time-btn', function(e){
-        e.preventDefault()
-
-        let textareaId_2 = uuidv4()
-        
-        let dayTimeItem = $('<div class="day-time-item">')
-        let div = $('<div class="mb-0" style="width: 100%;">')
-        let input = $('<input class="form-control form-control-solid" placeholder="Günün herhangi bir saatini giriniz" id="kt_datepicker_3"/>')
-        let formFloating = $('<div class="form-floating">')
-        let textarea = $('<textarea class="form-control" placeholder="Leave a comment here" style="height: 100px">').attr('id', textareaId_2)
-        let label = $('<label">Paragraf</label>').attr('for', textareaId_2)
-        
-        div.append(input)
-        formFloating.append(textarea).append(label)
-        dayTimeItem.append(div).append(formFloating)
-
-
-
-
-        `<div class="day-time-item">
-                                <div class="mb-0" style="width: 100%;">
-                                    <input class="form-control form-control-solid" placeholder="Günün herhangi bir saatini giriniz" id="kt_datepicker_3"/>
-                                </div>
-                                <div class="form-floating">
-                                    <textarea class="form-control" placeholder="Leave a comment here" id="${textareaId_2}" style="height: 100px"></textarea>
-                                    <label for="${textareaId_2}">Paragraf</label>
-                                </div>
-                            </div>`
-
-        $(this).closest('.accordion-item').find('.time-list').append(dayTimeItem)
-    })
- */
     function uuidv4() {
         return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
             (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
         );
     }
+
+    $('#add_day_btn').on('click', function(e){
+        e.preventDefault()
+
+        //custom accoridon item
+        let dayItem = $('<div>').addClass('day-item')
+        let accordionBtn = $('<button>').addClass('accordion-btn').append('Gün')
+        let panel = $('<div>').addClass('panel').attr('style', 'display:none;')
+
+        dayItem.append(accordionBtn).append(panel)
+
+        //textarea item
+        let textareaContent = $('<div>').addClass('form-floating mb-2')
+        let textarea = $('<textarea style="height: 100px">').addClass('form-control tour-plan-description')
+        let textareaLabel = $('<label>').append('Açıklama')
+        
+        textareaContent.append(textarea).append(textareaLabel)
+        panel.append(textareaContent)
+        dayItem.append(panel)
+
+        //time add btn
+        let addTimeButton = $('<button style="margin-bottom:10px;">').addClass('btn btn-light-info').append('<i class="fa-solid fa-plus me-2"></i>').append('Zaman Ekle')
+        panel.append(addTimeButton)
+
+        $('#day_list').append(dayItem)
+
+        accordionBtn.get(0).addEventListener("click", function(e) {
+            e.preventDefault()
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            
+            if (panel.style.display == 'none') {
+                panel.style.display = 'block';
+            } else {
+                panel.style.display = "none";
+            } 
+        });
+
+        addTimeButton.click(function(e){
+            e.preventDefault()
+
+            let timeItem = $('<div style="position:relative;">').addClass('time-item')
+            let pickerDiv = $('<div style="position:relative;">')
+            let timePickerInput = $('<input style="margin-bottom:5px;">').addClass('form-control form-control-solid')
+            .attr('placeholder', 'Günün herhangi bir saatini giriniz')
+            
+            //textarea item
+            let textareaContent = $('<div style="margin-bottom:15px;">').addClass('rounded border d-flex flex-column p-10')
+            let textarea = $('<textarea style="height: 100px">').addClass('form-control time-description').attr('data-kt-autosize', 'true')
+
+            let removeBtn = $(`<div class="remove-time-btn" style="position:absolute; right:0; z-index:1; top:45%; display:none; cursor:pointer;">
+                                <span class="svg-icon svg-icon-5x"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path opacity="0.3" d="M12 10.6L14.8 7.8C15.2 7.4 15.8 7.4 16.2 7.8C16.6 8.2 16.6 8.80002 16.2 9.20002L13.4 12L12 10.6ZM10.6 12L7.8 14.8C7.4 15.2 7.4 15.8 7.8 16.2C8 16.4 8.3 16.5 8.5 16.5C8.7 16.5 8.99999 16.4 9.19999 16.2L12 13.4L10.6 12Z" fill="currentColor"/>
+                                <path d="M22 12C22 17.5 17.5 22 12 22C6.5 22 2 17.5 2 12C2 6.5 6.5 2 12 2C17.5 2 22 6.5 22 12ZM13.4 12L16.2 9.20001C16.6 8.80001 16.6 8.19999 16.2 7.79999C15.8 7.39999 15.2 7.39999 14.8 7.79999L12 10.6L9.2 7.79999C8.8 7.39999 8.2 7.39999 7.8 7.79999C7.4 8.19999 7.4 8.80001 7.8 9.20001L10.6 12L7.8 14.8C7.4 15.2 7.4 15.8 7.8 16.2C8 16.4 8.3 16.5 8.5 16.5C8.7 16.5 9 16.4 9.2 16.2L12 13.4L14.8 16.2C15 16.4 15.3 16.5 15.5 16.5C15.7 16.5 16 16.4 16.2 16.2C16.6 15.8 16.6 15.2 16.2 14.8L13.4 12Z" fill="currentColor"/>
+                                </svg></span>
+                                </div>`)
+            
+            let pickerClearBtn = $('<i class="fa fa-eraser fs-2x picker-clear-btn" style="position:absolute; right:8px; top:8px; cursor:pointer;"></i>')
+            
+            textareaContent.append(textarea)
+            pickerDiv.append(pickerClearBtn).append(timePickerInput)
+            timeItem.append(removeBtn).append(pickerDiv).append(textareaContent)
+            
+            timeItem.hover(function(){
+                removeBtn.css('display','block')
+            }, function(){
+                removeBtn.css('display','none')
+            })
+
+            removeBtn.on('click', function(){
+                $(this).closest('.time-item').remove()
+            })
+
+            timePickerInput.flatpickr({
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "H:i",
+            })
+            
+            pickerClearBtn.on('click', function(){
+                timePickerInput.flatpickr({
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "H:i",
+            }).clear()
+
+            })
+
+            $(this).closest('.panel').append(timeItem)
+        })
+    
+    })
+
+    
+
+    function getTourPlanList(){
+        let preDayItems = $('#day_list > .day-item')
+
+        let dayItems = []
+
+        for (let i = 0; i < preDayItems.length; i++) {
+            const item = $(preDayItems[i])
+
+            let description = item.find('.tour-plan-description').val()
+            let preTimeItems = item.find('.time-item')
+            let timeItems = []
+
+            for (let j = 0; j < preTimeItems.length; j++) {
+                const item = $(preTimeItems[j])
+                
+                let time = item.find('.flatpickr-input').val()
+                let timeDescription = item.find('.time-description').val()
+
+                if ((time != '' || time != null || time != undefined) && 
+                (timeDescription != '' || timeDescription != null || timeDescription != undefined)) {
+                    
+                    timeItems.push({
+                        time:time.trim(),
+                        timeDescription:timeDescription.trim()
+                    })
+                }
+            }
+
+            dayItems.push({
+                description: description,
+                timeItems: timeItems
+            })
+        }
+        return dayItems;
+    }
+
+    $('#save_btn').on('click', function(e){
+        e.preventDefault()
+
+        let listStr = JSON.stringify(getTourPlanList())
+
+        $('textarea[name=dayList]').remove()
+        let textarea = $('<textarea style="display:none;">').attr('name', 'dayList').val(listStr)
+
+        $('#item_save_form').append(textarea)
+        $('#item_save_form').submit()
+    })
 </script>

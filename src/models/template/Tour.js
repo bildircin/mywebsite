@@ -51,6 +51,9 @@ const Tour = db.define('Tour', {
     overview:{
         type:Sequelize.TEXT('long')
     },
+    dayList:{
+        type:Sequelize.TEXT('long')
+    },
     isActive:{
         type:Sequelize.BOOLEAN,
         allowNull:false,
