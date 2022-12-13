@@ -271,17 +271,21 @@ const toursPage = async (req,res)=>{
 }
 
 const tourSinglePage = async (req,res)=>{
-    const id = req.query.id
-
+    const id = req.params.id
+    
     res.locals.title = ""
     const t = await db.transaction()
     try {
         const tour = await Tour.findByPk(id, {transaction: t})
-        res.locals.title = tour.title
 
+        if(tour){
+            res.locals.title = tour.title
+        }
+        await t.commit()
         await res.render('webUI/tour-single', {layout:'webUI/layout', currentLang, contents, navigations, languageCodes, tour})
     } catch (error) {
         console.log(error)
+        await t.rollback()
     }
 }
 

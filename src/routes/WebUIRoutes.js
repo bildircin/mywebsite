@@ -11,6 +11,6 @@ router.get('/', webUIController.homePage)
 router.get('/hakkimizda', webUIController.aboutPage)
 router.get('/iletisim', webUIController.contactPage)
 router.get('/turlar', webUIController.toursPage)
-router.get('/tur-detay', webUIController.tourSinglePage)
+router.get('/tur-detay/:id', webUIController.tourSinglePage)
 
 export default router;

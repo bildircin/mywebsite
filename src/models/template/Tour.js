@@ -20,10 +20,13 @@ const Tour = db.define('Tour', {
         defaultValue:0
     },
     coverUrl:{
-        type:Sequelize.STRING
+        type:Sequelize.STRING(500)
     },
     headImgUrl:{
-        type:Sequelize.STRING
+        type:Sequelize.STRING(500)
+    },
+    flashDealUrl:{
+        type:Sequelize.STRING(500)
     },
     day:{
         type:Sequelize.INTEGER,
@@ -52,6 +55,9 @@ const Tour = db.define('Tour', {
         type:Sequelize.TEXT('long')
     },
     dayList:{
+        type:Sequelize.TEXT('long')
+    },
+    amenities:{
         type:Sequelize.TEXT('long')
     },
     isActive:{

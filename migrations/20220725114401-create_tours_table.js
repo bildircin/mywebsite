@@ -30,6 +30,9 @@ module.exports = {
         headImgUrl:{
             type:Sequelize.STRING
         },
+        flashDealUrl:{
+            type:Sequelize.STRING
+        },
         day:{
             type:Sequelize.INTEGER,
             allowNull:false,
@@ -62,6 +65,9 @@ module.exports = {
             type:Sequelize.TEXT('long')
         },
         dayList:{
+            type:Sequelize.TEXT('long')
+        },
+        amenities:{
             type:Sequelize.TEXT('long')
         },
         isDeleted:{

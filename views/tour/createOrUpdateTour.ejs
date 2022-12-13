@@ -102,6 +102,18 @@
                             <input type="text" class="form-control" id="price" name="price" value="<%= tour.price %>"  />
                         </div>
                         <div class="mb-10">
+                            <input type="hidden" name="dataSrcFlashDealUrl" value="<%= tour.flashDealUrl %>">
+                            <div style="width: 300px; height: auto;">
+                                <% if(tour.flashDealUrl){ %>
+                                    <img src="<%= tour.flashDealUrl %>" alt="" style="width:100%;">
+                                <% }else{ %>
+                                    <img src="/webUI/image/catalog/demo/product/travel/t3.jpg" alt="" style="width:100%;">
+                                <% } %>
+                            </div>
+                            <label class="form-label">Flaş Fırsat URL (270x380)</label>
+                            <input type="file" name="flashDealUrlFile" accept="image/png, image/gif, image/jpeg" />
+                        </div>
+                        <div class="mb-10">
                             <input type="hidden" name="dataSrcCoverUrl" value="<%= tour.coverUrl %>">
                             <div style="width: 300px; height: auto;">
                                 <% if(tour.coverUrl){ %>
@@ -110,7 +122,7 @@
                                     <img src="/webUI/image/no_image.png" alt="" style="width:100%;">
                                 <% } %>
                             </div>
-                            <label class="form-label">Cover İmage (370x247)</label>
+                            <label class="form-label">Küçük Kapak URL (370x247)</label>
                             <input type="file" name="coverUrlFile" accept="image/png, image/gif, image/jpeg" />
                         </div>
                         <div class="mb-10">
@@ -122,7 +134,7 @@
                                     <img src="/webUI/image/catalog/demo/product/travel/tour-detail.jpg" alt="" style="width:100%;">
                                 <% } %>
                             </div>
-                            <label class="form-label">Head İmage (1920x600)</label>
+                            <label class="form-label">Sayfa Başlık URL (1920x600)</label>
                             <input type="file" name="headImgUrlFile" accept="image/png, image/gif, image/jpeg" />
                         </div>
                         <div class="mb-10">
@@ -163,8 +175,11 @@
                               
                             </div>
                         </div>
-
-
+        
+                        <div class="mb-10">
+                            <label class="form-label">Kolaylıklar</label>
+                            <input class="form-control" name="amenities" value="<%= tour.amenities %>" id="amenities"/>
+                        </div>
              
                         <div class="form-check form-switch form-check-custom form-check-solid my-10">
                             <input class="form-check-input" type="checkbox" id="is_active" name="isActive" <%= tour.isActive ? 'checked=checked' : '' %> />
@@ -238,16 +253,24 @@
             }
         })
 
+        let amenities = document.querySelector("#amenities")
+        let initAmenities = new Tagify(amenities)
+
         rawDayList = JSON.parse($('#raw_day_list').text())
 
         rawDayList.forEach(item => {
             
             //custom accoridon item
-            let dayItem = $('<div>').addClass('day-item')
+            let dayItem = $('<div style="position:relative;">').addClass('day-item')
             let accordionBtn = $('<button>').addClass('accordion-btn').append('Gün')
             let panel = $('<div>').addClass('panel').attr('style', 'display:none;')
+            let dayRemoveBtn = $('<i class="fa fa-trash fs-2x day-remove-btn" style="position:absolute; right:12px; top:12px; cursor:pointer;"></i>')
 
-            dayItem.append(accordionBtn).append(panel)
+            dayRemoveBtn.on('click', function(){
+                dayItem.remove()
+            })
+
+            dayItem.append(dayRemoveBtn).append(accordionBtn).append(panel)
 
             //textarea item
             let textareaContent = $('<div>').addClass('form-floating mb-2')
@@ -449,14 +472,19 @@
     }
 
     $('#add_day_btn').on('click', function(e){
-        e.preventDefault()
+        e.preventDefault()  
 
         //custom accoridon item
-        let dayItem = $('<div>').addClass('day-item')
+        let dayItem = $('<div style="position:relative;">').addClass('day-item')
         let accordionBtn = $('<button>').addClass('accordion-btn').append('Gün')
         let panel = $('<div>').addClass('panel').attr('style', 'display:none;')
+        let dayRemoveBtn = $('<i class="fa fa-trash fs-2x day-remove-btn" style="position:absolute; right:12px; top:12px; cursor:pointer;"></i>')
 
-        dayItem.append(accordionBtn).append(panel)
+        dayRemoveBtn.on('click', function(){
+            dayItem.remove()
+        })
+
+        dayItem.append(dayRemoveBtn).append(accordionBtn).append(panel)
 
         //textarea item
         let textareaContent = $('<div>').addClass('form-floating mb-2')

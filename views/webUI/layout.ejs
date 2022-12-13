@@ -17,28 +17,28 @@
     
     <!-- Libs CSS
         ============================================ -->
-        <link rel="stylesheet" href="webUI/css/bootstrap/css/bootstrap.min.css">
-        <link href="webUI/css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-        <link href="webUI/js/datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
-        <link href="webUI/js/owl-carousel/owl.carousel.css" rel="stylesheet">
-        <link href="webUI/css/themecss/lib.css" rel="stylesheet">
-        <link href="webUI/js/jquery-ui/jquery-ui.min.css" rel="stylesheet">
-        <link href="webUI/js/minicolors/miniColors.css" rel="stylesheet">
+        <link rel="stylesheet" href="../webUI/css/bootstrap/css/bootstrap.min.css">
+        <link href="../webUI/css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+        <link href="../webUI/js/datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
+        <link href="../webUI/js/owl-carousel/owl.carousel.css" rel="stylesheet">
+        <link href="../webUI/css/themecss/lib.css" rel="stylesheet">
+        <link href="../webUI/js/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+        <link href="../webUI/js/minicolors/miniColors.css" rel="stylesheet">
     <!-- Theme CSS
         ============================================ -->
-        <link href="webUI/css/themecss/so_sociallogin.css" rel="stylesheet">
-        <link href="webUI/css/themecss/so_searchpro.css" rel="stylesheet">
-        <link href="webUI/css/themecss/so_megamenu.css" rel="stylesheet">
-        <link href="webUI/css/themecss/so-categories.css" rel="stylesheet">
-        <link href="webUI/css/themecss/so-listing-tabs.css" rel="stylesheet">
-        <link href="webUI/css/themecss/so-category-slider.css" rel="stylesheet">
-        <link href="webUI/css/themecss/so-newletter-popup.css" rel="stylesheet">
-        <link href="webUI/css/footer/footer1.css" rel="stylesheet">
-        <link href="webUI/css/header/header1.css" rel="stylesheet">
-        <link href="webUI/css/header/header2.css" rel="stylesheet">
-        <link id="color_scheme" href="webUI/css/theme.css" rel="stylesheet">
-        <link href="webUI/css/responsive.css" rel="stylesheet">
-        <link href="webUI/css/quickview/quickview.css" rel="stylesheet">
+        <link href="../webUI/css/themecss/so_sociallogin.css" rel="stylesheet">
+        <link href="../webUI/css/themecss/so_searchpro.css" rel="stylesheet">
+        <link href="../webUI/css/themecss/so_megamenu.css" rel="stylesheet">
+        <link href="../webUI/css/themecss/so-categories.css" rel="stylesheet">
+        <link href="../webUI/css/themecss/so-listing-tabs.css" rel="stylesheet">
+        <link href="../webUI/css/themecss/so-category-slider.css" rel="stylesheet">
+        <link href="../webUI/css/themecss/so-newletter-popup.css" rel="stylesheet">
+        <link href="../webUI/css/footer/footer1.css" rel="stylesheet">
+        <link href="../webUI/css/header/header1.css" rel="stylesheet">
+        <link href="../webUI/css/header/header2.css" rel="stylesheet">
+        <link id="color_scheme" href="../webUI/css/theme.css" rel="stylesheet">
+        <link href="../webUI/css/responsive.css" rel="stylesheet">
+        <link href="../webUI/css/quickview/quickview.css" rel="stylesheet">
     <!-- Google web fonts
         ============================================ -->
         <link href="https://fonts.googleapis.com/css?family=Poppins:600,700,800&display=swap" rel="stylesheet">
@@ -67,14 +67,14 @@
                             <form action="#" method="post" enctype="multipart/form-data">
                                 <div class="btn-group">
                                     <button id="selected-language" class="btn-link dropdown-toggle" data-toggle="dropdown">
-                                        <img src="webUI/image/catalog/flags/<%= currentLang.lng%>.png" alt="<%= currentLang.languageTitle %>" title="<%= currentLang.languageTitle %>">
+                                        <img src="../webUI/image/catalog/flags/<%= currentLang.lng%>.png" alt="<%= currentLang.languageTitle %>" title="<%= currentLang.languageTitle %>">
                                         <span class="hidden-xs hidden-sm hidden-md"></span> <i class="fa fa-angle-down"></i>
                                     </button>
                                     <ul class="dropdown-menu">
                                         <% languageCodes.forEach(item => { %>
                                             
                                             <li>
-                                                <button class="btn-block language-select" type="button" name="<%= item.lng %>"><img src="webUI/image/catalog/flags/<%= item.lng %>.png" alt="<%= item.name %>" title="<%= item.name %>" /> <%= item.name %></button>
+                                                <button class="btn-block language-select" type="button" name="<%= item.lng %>"><img src="../webUI/image/catalog/flags/<%= item.lng %>.png" alt="<%= item.name %>" title="<%= item.name %>" /> <%= item.name %></button>
                                             </li>
                                         <% }) %>
 
@@ -84,9 +84,9 @@
                                 <input type="hidden" name="redirect" value="#" />
                             </form>
                         </div>
-                        <div class="bonus-login pull-right">
+                       <!--  <div class="bonus-login pull-right">
                             <a data-toggle="modal" data-target="#so_sociallogin" href="#"><i class="fa fa-user" aria-hidden="true"></i> Sign in</a>
-                        </div>		
+                        </div> -->		
                     </div>
                 </div>
 
@@ -97,11 +97,11 @@
                         <div class="row">
                             <div class="col-lg-3 col-xs-3 header-logo pull-left">
                                 <div class="navbar-logo">
-                                    <a href="index.html"><img src="webUI/image/catalog/demo/logo/logo.png" alt="Your Store" width="118" height="36" title="Your Store"></a>
+                                    <a href="/"><img src="../webUI/image/catalog/demo/logo/logo.png" alt="Your Store" width="118" height="36" title="Your Store"></a>
                                 </div>
                             </div>
                             <div class="book pull-right">
-                                <a href="requiry.html">inquiry</a>
+                                <a href="#">inquiry</a>
                             </div>
                             <div class="search-top pull-right">
                                 <div class="icon-search"><i class="fa fa-search" aria-hidden="true"></i></div>
@@ -312,7 +312,7 @@
                                     <div class="row row_hwmc  ">
                                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 col_6ps1 footer--link">
                                             <div class="footer-logo">
-                                                <a href="index.html"><img src="webUI/image/logo/logo-footer.png" alt="Your Store" width="194" height="59" title="Your Store"></a>
+                                                <a href="index.html"><img src="../webUI/image/logo/logo-footer.png" alt="Your Store" width="194" height="59" title="Your Store"></a>
                                             </div>
                                             <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form...</p>						
                                         </div>
@@ -407,28 +407,28 @@
         <!-- Include Libs & Plugins
             ============================================ -->
         <!-- Placed at the end of the document so the pages load faster -->
-        <script type="text/javascript" src="webUI/js/jquery-2.2.4.min.js"></script>
-        <script type="text/javascript" src="webUI/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="webUI/js/themejs/so_megamenu.js"></script>
-        <script type="text/javascript" src="webUI/js/owl-carousel/owl.carousel.js"></script>
-        <script type="text/javascript" src="webUI/js/slick-slider/slick.js"></script>
-        <script type="text/javascript" src="webUI/js/themejs/libs.js"></script>
-        <script type="text/javascript" src="webUI/js/unveil/jquery.unveil.js"></script>
-        <script type="text/javascript" src="webUI/js/countdown/jquery.countdown.min.js"></script>
-        <script type="text/javascript" src="webUI/js/dcjqaccordion/jquery.dcjqaccordion.2.8.min.js"></script>
-        <script type="text/javascript" src="webUI/js/datetimepicker/moment.js"></script>
-        <script type="text/javascript" src="webUI/js/datetimepicker/bootstrap-datetimepicker.min.js"></script>
-        <script type="text/javascript" src="webUI/js/jquery-ui/jquery-ui.min.js"></script>
-        <script type="text/javascript" src="webUI/js/modernizr/modernizr-2.6.2.min.js"></script>
-        <script type="text/javascript" src="webUI/js/minicolors/jquery.miniColors.min.js"></script>
-        <script type="text/javascript" src="webUI/js/jquery.nav.js"></script>
-        <script type="text/javascript" src="webUI/js/quickview/jquery.magnific-popup.min.js"></script>
+        <script type="text/javascript" src="../webUI/js/jquery-2.2.4.min.js"></script>
+        <script type="text/javascript" src="../webUI/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="../webUI/js/themejs/so_megamenu.js"></script>
+        <script type="text/javascript" src="../webUI/js/owl-carousel/owl.carousel.js"></script>
+        <script type="text/javascript" src="../webUI/js/slick-slider/slick.js"></script>
+        <script type="text/javascript" src="../webUI/js/themejs/libs.js"></script>
+        <script type="text/javascript" src="../webUI/js/unveil/jquery.unveil.js"></script>
+        <script type="text/javascript" src="../webUI/js/countdown/jquery.countdown.min.js"></script>
+        <script type="text/javascript" src="../webUI/js/dcjqaccordion/jquery.dcjqaccordion.2.8.min.js"></script>
+        <script type="text/javascript" src="../webUI/js/datetimepicker/moment.js"></script>
+        <script type="text/javascript" src="../webUI/js/datetimepicker/bootstrap-datetimepicker.min.js"></script>
+        <script type="text/javascript" src="../webUI/js/jquery-ui/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="../webUI/js/modernizr/modernizr-2.6.2.min.js"></script>
+        <script type="text/javascript" src="../webUI/js/minicolors/jquery.miniColors.min.js"></script>
+        <script type="text/javascript" src="../webUI/js/jquery.nav.js"></script>
+        <script type="text/javascript" src="../webUI/js/quickview/jquery.magnific-popup.min.js"></script>
     <!-- Theme files
         ============================================ -->
-        <script type="text/javascript" src="webUI/js/themejs/application.js"></script>
-        <script type="text/javascript" src="webUI/js/themejs/homepage.js"></script>
-        <script type="text/javascript" src="webUI/js/themejs/custom_h1.js"></script>
-        <script type="text/javascript" src="webUI/js/themejs/nouislider.js"></script>
+        <script type="text/javascript" src="../webUI/js/themejs/application.js"></script>
+        <script type="text/javascript" src="../webUI/js/themejs/homepage.js"></script>
+        <script type="text/javascript" src="../webUI/js/themejs/custom_h1.js"></script>
+        <script type="text/javascript" src="../webUI/js/themejs/nouislider.js"></script>
 
         <script>
             

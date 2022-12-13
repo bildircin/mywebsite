@@ -78,7 +78,8 @@ const createOrUpdateTour = async (req,res)=>{
 
 const createOrUpdateTourAjax = async (req,res)=>{
     
-    const {id, category, description, sequence, day, dataSrcCoverUrl, dataSrcHeadImgUrl, persons, price, startedAt, finishedAt, isActive, overview, dayList } = req.body
+    const {id, category, description, sequence, day, dataSrcCoverUrl, dataSrcHeadImgUrl, dataSrcFlashDealUrl,
+         persons, price, startedAt, finishedAt, isActive, overview, dayList, amenities } = req.body
     let title = req.body.title
 
     if(category == undefined || category == null || category == ""){
@@ -94,7 +95,7 @@ const createOrUpdateTourAjax = async (req,res)=>{
         return res.status(400).send({isSuccess:false, message: "Lütfen bitiş tarihi giriniz"})
     }
     title = title.trim()
-    console.log( dayList)
+
     /* create */
     if(id == null || id == undefined || id == ""){
         
@@ -126,7 +127,6 @@ const createOrUpdateTourAjax = async (req,res)=>{
                 let fileName = Date.now() + '.' + fileType
                 let fileUrl = '/webUI/image/' + fileName;
                 
-                console.log(key)
                 await file.mv('public/webUI/image/' + fileName)
                 fileArr =  {...fileArr, [key]:fileUrl}
             }
@@ -145,8 +145,10 @@ const createOrUpdateTourAjax = async (req,res)=>{
                 finishedAt,
                 overview,
                 dayList,
+                amenities,
                 coverUrl: fileArr.coverUrlFile ? fileArr.coverUrlFile : dataSrcCoverUrl ? dataSrcCoverUrl : null,
                 headImgUrl: fileArr.headImgUrlFile ? fileArr.headImgUrlFile : dataSrcHeadImgUrl ? dataSrcHeadImgUrl : null,
+                flashDealUrl: fileArr.flashDealUrlFile ? fileArr.flashDealUrlFile : dataSrcFlashDealUrl ? dataSrcFlashDealUrl : null,
                 isActive:getCheckedBtn(isActive),
                 isDeleted:false,
                 createdAt:moment(),
@@ -208,48 +210,50 @@ const createOrUpdateTourAjax = async (req,res)=>{
                 fileArr =  {...fileArr, [key]:fileUrl}
             }
         }
+        const t = await db.transaction()
         
         try {
-            const result = await db.transaction(async (t) => {
-                const tour = await Tour.update({
-                    title,
-                    description,
-                    sequence,
-                    day,
-                    persons,
-                    price,
-                    startedAt,
-                    finishedAt,
-                    overview,
-                    dayList,
-                    coverUrl: fileArr.coverUrlFile ? fileArr.coverUrlFile : dataSrcCoverUrl ? dataSrcCoverUrl : null,
-                    headImgUrl: fileArr.headImgUrlFile ? fileArr.headImgUrlFile : dataSrcHeadImgUrl ? dataSrcHeadImgUrl : null,
-                    isActive:getCheckedBtn(isActive),
-                    updatedAt: moment()
-                }, {
-                    where:{
-                        id
-                    }
-                }, { transaction: t })
-    
-                await TourCategory.destroy({
-                    where:{
-                        tourId:id
-                    }
-                }, { transaction: t })
-    
-                for (let i = 0; i < category.length; i++) {
-                    const item = category[i];
-                    await TourCategory.create({
-                        tourId:id,
-                        categoryId:item
-                    }, { transaction: t })
+            const tour = await Tour.update({
+                title,
+                description,
+                sequence,
+                day,
+                persons,
+                price,
+                startedAt,
+                finishedAt,
+                overview,
+                dayList,
+                amenities,
+                coverUrl: fileArr.coverUrlFile ? fileArr.coverUrlFile : dataSrcCoverUrl ? dataSrcCoverUrl : null,
+                headImgUrl: fileArr.headImgUrlFile ? fileArr.headImgUrlFile : dataSrcHeadImgUrl ? dataSrcHeadImgUrl : null,
+                flashDealUrl: fileArr.flashDealUrlFile ? fileArr.flashDealUrlFile : dataSrcFlashDealUrl ? dataSrcFlashDealUrl : null,
+                isActive:getCheckedBtn(isActive),
+                updatedAt: moment()
+            }, {
+                where:{
+                    id
                 }
-                return tour
-            })
+            }, { transaction: t })
+
+            await TourCategory.destroy({
+                where:{
+                    tourId:id
+                }
+            }, { transaction: t })
+
+            for (let i = 0; i < category.length; i++) {
+                const item = category[i];
+                await TourCategory.create({
+                    tourId:id,
+                    categoryId:item
+                }, { transaction: t })
+            }
+            await t.commit()
             await res.send({isSuccess:true, message:'Tur başarıyla güncellendi'})
         } catch (err) {
             console.log(err)
+            await t.rollback()
             await res.send({isSuccess:false, message:'Bir hata oluştu'})
         }
     }
