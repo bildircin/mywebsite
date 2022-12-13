@@ -116,28 +116,48 @@
                             </div>
                         </div>
 
-                        <div class="mb-10 border">
-                            <div class="alert alert-dismissible bg-light-primary d-flex flex-column flex-sm-row p-5 m-10">
-                                <span class="svg-icon svg-icon-2hx svg-icon-primary me-4 mb-5 mb-sm-0">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10" fill="currentColor"/>
-                                        <path d="M10.4343 12.4343L8.75 10.75C8.33579 10.3358 7.66421 10.3358 7.25 10.75C6.83579 11.1642 6.83579 11.8358 7.25 12.25L10.2929 15.2929C10.6834 15.6834 11.3166 15.6834 11.7071 15.2929L17.25 9.75C17.6642 9.33579 17.6642 8.66421 17.25 8.25C16.8358 7.83579 16.1642 7.83579 15.75 8.25L11.5657 12.4343C11.2533 12.7467 10.7467 12.7467 10.4343 12.4343Z" fill="currentColor"/>
-                                        </svg>
-                                </span>
-
-                                <div class="d-flex flex-column pe-0 pe-sm-10">
-                                    <h4 class="fw-semibold">1. Gün</h4>
-                                    <span>The alert component can be used to highlight certain parts of your page for higher content visibility.</span>
-                                </div>
-
-                                <button type="button" class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto" data-bs-dismiss="alert">
-                                    <span class="svg-icon svg-icon-1 svg-icon-primary">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.3" d="M6 19.7C5.7 19.7 5.5 19.6 5.3 19.4C4.9 19 4.9 18.4 5.3 18L18 5.3C18.4 4.9 19 4.9 19.4 5.3C19.8 5.7 19.8 6.29999 19.4 6.69999L6.7 19.4C6.5 19.6 6.3 19.7 6 19.7Z" fill="currentColor"/>
-                                            <path d="M18.8 19.7C18.5 19.7 18.3 19.6 18.1 19.4L5.40001 6.69999C5.00001 6.29999 5.00001 5.7 5.40001 5.3C5.80001 4.9 6.40001 4.9 6.80001 5.3L19.5 18C19.9 18.4 19.9 19 19.5 19.4C19.3 19.6 19 19.7 18.8 19.7Z" fill="currentColor"/>
+                        <div class="mb-10">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <label class="form-label">Tur Planı</label>
+                                <button class="btn btn-primary" id="add_day_btn">Gün Ekle</button>
+                            </div>
+                            <div class="accordion" id="kt_accordion_1">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header d-flex align-items-center" id="kt_accordion_1_header_1">
+                                        <span class="svg-icon svg-icon-muted svg-icon-2hx">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="currentColor"/>
+                                                <rect x="7" y="15.3137" width="12" height="2" rx="1" transform="rotate(-45 7 15.3137)" fill="currentColor"/>
+                                                <rect x="8.41422" y="7" width="12" height="2" rx="1" transform="rotate(45 8.41422 7)" fill="currentColor"/>
                                             </svg>
-                                    </span>
-                                </button>
+                                        </span>
+                                        <button class="accordion-button fs-4 fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#kt_accordion_1_body_1" aria-expanded="true" aria-controls="kt_accordion_1_body_1">
+                                            1. Gün
+                                        </button>
+                                    </h2>
+                                    <div id="kt_accordion_1_body_1" class="accordion-collapse collapse show" aria-labelledby="kt_accordion_1_header_1" data-bs-parent="#kt_accordion_1">
+                                        <div class="accordion-body">
+                                            <div class="form-floating mb-2 tour-plan-description">
+                                                <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
+                                                <label for="floatingTextarea2">Açıklama</label>
+                                            </div>
+                                            <div class="d-flex flex-column me-2" style="width: 100%;">
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <h2>Saatler</h2>
+                                                    <button class="btn btn-primary">Ekle</button>
+                                                </div>
+                                                <div class="mb-0" style="width: 100%;">
+                                                    <input class="form-control form-control-solid" placeholder="Günün herhangi bir saatini giriniz" id="kt_datepicker_3"/>
+                                                </div>
+                                                <div class="form-floating">
+                                                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
+                                                    <label for="floatingTextarea2">Paragraf</label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                   
@@ -255,4 +275,83 @@
         },
     });
 
+    $('#add_day_btn').on('click', function(e){
+        e.preventDefault()
+
+        let accordionItem = $('<div>').addClass('accordion-item')
+        let accordionHeader = $('<h2>').addClass('accordion-header').attr('id', 'kt_accordion_1_header_1')
+        let accordionButton = $('<button>').addClass('accordion-button fs-4 fw-semibold')
+            .attr('type', 'button')
+            .attr('data-bs-toggle', 'collapse')
+            .attr('data-bs-target', '#kt_accordion_1_body_1')
+            .attr('aria-expanded', 'true')
+            .attr('aria-controls', 'kt_accordion_1_body_1')
+            .append('Accordion Item #1')
+        let accordionCollapse =  $('<div>').addClass('accordion-collapse collapse show')
+            .attr('id', 'kt_accordion_1_body_1')
+            .attr('aria-labelledby', 'kt_accordion_1_header_1')
+            .attr('data-bs-parent', '#kt_accordion_1')
+            .append('...')
+        let accordionBody =  $('<div>').addClass('accordion-body').append('...')
+        
+        accordionHeader.append(accordionButton)
+        accordionCollapse.append(accordionBody)
+        accordionItem.append(accordionHeader).append(accordionBody)
+
+
+        let acc = `
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="kt_accordion_1_header_1">
+                                <button class="accordion-button fs-4 fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#kt_accordion_1_body_1" aria-expanded="true" aria-controls="kt_accordion_1_body_1">
+                                    Accordion Item #1
+                                </button>
+                            </h2>
+                            <div id="kt_accordion_1_body_1" class="accordion-collapse collapse show" aria-labelledby="kt_accordion_1_header_1" data-bs-parent="#kt_accordion_1">
+                                <div class="accordion-body">
+                                    ...
+                                </div>
+                            </div>
+                        </div>`
+
+        $('#kt_accordion_1').append(accordionItem)
+
+    })
+/* 
+    $('#kt_accordion_1').on('click', '.add-time-btn', function(e){
+        e.preventDefault()
+
+        let textareaId_2 = uuidv4()
+        
+        let dayTimeItem = $('<div class="day-time-item">')
+        let div = $('<div class="mb-0" style="width: 100%;">')
+        let input = $('<input class="form-control form-control-solid" placeholder="Günün herhangi bir saatini giriniz" id="kt_datepicker_3"/>')
+        let formFloating = $('<div class="form-floating">')
+        let textarea = $('<textarea class="form-control" placeholder="Leave a comment here" style="height: 100px">').attr('id', textareaId_2)
+        let label = $('<label">Paragraf</label>').attr('for', textareaId_2)
+        
+        div.append(input)
+        formFloating.append(textarea).append(label)
+        dayTimeItem.append(div).append(formFloating)
+
+
+
+
+        `<div class="day-time-item">
+                                <div class="mb-0" style="width: 100%;">
+                                    <input class="form-control form-control-solid" placeholder="Günün herhangi bir saatini giriniz" id="kt_datepicker_3"/>
+                                </div>
+                                <div class="form-floating">
+                                    <textarea class="form-control" placeholder="Leave a comment here" id="${textareaId_2}" style="height: 100px"></textarea>
+                                    <label for="${textareaId_2}">Paragraf</label>
+                                </div>
+                            </div>`
+
+        $(this).closest('.accordion-item').find('.time-list').append(dayTimeItem)
+    })
+ */
+    function uuidv4() {
+        return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        );
+    }
 </script>
