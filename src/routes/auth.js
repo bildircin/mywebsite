@@ -71,7 +71,7 @@ router.post('/logout', function(req, res, next) {
   });
 
 router.post('/user-ajax', passport.authenticate('local', {
-    successRedirect: '/dil-deger-guncelleme',
+    successRedirect: '/admin',
     failureRedirect: '/login',
     failureFlash: true
 }))

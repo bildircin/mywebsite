@@ -1,6 +1,7 @@
 import {Op} from "sequelize"
 import Tour from "../models/template/Tour.js"
 import Category from '../models/Category.js'
+import Image from '../models/Image.js'
 import TourCategory from '../models/template/TourCategory.js'
 import moment from 'moment'
 import db from '../../db.js'
@@ -259,7 +260,47 @@ const createOrUpdateTourAjax = async (req,res)=>{
     }
 }
 
+const selectImageTourAjax = async (req,res)=>{
 
+    const page = req.body.page ? parseInt(req.body.page) : 1
+    const limit = 6
+    const startIndex = (page - 1) * limit
+    const endIndex = page * limit
+
+    const imageCount = await Image.count({})
+    const paginatedResults = {
+        pageCount:Math.ceil(imageCount / limit),
+        page
+    }
+    if (endIndex < imageCount) {
+        paginatedResults.next = {
+            page: page + 1
+        }
+    }
+    if (startIndex > 0) {
+        paginatedResults.previous = {
+            page: page - 1
+        }
+    }
+    const t = await db.transaction()
+
+    try {
+        const images = await Image.findAll({
+            offset:startIndex,
+            limit:limit,
+            order:[
+                ['id', 'DESC']
+            ]
+        }, {transaction: t})
+        
+        await t.commit()
+        console.log(paginatedResults)
+        await res.send({isActive:true, images, paginatedResults})
+    } catch (error) {
+        await t.rollback()
+        await res.send({isActive:false})
+    }
+}
 
 
 
@@ -327,5 +368,6 @@ function adjustCategoryList(arr, id) {
 export default {
     allTour,
     createOrUpdateTour,
-    createOrUpdateTourAjax
+    createOrUpdateTourAjax,
+    selectImageTourAjax
 }
