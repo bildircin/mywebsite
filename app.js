@@ -149,9 +149,15 @@ async function getPages(url){
 
 app.get('*', (req,res, next)=>{
 
-    if(!req.isAuthenticated() && req.url != '/login'){
-        return res.send('webUI/404')
+    if(!req.isAuthenticated() && req.url != 'login'){
+        if(req.url == "/admin"){
+            return next()
+        }
+        return res.redirect('/404')
     }
+    next()
+}) 
+app.get('*', (req,res, next)=>{
 
     if(req.isAuthenticated()){
         app.locals.username = req.user.name

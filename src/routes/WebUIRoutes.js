@@ -13,4 +13,7 @@ router.get('/iletisim', webUIController.contactPage)
 router.get('/turlar', webUIController.toursPage)
 router.get('/tur-detay/:id', webUIController.tourSinglePage)
 
+router.get('/404', webUIController.page404) 
+
+
 export default router;

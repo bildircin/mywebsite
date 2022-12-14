@@ -291,6 +291,10 @@ const tourSinglePage = async (req,res)=>{
 
 
 
+const page404 = async (req,res,next)=>{
+
+    await res.render('webUI/404', {layout:'webUI/layout', currentLang, contents, navigations, languageCodes})
+}
 
 
 
@@ -332,5 +336,6 @@ export default {
     contactPage,
     toursPage,
     setSettings,
-    tourSinglePage
+    tourSinglePage,
+    page404
 }
