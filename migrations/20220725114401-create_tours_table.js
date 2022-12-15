@@ -56,11 +56,6 @@ module.exports = {
             type:Sequelize.DATE,
             allowNull:false
         },
-        isActive:{
-            type:Sequelize.BOOLEAN,
-            allowNull:false,
-            defaultValue:false
-        },
         overview:{
             type:Sequelize.TEXT('long')
         },
@@ -69,6 +64,21 @@ module.exports = {
         },
         amenities:{
             type:Sequelize.TEXT('long')
+        },
+        isFlashDeal:{
+            type:Sequelize.BOOLEAN,
+            allowNull:false,
+            defaultValue:false
+        },
+        isPopular:{
+            type:Sequelize.BOOLEAN,
+            allowNull:false,
+            defaultValue:false
+        },
+        isActive:{
+            type:Sequelize.BOOLEAN,
+            allowNull:false,
+            defaultValue:false
         },
         isDeleted:{
             type:Sequelize.BOOLEAN,

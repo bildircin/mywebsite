@@ -60,6 +60,16 @@ const Tour = db.define('Tour', {
     amenities:{
         type:Sequelize.TEXT('long')
     },
+    isFlashDeal:{
+        type:Sequelize.BOOLEAN,
+        allowNull:false,
+        defaultValue:false
+    },
+    isPopular:{
+        type:Sequelize.BOOLEAN,
+        allowNull:false,
+        defaultValue:false
+    },
     isActive:{
         type:Sequelize.BOOLEAN,
         allowNull:false,

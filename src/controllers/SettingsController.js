@@ -4,6 +4,8 @@ import Email from '../models/Email.js'
 import LanguageCode from '../models/template/LanguageCode.js'
 import moment from 'moment'
 import db from '../../db.js'
+import flatCache from 'flat-cache'
+import webUIController from '../controllers/WebUIController.js'
 
 
 
@@ -60,6 +62,8 @@ const generalUpdateAjax = async (req,res)=>{
                 key:'uiMetaKeywords'
             }
         }, {transaction: t})
+
+        webUIController.cache.removeKey('settings')
         
         await t.commit()
         await res.send({isSuccess:true, message:'Genel ayarlar güncellendi'})
@@ -93,6 +97,8 @@ const emailUpdateAjax = async (req,res)=>{
             }
         }, {transaction: t})
         
+        webUIController.cache.removeKey('settings')
+
         await t.commit()
         await res.send({isSuccess:true, message:'Email ayarları güncellendi'})
     } catch (error) {
@@ -144,6 +150,10 @@ const localizationUpdateAjax = async (req,res)=>{
                 lng: isNullLocalizationLanguages == "true" ? {[Op.notIn]: []} : {[Op.notIn]: localizationLanguages}
             }
         },{ transaction: t})
+
+        webUIController.cache.removeKey('settings')
+        webUIController.cache.removeKey('languageCode')
+        webUIController.cache.removeKey('languageItems')
 
         await t.commit()
         await res.send({isSuccess:true, message:'Lokalizasyon ayarları güncellendi'})

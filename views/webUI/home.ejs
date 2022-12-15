@@ -136,123 +136,45 @@
                                     <h3><span>Flash deal</span></h3>
                                     <p>Our best last minutes offers. Book now and go!</p>
                                 </div>
-                                <a href="tour.html" class="pull-right">view all <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                                <a href="/turlar" class="pull-right">Tümünü Göster <i class="fa fa-angle-right" aria-hidden="true"></i></a>
                             </div>
                             <div class="modcontent">
                                 <div class="so-deal modcontent products-list grid clearfix clearfix preset00-3 preset01-3 preset02-2 preset03-2 preset04-1  button-type1  style2">
                                     <div class="category-slider-inner products-list yt-content-slider" data-rtl="yes" data-autoplay="yes" data-autoheight="no" data-delay="4" data-speed="0.6" data-margin="30" data-items_column00="4" data-items_column0="4" data-items_column1="4" data-items_column2="2"  data-items_column3="2" data-items_column4="1" data-arrows="no" data-pagination="no" data-lazyload="yes" data-loop="yes" data-hoverpause="yes">
-                                        <div class="item">
-                                            <div class="transition product-layout">
-                                                <div class="product-item-container ">
-                                                    <div class="item-block so-quickview">
-                                                        <div class="image">
-                                                            <a href="tour-detail.html" target="_self">
-                                                                <img src="webUI/image/kabe-dikey-1.png" alt="Bougainvilleas on Lombard Street,  San Francisco, Tokyo" class="img-responsive">
-                                                            </a>
-                                                            <span class="price">$1150</span>
-                                                            <span class="label-bolt"><i class="fa fa-bolt" aria-hidden="true"></i></span>
-                                                        </div>
-                                                        <div class="item-content">
-                                                            <h3><a href="tour-detail.html">10 Günlük Umre Turu, <br />11 Gece Mekke, 3 Gece Medine</a></h3>
-                                                            <div class="reviews-content">
-                                                                <div class="star">
-                                                                    <span style="width: 60px"></span>	
-                                                                </div>
+
+                                        <% toursFlashDeal.forEach(item => { %>
+                                            
+                                            <div class="item">
+                                                <div class="transition product-layout">
+                                                    <div class="product-item-container ">
+                                                        <div class="item-block so-quickview">
+                                                            <div class="image">
+                                                                <a href="/tur-detay/<%= item.id %>" target="_self">
+                                                                    <img src="<%= item.flashDealUrl %>" alt="" class="img-responsive">
+                                                                </a>
+                                                                <span class="price">$<%= item.price %></span>
+                                                                <span class="label-bolt"><i class="fa fa-bolt" aria-hidden="true"></i></span>
                                                             </div>
-                                                            <ul>
-                                                                <li><i class="fa fa-map-marker" aria-hidden="true"></i> New Zealand</li>
-                                                                <li><i class="fa fa-clock-o" aria-hidden="true"></i> 2 Day</li>
-                                                                <li><i class="fa fa-user-circle" aria-hidden="true"></i> 4 Pers</li>
-                                                            </ul>
+                                                            <div class="item-content">
+                                                                <h3><a href="/tur-detay/<%= item.id %>"><%= item.title %></a></h3>
+                                                                <!--<div class="reviews-content">
+                                                                    <div class="star">
+                                                                        <span style="width: 60px"></span>	
+                                                                    </div>
+                                                                </div>-->
+                                                                <ul>
+                                                                    <!-- <li><i class="fa fa-map-marker" aria-hidden="true"></i> New Zealand</li> -->
+                                                                    <% let dayMillisecond = moment(item.finishedAt, "MM/DD/YYYY").valueOf() - moment(item.startedAt, "MM/DD/YYYY").valueOf() %>
+                                                                    <li><i class="fa fa-clock-o" aria-hidden="true"></i> <%= dhm(dayMillisecond).days %> Gün</li>
+                                                                    <li><i class="fa fa-user-circle" aria-hidden="true"></i> <%= item.persons %> Kişi</li>
+                                                                </ul>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="item">
-                                            <div class="transition product-layout">
-                                                <div class="product-item-container ">
-                                                    <div class="item-block so-quickview">
-                                                        <div class="image">
-                                                            <a href="tour-detail.html" target="_self">
-                                                                <img src="webUI/image/catalog/demo/product/travel/t2.jpg" alt="Bougainvilleas on Lombard Street,  San Francisco, Tokyo" class="img-responsive">
-                                                            </a>
-                                                            <span class="price">$230</span>
-                                                            <span class="label-bolt"><i class="fa fa-bolt" aria-hidden="true"></i></span>
-                                                        </div>
-                                                        <div class="item-content">
-                                                            <h3><a href="tour-detail.html">The Windmills of Schie-dam, Holland</a></h3>
-                                                            <div class="reviews-content">
-                                                                <div class="star">
-                                                                    <span style="width: 60px"></span>	
-                                                                </div>
-                                                            </div>
-                                                            <ul>
-                                                                <li><i class="fa fa-map-marker" aria-hidden="true"></i> New Zealand</li>
-                                                                <li><i class="fa fa-clock-o" aria-hidden="true"></i> 2 Day</li>
-                                                                <li><i class="fa fa-user-circle" aria-hidden="true"></i> 4 Pers</li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <div class="transition product-layout">
-                                                <div class="product-item-container ">
-                                                    <div class="item-block so-quickview">
-                                                        <div class="image">
-                                                            <a href="tour-detail.html" target="_self">
-                                                                <img src="webUI/image/catalog/demo/product/travel/t3.jpg" alt="Bougainvilleas on Lombard Street,  San Francisco, Tokyo" class="img-responsive">
-                                                            </a>
-                                                            <span class="price">$230</span>
-                                                            <span class="label-bolt"><i class="fa fa-bolt" aria-hidden="true"></i></span>
-                                                        </div>
-                                                        <div class="item-content">
-                                                            <h3><a href="tour-detail.html">2 Day 1 Night Trip to Santorini, Greece</a></h3>
-                                                            <div class="reviews-content">
-                                                                <div class="star">
-                                                                    <span style="width: 60px"></span>	
-                                                                </div>
-                                                            </div>
-                                                            <ul>
-                                                                <li><i class="fa fa-map-marker" aria-hidden="true"></i> New Zealand</li>
-                                                                <li><i class="fa fa-clock-o" aria-hidden="true"></i> 2 Day</li>
-                                                                <li><i class="fa fa-user-circle" aria-hidden="true"></i> 4 Pers</li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <div class="transition product-layout">
-                                                <div class="product-item-container ">
-                                                    <div class="item-block so-quickview">
-                                                        <div class="image">
-                                                            <a href="tour-detail.html" target="_self">
-                                                                <img src="webUI/image/catalog/demo/product/travel/t4.jpg" alt="Bougainvilleas on Lombard Street,  San Francisco, Tokyo" class="img-responsive">
-                                                            </a>
-                                                            <span class="price">$230</span>
-                                                            <span class="label-bolt"><i class="fa fa-bolt" aria-hidden="true"></i></span>
-                                                        </div>
-                                                        <div class="item-content">
-                                                            <h3><a href="tour-detail.html">The Windmills of Schie-dam, Holland</a></h3>
-                                                            <div class="reviews-content">
-                                                                <div class="star">
-                                                                    <span style="width: 60px"></span>	
-                                                                </div>
-                                                            </div>
-                                                            <ul>
-                                                                <li><i class="fa fa-map-marker" aria-hidden="true"></i> New Zealand</li>
-                                                                <li><i class="fa fa-clock-o" aria-hidden="true"></i> 2 Day</li>
-                                                                <li><i class="fa fa-user-circle" aria-hidden="true"></i> 4 Pers</li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <% }); %>
+
                                     </div>
                                 </div>
                             </div>
@@ -300,222 +222,94 @@
                                 <div class="block-title pull-left">
                                     <h3><span>popular Tour</span></h3>
                                 </div>
-                                <a href="tour.html" class="pull-right">view all <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                                <a href="/turlar" class="pull-right">Tümünü Gör<i class="fa fa-angle-right" aria-hidden="true"></i></a>
                             </div>
                             <div class="modcontent">
                                 <div class="so-deal modcontent products-list grid clearfix clearfix preset00-3 preset01-3 preset02-2 preset03-2 preset04-1  button-type1  style2">
                                     <div class="category-slider-inner products-list yt-content-slider" data-rtl="yes" data-autoplay="no" data-autoheight="no" data-delay="4" data-speed="0.6" data-margin="30" data-items_column00="3" data-items_column0="3" data-items_column1="3" data-items_column2="2"  data-items_column3="2" data-items_column4="1" data-arrows="no" data-pagination="no" data-lazyload="yes" data-loop="yes" data-hoverpause="yes">
-                                        <div class="item">
-                                            <div class="item-inner">
-                                                <div class="transition product-layout">
-                                                    <div class="product-item-container ">
-                                                        <div class="item-block so-quickview">
-                                                            <div class="image">
-                                                                <a href="tour-detail.html" target="_self">
-                                                                    <img src="webUI/image/catalog/demo/product/travel/p1.jpg" alt="Bougainvilleas on Lombard Street,  San Francisco, Tokyo" class="img-responsive">
-                                                                </a>
-                                                                <span class="label-hot"><i class="fa fa-fire" aria-hidden="true"></i>Hot tour</span>
-                                                                <span class="label-rate style2"><i class="fa fa-star" aria-hidden="true"></i>high rate</span>
-                                                            </div>
-                                                            <div class="item-content clearfix">
-                                                                <h3><a href="tour-detail.html">2 Day 1 Night Trip to Santorini, Greece</a></h3>
-                                                                <div class="reviews-content">
-                                                                    <div class="star">
-                                                                        <span style="width: 60px"></span>	
-                                                                    </div>
-                                                                    <a href="#" class="review-link" rel="nofollow">(15 reviews)</a>
+                                        <%_ let i; for(i = 0; i < toursPopular.length;) {
+                                            const item_1 = toursPopular[i]; 
+                                            const item_2 = toursPopular[i + 1]; 
+                                            i = i + 2; _%>
+                                            
+                                            <div class="item">
+                                                <% if(item_1){ %>
+                                                <div class="item-inner">
+                                                    <div class="transition product-layout">
+                                                        <div class="product-item-container ">
+                                                            <div class="item-block so-quickview">
+                                                                <div class="image">
+                                                                    <a href="/tur-detay/<%= item_1.id %>" target="_self">
+                                                                        <img src="<%= item_1.coverUrl %>" class="img-responsive">
+                                                                    </a>
+                                                                    <span class="label-hot"><i class="fa fa-fire" aria-hidden="true"></i>Hot tour</span>
+                                                                    <span class="label-rate style2"><i class="fa fa-star" aria-hidden="true"></i>high rate</span>
                                                                 </div>
-                                                                <ul>
-                                                                    <li><i class="fa fa-map-marker" aria-hidden="true"></i> New Zealand</li>
-                                                                    <li><i class="fa fa-clock-o" aria-hidden="true"></i> 2 Day</li>
-                                                                    <li><i class="fa fa-user-circle" aria-hidden="true"></i> 4 persons</li>
-                                                                </ul>
-                                                                <div class="item-bot clearfix">
-                                                                    <div class="price pull-left">
-                                                                        from <label>$230</label><span>person</span>
+                                                                <div class="item-content clearfix">
+                                                                    <h3><a href="/tur-detay/<%= item_1.id %>"><%= item_1.title %></a></h3>
+                                                                    <!--<div class="reviews-content">
+                                                                        <div class="star">
+                                                                            <span style="width: 60px"></span>	
+                                                                        </div>
+                                                                        <a href="#" class="review-link" rel="nofollow">(15 reviews)</a>
+                                                                    </div>-->
+                                                                    <ul>
+                                                                        <% let dayMillisecond_1 = moment(item_1.finishedAt, "MM/DD/YYYY").valueOf() - moment(item_1.startedAt, "MM/DD/YYYY").valueOf() %>
+
+                                                                        <li><i class="fa fa-clock-o" aria-hidden="true"></i><%= dhm(dayMillisecond_1).days %> Gün</li>
+                                                                        <li><i class="fa fa-user-circle" aria-hidden="true"></i>  <%= item_1.persons %> Kişi</li>
+                                                                    </ul>
+                                                                    <div class="item-bot clearfix">
+                                                                        <div class="price pull-left">
+                                                                            <label>$<%= item_1.price %></label>
+                                                                        </div>
+                                                                        <a href="#" class="book-now btn-quickview quickview quickview_handler pull-right" title="Quick View" data-title="Quick View" data-fancybox-type="iframe">Book now</a>
                                                                     </div>
-                                                                    <a href="booking-step.html" class="book-now btn-quickview quickview quickview_handler pull-right" title="Quick View" data-title="Quick View" data-fancybox-type="iframe">Book now</a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="item-inner">
-                                                <div class="transition product-layout">
-                                                    <div class="product-item-container ">
-                                                        <div class="item-block so-quickview">
-                                                            <div class="image">
-                                                                <a href="tour-detail.html" target="_self">
-                                                                    <img src="webUI/image/catalog/demo/product/travel/p4.jpg" alt="Bougainvilleas on Lombard Street,  San Francisco, Tokyo" class="img-responsive">
-                                                                </a>
-                                                                <span class="label-hot"><i class="fa fa-fire" aria-hidden="true"></i>Hot tour</span>
-                                                            </div>
-                                                            <div class="item-content clearfix">
-                                                                <h3><a href="tour-detail.html">2 Day 1 Night Trip to Santorini, Greece</a></h3>
-                                                                <div class="reviews-content">
-                                                                    <div class="star">
-                                                                        <span style="width: 60px"></span>	
-                                                                    </div>
-                                                                    <a href="#" class="review-link" rel="nofollow">(20 reviews)</a>
-                                                                </div>
-                                                                <ul>
-                                                                    <li><i class="fa fa-map-marker" aria-hidden="true"></i> New Zealand</li>
-                                                                    <li><i class="fa fa-clock-o" aria-hidden="true"></i> 2 Day</li>
-                                                                    <li><i class="fa fa-user-circle" aria-hidden="true"></i> 4 persons</li>
-                                                                </ul>
-                                                                <div class="item-bot clearfix">
-                                                                    <div class="price pull-left">
-                                                                        from <label>$230</label><span>person</span>
-                                                                    </div>
-                                                                    <a href="booking-step.html" class="book-now btn-quickview quickview quickview_handler pull-right" title="Quick View" data-title="Quick View" data-fancybox-type="iframe">Book now</a>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <div class="item-inner">
-                                                <div class="transition product-layout">
-                                                    <div class="product-item-container ">
-                                                        <div class="item-block so-quickview">
-                                                            <div class="image">
-                                                                <a href="tour-detail.html" target="_self">
-                                                                    <img src="webUI/image/catalog/demo/product/travel/p2.jpg" alt="Bougainvilleas on Lombard Street,  San Francisco, Tokyo" class="img-responsive">
-                                                                </a>
-                                                                <span class="label-rate"><i class="fa fa-star" aria-hidden="true"></i>high rate</span>
-                                                            </div>
-                                                            <div class="item-content clearfix">
-                                                                <h3><a href="tour-detail.html">The Windmills of Schie-dam, Holland</a></h3>
-                                                                <div class="reviews-content">
-                                                                    <div class="star">
-                                                                        <span style="width: 60px"></span>	
-                                                                    </div>
-                                                                    <a href="#" class="review-link" rel="nofollow">(10 reviews)</a>
+                                                <% }if(item_2){ %>
+                                                    <div class="item-inner">
+                                                    <div class="transition product-layout">
+                                                        <div class="product-item-container ">
+                                                            <div class="item-block so-quickview">
+                                                                <div class="image">
+                                                                    <a href="/tur-detay/<%= item_2.id %>" target="_self">
+                                                                        <img src="<%= item_2.coverUrl %>" class="img-responsive">
+                                                                    </a>
+                                                                    <span class="label-hot"><i class="fa fa-fire" aria-hidden="true"></i>Hot tour</span>
+                                                                    <span class="label-rate style2"><i class="fa fa-star" aria-hidden="true"></i>high rate</span>
                                                                 </div>
-                                                                <ul>
-                                                                    <li><i class="fa fa-map-marker" aria-hidden="true"></i> New Zealand</li>
-                                                                    <li><i class="fa fa-clock-o" aria-hidden="true"></i> 2 Day</li>
-                                                                    <li><i class="fa fa-user-circle" aria-hidden="true"></i> 4 persons</li>
-                                                                </ul>
-                                                                <div class="item-bot clearfix">
-                                                                    <div class="price pull-left">
-                                                                        from <label>$230</label><span>person</span>
+                                                                <div class="item-content clearfix">
+                                                                    <h3><a href="/tur-detay/<%= item_2.id %>"><%= item_2.title %></a></h3>
+                                                                    <!--<div class="reviews-content">
+                                                                        <div class="star">
+                                                                            <span style="width: 60px"></span>	
+                                                                        </div>
+                                                                        <a href="#" class="review-link" rel="nofollow">(15 reviews)</a>
+                                                                    </div>-->
+                                                                    <ul>
+                                                                        <% let dayMillisecond_2 = moment(item_2.finishedAt, "MM/DD/YYYY").valueOf() - moment(item_2.startedAt, "MM/DD/YYYY").valueOf() %>
+
+                                                                        <li><i class="fa fa-clock-o" aria-hidden="true"></i><%= dhm(dayMillisecond_2).days %> Gün</li>
+                                                                        <li><i class="fa fa-user-circle" aria-hidden="true"></i>  <%= item_2.persons %> Kişi</li>
+                                                                    </ul>
+                                                                    <div class="item-bot clearfix">
+                                                                        <div class="price pull-left">
+                                                                            <label>$<%= item_2.price %></label>
+                                                                        </div>
+                                                                        <a href="#" class="book-now btn-quickview quickview quickview_handler pull-right" title="Quick View" data-title="Quick View" data-fancybox-type="iframe">Book now</a>
                                                                     </div>
-                                                                    <a href="booking-step.html" class="book-now btn-quickview quickview quickview_handler pull-right" title="Quick View" data-title="Quick View" data-fancybox-type="iframe">Book now</a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="item-inner">
-                                                <div class="transition product-layout">
-                                                    <div class="product-item-container ">
-                                                        <div class="item-block so-quickview">
-                                                            <div class="image">
-                                                                <a href="tour-detail.html" target="_self">
-                                                                    <img src="webUI/image/catalog/demo/product/travel/p3.jpg" alt="Bougainvilleas on Lombard Street, San Francisco, Tokyo" class="img-responsive">
-                                                                </a>
-                                                                <span class="label-rate"><i class="fa fa-star" aria-hidden="true"></i>high rate</span>
-                                                            </div>
-                                                            <div class="item-content clearfix">
-                                                                <h3><a href="tour-detail.html">The Windmills of Schie-dam, Holland</a></h3>
-                                                                <div class="reviews-content">
-                                                                    <div class="star">
-                                                                        <span style="width: 60px"></span>	
-                                                                    </div>
-                                                                    <a href="#" class="review-link" rel="nofollow">(10 reviews)</a>
-                                                                </div>
-                                                                <ul>
-                                                                    <li><i class="fa fa-map-marker" aria-hidden="true"></i> New Zealand</li>
-                                                                    <li><i class="fa fa-clock-o" aria-hidden="true"></i> 2 Day</li>
-                                                                    <li><i class="fa fa-user-circle" aria-hidden="true"></i> 4 persons</li>
-                                                                </ul>
-                                                                <div class="item-bot clearfix">
-                                                                    <div class="price pull-left">
-                                                                        from <label>$670</label><span>person</span>
-                                                                    </div>
-                                                                    <a href="booking-step.html" class="book-now btn-quickview quickview quickview_handler pull-right" title="Quick View" data-title="Quick View" data-fancybox-type="iframe">Book now</a>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <% } %>
                                             </div>
-                                        </div>
-                                        <div class="item">
-                                            <div class="item-inner">
-                                                <div class="transition product-layout">
-                                                    <div class="product-item-container ">
-                                                        <div class="item-block so-quickview">
-                                                            <div class="image">
-                                                                <a href="tour-detail.html" target="_self">
-                                                                    <img src="webUI/image/catalog/demo/product/travel/p3.jpg" alt="Bougainvilleas on Lombard Street,  San Francisco, Tokyo" class="img-responsive">
-                                                                </a>
-                                                                <span class="label-rate"><i class="fa fa-star" aria-hidden="true"></i>high rate</span>
-                                                            </div>
-                                                            <div class="item-content clearfix">
-                                                                <h3><a href="tour-detail.html">2 Day 1 Night Trip to Santorini, Greece</a></h3>
-                                                                <div class="reviews-content">
-                                                                    <div class="star">
-                                                                        <span style="width: 60px"></span>	
-                                                                    </div>
-                                                                    <a href="#" class="review-link" rel="nofollow">(15 reviews)</a>
-                                                                </div>
-                                                                <ul>
-                                                                    <li><i class="fa fa-map-marker" aria-hidden="true"></i> New Zealand</li>
-                                                                    <li><i class="fa fa-clock-o" aria-hidden="true"></i> 2 Day</li>
-                                                                    <li><i class="fa fa-user-circle" aria-hidden="true"></i> 4 persons</li>
-                                                                </ul>
-                                                                <div class="item-bot clearfix">
-                                                                    <div class="price pull-left">
-                                                                        from <label>$800</label><span>person</span>
-                                                                    </div>
-                                                                    <a href="booking-step.html" class="book-now btn-quickview quickview quickview_handler pull-right" title="Quick View" data-title="Quick View" data-fancybox-type="iframe">Book now</a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="item-inner">
-                                                <div class="transition product-layout">
-                                                    <div class="product-item-container ">
-                                                        <div class="item-block so-quickview">
-                                                            <div class="image">
-                                                                <a href="tour-detail.html" target="_self">
-                                                                    <img src="webUI/image/catalog/demo/product/travel/p6.jpg" alt="Bougainvilleas on Lombard Street,  San Francisco, Tokyo" class="img-responsive">
-                                                                </a>
-                                                                <span class="label-hot"><i class="fa fa-fire" aria-hidden="true"></i>Hot tour</span>
-                                                            </div>
-                                                            <div class="item-content clearfix">
-                                                                <h3><a href="tour-detail.html">2 Day 1 Night Trip to Santorini, Greece</a></h3>
-                                                                <div class="reviews-content">
-                                                                    <div class="star">
-                                                                        <span style="width: 60px"></span>	
-                                                                    </div>
-                                                                    <a href="#" class="review-link" rel="nofollow">(15 reviews)</a>
-                                                                </div>
-                                                                <ul>
-                                                                    <li><i class="fa fa-map-marker" aria-hidden="true"></i> New Zealand</li>
-                                                                    <li><i class="fa fa-clock-o" aria-hidden="true"></i> 2 Day</li>
-                                                                    <li><i class="fa fa-user-circle" aria-hidden="true"></i> 4 persons</li>
-                                                                </ul>
-                                                                <div class="item-bot clearfix">
-                                                                    <div class="price pull-left">
-                                                                        from <label>$130</label><span>person</span>
-                                                                    </div>
-                                                                    <a href="booking-step.html" class="book-now btn-quickview quickview quickview_handler pull-right" title="Quick View" data-title="Quick View" data-fancybox-type="iframe">Book now</a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <% } %>
                                     </div>
                                 </div>
                             </div>
@@ -524,127 +318,7 @@
                 </div>
             </div>
         </section>
-        <section class="section-style5">
-            <div class="container page-builder-ltr">
-                <div class="row row-style row_a1">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col_a1c">
-                        <div class="module so-deals-1tr home1_deals so-deals">
-                            <div class="head-title clearfix">
-                                <div class="block-title pull-left">
-                                    <h3><span>Choose your destinations</span></h3>
-                                </div>
-                            </div>
-                            <div class="modcontent">
-                                <div class="so-deal modcontent products-list grid clearfix clearfix preset00-3 preset01-3 preset02-2 preset03-2 preset04-1  button-type1  style2">
-                                    <div class="category-slider-inner products-list yt-content-slider" data-rtl="yes" data-autoplay="no" data-autoheight="no" data-delay="4" data-speed="0.6" data-margin="30" data-items_column00="4" data-items_column0="4" data-items_column1="4" data-items_column2="2"  data-items_column3="2" data-items_column4="1" data-arrows="no" data-pagination="no" data-lazyload="yes" data-loop="yes" data-hoverpause="yes">
-                                        <div class="item">
-                                            <div class="transition product-layout">
-                                                <div class="product-item-container ">
-                                                    <div class="item-block so-quickview">
-                                                        <div class="image">
-                                                            <a href="destination-detail.html" target="_self">
-                                                                <img src="webUI/image/catalog/demo/product/travel/chosse1.jpg" alt="Bougainvilleas on Lombard Street,  San Francisco, Tokyo" class="img-responsive">
-                                                            </a>
-                                                        </div>
-                                                        <div class="item-content">
-                                                            <div class="item-title clearfix">
-                                                                <h3 class="pull-left"><a href="destination-detail.html"><i class="fa fa-map-marker" aria-hidden="true"></i> England</a></h3>
-                                                                <span class="pull-right">14 tours</span>
-                                                            </div>			
-                                                            <div class="view-all"><a href="destination-list.html">View all tour <i class="fa fa-angle-double-right" aria-hidden="true"></i></a></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <div class="transition product-layout">
-                                                <div class="product-item-container ">
-                                                    <div class="item-block so-quickview">
-                                                        <div class="image">
-                                                            <a href="destination-detail.html" target="_self">
-                                                                <img src="webUI/image/catalog/demo/product/travel/chosse2.jpg" alt="Bougainvilleas on Lombard Street,  San Francisco, Tokyo" class="img-responsive">
-                                                            </a>
-                                                        </div>
-                                                        <div class="item-content">
-                                                            <div class="item-title clearfix">
-                                                                <h3 class="pull-left"><a href="destination-detail.html"><i class="fa fa-map-marker" aria-hidden="true"></i> France</a></h3>
-                                                                <span class="pull-right">14 tours</span>
-                                                            </div>				
-                                                            <div class="view-all"><a href="destination-list.html">View all tour <i class="fa fa-angle-double-right" aria-hidden="true"></i></a></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <div class="transition product-layout">
-                                                <div class="product-item-container ">
-                                                    <div class="item-block so-quickview">
-                                                        <div class="image">
-                                                            <a href="destination-detail.html" target="_self">
-                                                                <img src="webUI/image/catalog/demo/product/travel/chosse3.jpg" alt="Bougainvilleas on Lombard Street,  San Francisco, Tokyo" class="img-responsive">
-                                                            </a>
-                                                        </div>
-                                                        <div class="item-content">
-                                                            <div class="item-title clearfix">
-                                                                <h3 class="pull-left"><a href="destination-detail.html"><i class="fa fa-map-marker" aria-hidden="true"></i> Australia</a></h3>
-                                                                <span class="pull-right">14 tours</span>
-                                                            </div>				
-                                                            <div class="view-all"><a href="destination-list.html">View all tour <i class="fa fa-angle-double-right" aria-hidden="true"></i></a></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <div class="transition product-layout">
-                                                <div class="product-item-container ">
-                                                    <div class="item-block so-quickview">
-                                                        <div class="image">
-                                                            <a href="destination-detail.html" target="_self">
-                                                                <img src="webUI/image/catalog/demo/product/travel/chosse4.jpg" alt="Bougainvilleas on Lombard Street,  San Francisco, Tokyo" class="img-responsive">
-                                                            </a>
-                                                        </div>
-                                                        <div class="item-content">
-                                                            <div class="item-title clearfix">
-                                                                <h3 class="pull-left"><a href="destination-detail.html"><i class="fa fa-map-marker" aria-hidden="true"></i> Laos</a></h3>
-                                                                <span class="pull-right">14 tours</span>
-                                                            </div>				
-                                                            <div class="view-all"><a href="destination-list.html">View all tour <i class="fa fa-angle-double-right" aria-hidden="true"></i></a></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <div class="transition product-layout">
-                                                <div class="product-item-container ">
-                                                    <div class="item-block so-quickview">
-                                                        <div class="image">
-                                                            <a href="destination-detail.html" target="_self">
-                                                                <img src="webUI/image/catalog/demo/product/travel/chosse5.jpg" alt="Bougainvilleas on Lombard Street,  San Francisco, Tokyo" class="img-responsive">
-                                                            </a>
-                                                        </div>
-                                                        <div class="item-content">
-                                                            <div class="item-title clearfix">
-                                                                <h3 class="pull-left"><a href="destination-detail.html"><i class="fa fa-map-marker" aria-hidden="true"></i> Italy</a></h3>
-                                                                <span class="pull-right">14 tours</span>
-                                                            </div>				
-                                                            <div class="view-all"><a href="destination-list.html">View all tour <i class="fa fa-angle-double-right" aria-hidden="true"></i></a></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+
         <section class="section-style6">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col_6fdl float_none container">
                 <div class="head-title clearfix">

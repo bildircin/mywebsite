@@ -80,7 +80,7 @@ const createOrUpdateTour = async (req,res)=>{
 const createOrUpdateTourAjax = async (req,res)=>{
     
     const {id, category, description, sequence, day, dataSrcCoverUrl, dataSrcHeadImgUrl, dataSrcFlashDealUrl,
-         persons, price, startedAt, finishedAt, isActive, overview, dayList, amenities } = req.body
+         persons, price, startedAt, finishedAt, isActive, overview, dayList, amenities, isFlashDeal } = req.body
     let title = req.body.title
 
     if(category == undefined || category == null || category == ""){
@@ -150,6 +150,7 @@ const createOrUpdateTourAjax = async (req,res)=>{
                 coverUrl: fileArr.coverUrlFile ? fileArr.coverUrlFile : dataSrcCoverUrl ? dataSrcCoverUrl : null,
                 headImgUrl: fileArr.headImgUrlFile ? fileArr.headImgUrlFile : dataSrcHeadImgUrl ? dataSrcHeadImgUrl : null,
                 flashDealUrl: fileArr.flashDealUrlFile ? fileArr.flashDealUrlFile : dataSrcFlashDealUrl ? dataSrcFlashDealUrl : null,
+                isFlashDeal:getCheckedBtn(isFlashDeal),
                 isActive:getCheckedBtn(isActive),
                 isDeleted:false,
                 createdAt:moment(),
@@ -229,6 +230,7 @@ const createOrUpdateTourAjax = async (req,res)=>{
                 coverUrl: fileArr.coverUrlFile ? fileArr.coverUrlFile : dataSrcCoverUrl ? dataSrcCoverUrl : null,
                 headImgUrl: fileArr.headImgUrlFile ? fileArr.headImgUrlFile : dataSrcHeadImgUrl ? dataSrcHeadImgUrl : null,
                 flashDealUrl: fileArr.flashDealUrlFile ? fileArr.flashDealUrlFile : dataSrcFlashDealUrl ? dataSrcFlashDealUrl : null,
+                isFlashDeal:getCheckedBtn(isFlashDeal),
                 isActive:getCheckedBtn(isActive),
                 updatedAt: moment()
             }, {
