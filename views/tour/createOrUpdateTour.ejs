@@ -190,7 +190,7 @@
                         <div class="mb-10">
                             <textarea  name="dayList"  cols="30" rows="10" style="display: none;"></textarea>
                             <div class="d-flex justify-content-between align-items-center">
-                                <label class="form-label"><h2>Tur Planı</h2></label>
+                                <label class="form-label">Tur Planı</label>
                                 <button class="btn btn-primary" id="add_day_btn">Gün Ekle</button>
                             </div>
 
@@ -762,7 +762,7 @@
                     let dataSrc = $('#image_list_modal').attr('data-image-src')
                     let url = $(this).find('.copy-url').text()
 
-                    $('input[name=' + dataSrc + ']').attr('value', dataSrc)
+                    $('input[name=' + dataSrc + ']').attr('value', url)
                     $('input[name=' + dataSrc + ']').siblings('div').find('img').attr('src', url)
 
                     $('.close-modal-btn').first().trigger('click')

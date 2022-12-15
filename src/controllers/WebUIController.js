@@ -10,8 +10,10 @@ import Category from "../models/Category.js"
 import TourCategory from "../models/template/TourCategory.js"
 import db from '../../db.js'
 import Setting from "../models/template/Setting.js"
+import flatCache from 'flat-cache'
 
 
+let cache = flatCache.load('cacheId');
 let currentLang = {
     lng:'tr',
     languageTitle:'Türkçe'
@@ -19,26 +21,30 @@ let currentLang = {
 let contents = {}
 let navigations = []
 let languageCodes = []
-let currentSettings = []
+let settings;
 
 //middleware
 const setSettings = async (req,res,next)=>{
-
-    const settings = await Setting.findAll({}).catch(err=>{
-        console.log(err)
-    })
-    currentSettings = settings
+    settings = cache.getKey('settings')
+    console.log(settings)
+    if (!settings) {
+        settings = await Setting.findAll({}).catch(err=>{
+            console.log(err)
+        })
+        cache.setKey('settings', settings);
+        cache.save();
+    }
 
     res.locals.title = settings.find(el=>el.key == 'uiMetaTitle').value
     res.locals.uiMetaDescription = settings.find(el=>el.key == 'uiMetaDescription').value
     res.locals.uiMetaKeywords = settings.find(el=>el.key == 'uiMetaKeywords').value
-
+  
     next()
 }
 const setCurrentLang = async (req,res,next)=>{
     //default currentLang
-    let uiCurrentLanugage = currentSettings.find(el=>el.key == 'uiCurrentLanugage')
-    console.log(uiCurrentLanugage)
+   
+    let uiCurrentLanugage = settings.find(el=>el.key == 'uiCurrentLanugage')
     if(uiCurrentLanugage.value){
         
         const languageCode = await LanguageCode.findOne({
@@ -159,7 +165,7 @@ const contactPage = async (req,res)=>{
 const toursPage = async (req,res)=>{
     res.locals.title="Turlar"
 
-    let uiProductsItemsPerPage = currentSettings.find(el=>el.key == 'uiProductsItemsPerPage').value
+    let uiProductsItemsPerPage = settings.find(el=>el.key == 'uiProductsItemsPerPage').value
 
     //query
     const q = req.query;
