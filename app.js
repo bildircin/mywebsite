@@ -114,6 +114,7 @@ import categoryRoutes from './src/routes/CategoryRoutes.js'
 import videoRoutes from './src/routes/VideoRoutes.js'
 import tourRoutes from './src/routes/TourRoutes.js'
 import imageRoutes from './src/routes/ImageRoutes.js'
+import sharedImageRoutes from './src/routes/SharedImageRoutes.js'
 import templateRoutes from './src/routes/TemplateRoutes.js'
 import webUIRoutes from './src/routes/WebUIRoutes.js'
 import settingsRoutes from './src/routes/SettingsRoutes.js'
@@ -182,6 +183,7 @@ app.use(categoryRoutes)
 app.use(videoRoutes)
 app.use(tourRoutes)
 app.use(imageRoutes)
+app.use(sharedImageRoutes)
 app.use(settingsRoutes)
 app.use(templateRoutes)
 

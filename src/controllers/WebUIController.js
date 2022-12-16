@@ -38,7 +38,6 @@ const setSettings = async (req,res,next)=>{
     next()
 }
 const setCurrentLang = async (req,res,next)=>{
-    //default currentLang
    
     let uiCurrentLanugage = settings.find(el=>el.key == 'uiCurrentLanugage')
     if(uiCurrentLanugage.value){
