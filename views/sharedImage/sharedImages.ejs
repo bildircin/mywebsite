@@ -42,7 +42,7 @@
     <div class="card-body fs-6 py-15 px-10 py-lg-15 px-lg-15 text-gray-700">
         <ul class="nav nav-stretch nav-line-tabs fw-bold fs-4 border-bottom-2 border-transparent flex-nowrap mb-8 justify-content-between" role="tablist" id="kt_illustration_tabs">
             <li class="nav-item" role="presentation">
-                <a class="nav-link text-active-primary border-bottom-2 active" data-bs-toggle="tab" href="#kt_illustration_sketchy-1" role="tab" aria-selected="true">Resimler</a>
+                <a class="nav-link text-active-primary border-bottom-2 active" data-bs-toggle="tab" href="#kt_illustration_sketchy-1" role="tab" aria-selected="true">Paylaşılan Resimler</a>
             </li>
             <li>
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_item_modal">Yeni Ekle</button>
@@ -102,7 +102,7 @@
             </div>
             <div class="modal-body">
 
-                <form action="/createImageAjax" role="form" id="add_item_form" method="post" enctype="multipart/form-data">
+                <form action="/createSharedImageAjax" role="form" id="add_item_form" method="post" enctype="multipart/form-data">
                     <div class="modal-body">
                         
                         <div class="mb-10">
@@ -146,7 +146,6 @@
     $('#add_item_modal').on('hidden.bs.modal', function(){
         $('#url_file').val('')
         $('#url_file_preview').attr('src', '/webUI/image/no_image.png')
-
     })
 
     $('#add_item_form').ajaxForm({
@@ -169,7 +168,7 @@
 
             if (result.responseJSON.isSuccess) {
 
-                window.location.href = '/resimler'
+                window.location.href = '/paylasilan-resimler'
 
             }
             else {
@@ -177,14 +176,13 @@
                 $('#save_btn').removeAttr('data-kt-indicator')
                 $('#save_btn').removeAttr("disabled")
             }
-
-        },
+        }
     });
 
     $('body').on('click', '.remove-img-btn', function(){
         const id = $(this).data('id')
 
-        $.post('/deleteImageAjax', {id}, function(result){
+        $.post('/deleteSharedImageAjax', {id}, function(result){
 
             if(result.image){
                 const id = result.image.id
@@ -234,7 +232,7 @@
 
         const value = $(this).data('value')
 
-        window.location.href = "/resimler?page=" + value
+        window.location.href = "/paylasilan-resimler?page=" + value
 
     })
 

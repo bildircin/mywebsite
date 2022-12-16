@@ -1,0 +1,355 @@
+
+
+<style>
+    .accordion-btn {
+        background-color: #f5f8fa;
+        color: #444;
+        cursor: pointer;
+        padding: 18px;
+        width: 100%;
+        border: none;
+        text-align: left;
+        outline: none;
+        font-size: 15px;
+        border-radius: 5px;
+    }
+    .accordion-btn.active{
+        margin-bottom: 18px;
+    }
+    .active {
+        background-color: #d2e5f1;
+    }
+
+    .panel {
+        padding: 0 18px;
+        background-color: white;
+    }
+
+    .day-item{
+        border: 1px solid #eff2f5;
+        border-radius: 5px;
+    }
+    #day_list{
+        min-height: 60px;
+        border-radius: 5px;
+    }
+
+    .item-img:hover{
+        display:block !important;
+    }    
+
+    .copy-url:hover{
+        cursor: pointer;
+    }
+
+</style>
+
+    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+            <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0"><%= blog.title ? blog.title : 'Yeni Ekle' %></h1>
+                <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                    <li class="breadcrumb-item text-muted">
+                        <a href="/admin" class="text-muted text-hover-primary">Anasayfa</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                    </li>
+                     <li class="breadcrumb-item text-muted">
+                        <a href="/blog-listesi" class="text-muted text-hover-primary">Bloglar</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                    </li>
+                    <li class="breadcrumb-item text-muted"><%= blog.title ? blog.title : 'Yeni Ekle' %></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="kt_app_content" class="app-content flex-column-fluid">
+        <div id="kt_app_content_container" class="app-container container-fluid">
+            <div class="card card-docs flex-row-fluid mb-2">
+                <div class="card-body fs-6 py-15 px-10 py-lg-15 px-lg-15 text-gray-700">
+
+                    <form action="/createOrUpdateBlogAjax" id="item_save_form" method="post" enctype="multipart/form-data">
+                      
+                        <input type="hidden" id="id" name="id" value="<%= blog.id %>" />
+                        
+                        <div class="mb-10">
+                            <label class="required form-label">Başlık</label>
+                            <input type="text" class="form-control" id="title" name="title" value="<%= blog.title %>" />
+                        </div>
+                        <div class="mb-10">
+                            <label class="required form-label">Yayın Tarihi</label>
+                            <input type="text" class="form-control" id="release_date" name="releaseDate"  value="<%= blog.releaseDate %>"  />
+                        </div>
+                        <div class="mb-10 image-content">
+                            <input type="hidden" class="image-data-src" name="dataSrcHeadImgUrl" value="<%= blog.headImgUrl %>">
+                            <div style="width: 600px; height: auto;">
+                                <% if(blog.headImgUrl){ %>
+                                    <img src="<%= blog.headImgUrl %>" alt="" style="width:100%;">
+                                <% }else{ %>
+                                    <img src="/webUI/image/catalog/demo/blog/6.jpg" alt="" style="width:100%;">
+                                <% } %>
+                            </div>
+                            <div class="mt-3">
+                                <label class="form-label">Sayfa Başlık URL</label>
+                                <button type="button" class="btn btn-primary image-select-btn">
+                                    Resimlerden Seç
+                                </button>
+                                <input type="file" name="headImgUrlFile" accept="image/png, image/gif, image/jpeg" />
+                            </div>
+                        </div>
+                        <div class="mb-10 border">
+                            <label class="form-label">Açıklama</label>
+                            <div id="toolbar_container_header"></div>
+                            <textarea id="description" name="description" class="tox-target">
+                                 <%= blog.description %>
+                            </textarea>
+    
+                            <div class="d-none" id="description_hidden">
+                                
+                            </div>
+                        </div>
+                        <div class="mb-10">
+                            <label class="form-label">Etiketler</label>
+                            <input class="form-control" name="tags" value="<%= blog.tags %>" id="tags"/>
+                        </div>
+                        <div class="form-check form-switch form-check-custom form-check-solid my-10">
+                            <input class="form-check-input" type="checkbox" id="is_active" name="isActive" <%= blog.isActive ? 'checked=checked' : '' %> />
+                            <label class="form-check-label" for="is_active">
+                                Aktif
+                            </label>
+                        </div>
+
+                        
+                    
+                        <div class="form-group row mt-5">
+                            <div class="col-md-2">
+                                <a href="/blog-listesi" class="btn btn-block btn-dark" id="back_btn">GERİ</a>
+                            </div>
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-primary" id="save_btn">
+                                    <span class="indicator-label">
+                                        KAYDET
+                                    </span>
+                                    <span class="indicator-progress">
+                                        Lütfen Bekleyin... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal bg-white fade" tabindex="-1" id="image_list_modal" data-imagesrc="">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content shadow-none">
+                <div class="modal-header">
+                    <h5 class="modal-title">Resimler</h5>
+    
+                    <!--begin::Close-->
+                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2 close-modal-btn" data-bs-dismiss="modal" data-closing="false" aria-label="Close">
+                        <span class="svg-icon svg-icon-2x">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor"></rect>
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor"></rect>
+                            </svg>
+                        </span>
+                    </div>
+                    <!--end::Close-->
+                </div>
+    
+                <div class="modal-body">
+                    <div class="row" id="image_view_list">
+
+                    </div>
+                    <div id="paginate_content">
+
+                    </div>
+                </div>
+    
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light close-modal-btn" data-bs-dismiss="modal">Vazgeç</button>
+                    <button type="button" class="btn btn-primary">Seç</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/global/plugins/jquery-form/jquery.form.js"></script>
+    <script src="../assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js" type="text/javascript"></script>
+    <script src="../assets/plugins/custom/tinymce/tinymce.bundle.js"></script>
+
+<script>
+    let rawDayList = []
+
+    $(document).ready(function(){
+        
+        $("#release_date").flatpickr();
+
+        tinymce.init({
+            selector: "#description",
+            height:'480',
+            plugins: "code",
+            setup: function (editor) {
+                editor.on('change', function () {
+                    editor.save();
+                });
+            }
+        })
+
+        let tags = document.querySelector("#tags")
+        let initAmenities = new Tagify(tags)
+    })
+ 
+    $('#item_save_form').ajaxForm({
+        beforeSubmit: function (arr) {
+
+            if ($('#title').val() == "") {
+                toastr.warning("Başlık giriniz");
+                $('#title').focus();
+                return false;
+            }
+            if ($('#release_date').val() == "") {
+                toastr.warning("Yayın tarihi giriniz");
+                $('#release_date').focus();
+                return false;
+            }
+       
+
+            $('#save_btn').attr("data-kt-indicator", "on")
+            $('#save_btn').attr("disabled", "disabled")
+        },
+        beforeSend: function (e) {
+
+        },
+        complete: function (result) {
+            console.log(result.responseJSON)
+
+            if (result.responseJSON.isSuccess) {
+                toastr.success(result.responseJSON.message);
+            }
+            else {
+                toastr.error(result.responseJSON.message)
+            }
+
+            $('#save_btn').removeAttr('data-kt-indicator')
+            $('#save_btn').removeAttr("disabled")
+        },
+    });
+
+
+    $('.image-select-btn').on('click', function(e){
+        let name = $(this).closest('.image-content').find('.image-data-src').attr('name')
+        $('#image_list_modal').attr('data-image-src', name)
+        
+        getImages(1)
+        
+        $('#image_list_modal')
+        .addClass('show')
+        .css('display','block')
+    })
+
+    function getImages(pageNumber){
+        $('#image_view_list').empty()
+        $('#paginate_content').empty()
+       
+        fetch('/selectImageTourAjax', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify({page:pageNumber})
+        })
+        .then((response) => response.json())
+        .then((result) => {
+
+            if(result.isActive){
+
+                let images = result.images
+                let paginatedResults = result.paginatedResults
+
+                result.images.forEach(item => {
+                    
+                    let image = `<div class="col-lg-4 item-img img-item-${ item.id}">
+                                    <style>
+                                        .image-placeholder-sketchy-1-${ item.id} { 
+                                            background-image: url('${ item.url}'); 
+                                        } 
+                                    </style>
+                                    <div class="card overlay border">
+                                        <label class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow d-none remove-img-btn" data-id="${ item.id}">
+                                            <i class="bi bi-x fs-2"></i>
+                                        </label>
+                                        <div class="card-body p-0">
+                                            <div class="overlay-wrapper h-300px bgi-no-repeat bgi-size-contain bgi-position-center image-placeholder-sketchy-1-${ item.id}"></div>
+                                            <div class="overlay-layer card-rounded bg-dark bg-opacity-10 align-items-end pb-3">
+                                                <code class="py-2 px-4 copy-url">${ item.url}</code>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`
+                    $('#image_view_list').append(image)
+                    
+                });
+
+                let paginate = `  <ul class="pagination">
+                    <li class="page-item previous ${ !paginatedResults.previous ? 'disabled' : ''  }"><a href="javascript:void(0);" data-value="${paginatedResults.previous ? paginatedResults.previous.page : ''}" class="page-link"><i class="previous"></i></a></li>`
+                    
+                for (let i = 0; i < paginatedResults.pageCount; i++) {
+                    paginate += `<li class="page-item ${ i + 1 == paginatedResults.page ? 'active' : ''}"><a href="javascript:void(0);" class="page-link" data-value="${ i + 1 }">${ i + 1 }</a></li>`
+                }
+                    
+                paginate += `<li class="page-item next ${ !paginatedResults.previous ? 'disabled' : ''  }"><a href="javascript:void(0);" data-value="${paginatedResults.previous ? paginatedResults.previous.page : ''}" class="page-link"><i class="next"></i></a></li>
+                </ul>`
+                
+                $('#paginate_content').append(paginate)
+                const pageLinkList = document.querySelectorAll(".page-link");
+
+                for (let i = 0; i < pageLinkList.length; i++) {
+                    let item = pageLinkList[i];
+
+                    item.addEventListener("click", function(e) {
+                        e.preventDefault()
+
+                        let pageNumber = this.dataset.value;
+                        getImages(pageNumber)
+                    });
+                }
+
+                $('.item-img').on('click', function(){
+
+                    let dataSrc = $('#image_list_modal').attr('data-image-src')
+                    let url = $(this).find('.copy-url').text()
+
+                    $('input[name=' + dataSrc + ']').attr('value', url)
+                    $('input[name=' + dataSrc + ']').siblings('div').find('img').attr('src', url)
+
+                    $('.close-modal-btn').first().trigger('click')
+                })
+            }
+        })
+    }
+  
+    $('.close-modal-btn').on('click', function(){
+        $('#image_list_modal')
+        .removeClass('show')
+        .css('display','none')
+    })
+
+    $('.image-content input[type=file]').on('change', function(){
+        const [file] = $(this).get(0).files
+        console.log( file)
+        if(file){
+            $(this).closest('.image-content').find('img').attr('src', URL.createObjectURL(file))
+        }
+    })
+
+</script>

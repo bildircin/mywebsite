@@ -61,7 +61,7 @@ const createSharedImageAjax = async (req,res)=>{
 
     console.log('req.files')
     console.log(req.files)
-    return
+
     let fileObj = {}
 
     if(req.files != null && req.files.coverUrlFile){
@@ -74,13 +74,13 @@ const createSharedImageAjax = async (req,res)=>{
         }
         let fileType = mime.extension(file.mimetype)
         let fileName = Date.now() + '.' + fileType
-        let fileUrl = '/webUI/public-image/' + fileName;
+        let fileUrl = '/webUI/image/shared-images/' + fileName;
         fileObj =  {
             name:file.name,
             url:fileUrl
         }
         
-        await file.mv('public/webUI/public-image/' + fileName)
+        await file.mv('public/webUI/image/shared-images/' + fileName)
     }else{
         return res.status(400).send({isSuccess:false, message: "Resim seçiniz"})
     }

@@ -11,6 +11,7 @@ import TourCategory from "../models/template/TourCategory.js"
 import db from '../../db.js'
 import Setting from "../models/template/Setting.js"
 import flatCache from 'flat-cache'
+import SharedImage from "../models/SharedImage.js"
 
 let cache = flatCache.load('webUIController')
 let currentLang = {
@@ -149,7 +150,7 @@ const homePage = async (req,res)=>{
 
     const pageContents = await PageContent.findAll({
         where:{
-            key:['homeSlider'],
+            key:['homeSlider', 'homeTravelTipHead', 'homeTravelTipRight'],
             languageCode:currentLang.lng
         }
     })
@@ -164,14 +165,15 @@ const homePage = async (req,res)=>{
             isPopular:true
         }
     })
+    const sharedImages = await SharedImage.findAll()
 
     let parentCategories = categories.filter(el=> {return el.parentId == 0})
 
-    if(pageContents.length > 0 ){
-        contents.homeSlider = pageContents.find(el=>el.key == 'homeSlider').value
-    }
+    contents.homeSlider = pageContents.find(el=>el.key == 'homeSlider').value
+    contents.homeTravelTipHead = pageContents.find(el=>el.key == 'homeTravelTipHead').value
+    contents.homeTravelTipRight = pageContents.find(el=>el.key == 'homeTravelTipRight').value
 
-    await res.render('webUI/home', {layout:'webUI/layout', currentLang, contents, navigations, categories, languageCodes, toursFlashDeal, toursPopular, parentCategories})
+    await res.render('webUI/home', {layout:'webUI/layout', currentLang, contents, navigations, categories, languageCodes, toursFlashDeal, toursPopular, parentCategories, sharedImages})
 }
 
 const aboutPage = async (req,res)=>{

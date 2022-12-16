@@ -118,8 +118,8 @@ import sharedImageRoutes from './src/routes/SharedImageRoutes.js'
 import templateRoutes from './src/routes/TemplateRoutes.js'
 import webUIRoutes from './src/routes/WebUIRoutes.js'
 import settingsRoutes from './src/routes/SettingsRoutes.js'
+import blogRoutes from './src/routes/BlogRoutes.js'
 import authRouter from './src/routes/auth.js'
-import LanguageCode from './src/models/template/LanguageCode.js'
 
 app.use('/', authRouter)
 
@@ -147,7 +147,7 @@ async function getPages(url){
     })
 }
 
-
+/* 
 app.get('*', (req,res, next)=>{
 
     if(!req.isAuthenticated() && req.url != 'login'){
@@ -167,7 +167,7 @@ app.get('*', (req,res, next)=>{
         return res.redirect('/login')
     }
 }) 
-
+ */
 
 
 app.get('/admin', async (req,res)=>{
@@ -185,6 +185,7 @@ app.use(tourRoutes)
 app.use(imageRoutes)
 app.use(sharedImageRoutes)
 app.use(settingsRoutes)
+app.use(blogRoutes)
 app.use(templateRoutes)
 
 

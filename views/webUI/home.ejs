@@ -222,7 +222,7 @@
                                 <div class="block-title pull-left">
                                     <h3><span>popular Tour</span></h3>
                                 </div>
-                                <a href="/turlar" class="pull-right">Tümünü Gör<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                                <a href="/turlar" class="pull-right">Tümünü Gör <i class="fa fa-angle-right" aria-hidden="true"></i></a>
                             </div>
                             <div class="modcontent">
                                 <div class="so-deal modcontent products-list grid clearfix clearfix preset00-3 preset01-3 preset02-2 preset03-2 preset04-1  button-type1  style2">
@@ -242,8 +242,8 @@
                                                                     <a href="/tur-detay/<%= item_1.id %>" target="_self">
                                                                         <img src="<%= item_1.coverUrl %>" class="img-responsive">
                                                                     </a>
-                                                                    <span class="label-hot"><i class="fa fa-fire" aria-hidden="true"></i>Hot tour</span>
-                                                                    <span class="label-rate style2"><i class="fa fa-star" aria-hidden="true"></i>high rate</span>
+                                                                    <!--<span class="label-hot"><i class="fa fa-fire" aria-hidden="true"></i>Hot tour</span>
+                                                                    <span class="label-rate style2"><i class="fa fa-star" aria-hidden="true"></i>high rate</span>-->
                                                                 </div>
                                                                 <div class="item-content clearfix">
                                                                     <h3><a href="/tur-detay/<%= item_1.id %>"><%= item_1.title %></a></h3>
@@ -279,8 +279,8 @@
                                                                     <a href="/tur-detay/<%= item_2.id %>" target="_self">
                                                                         <img src="<%= item_2.coverUrl %>" class="img-responsive">
                                                                     </a>
-                                                                    <span class="label-hot"><i class="fa fa-fire" aria-hidden="true"></i>Hot tour</span>
-                                                                    <span class="label-rate style2"><i class="fa fa-star" aria-hidden="true"></i>high rate</span>
+                                                                    <!--<span class="label-hot"><i class="fa fa-fire" aria-hidden="true"></i>Hot tour</span>
+                                                                    <span class="label-rate style2"><i class="fa fa-star" aria-hidden="true"></i>high rate</span>-->
                                                                 </div>
                                                                 <div class="item-content clearfix">
                                                                     <h3><a href="/tur-detay/<%= item_2.id %>"><%= item_2.title %></a></h3>
@@ -327,189 +327,157 @@
                     </div>
                 </div>
                 <div class="sw-gallery products-list yt-content-slider" data-rtl="yes" data-autoplay="no" data-autoheight="no" data-delay="4" data-speed="0.6" data-margin="0" data-items_column00="5" data-items_column0="5" data-items_column1="5" data-items_column2="3"  data-items_column3="3" data-items_column4="2" data-arrows="no" data-pagination="no" data-lazyload="yes" data-loop="yes" data-hoverpause="yes">
-                    <div class="item">
-                        <div class="content-img">
-                            <a class="image-popup" href="webUI/image/catalog/demo/banners/home1/gallery1.jpg"><img class="responsive" src="webUI/image/catalog/demo/banners/home1/gallery1.jpg" alt="gallery1"></a>
+
+                    
+                    <%_ let j; for(j = 0; j < sharedImages.length;) {
+                        const item_1 = sharedImages[j]; 
+                        const item_2 = sharedImages[j + 1]; 
+                        j = j + 2; _%>
+                        
+                        <div class="item">
+                            <% if(item_1){ %>
+                                <div class="content-img">
+                                    <a class="image-popup" href="<%= item_1.url %>">
+                                        <img class="responsive" src="<%= item_1.url %>" alt="gallery1">
+                                    </a>
+                                </div>
+                            <% }if(item_2){ %>
+                                <div class="content-img">
+                                    <a class="image-popup" href="<%= item_2.url %>">
+                                        <img class="responsive" src="<%= item_2.url %>" alt="gallery1">
+                                    </a>
+                                </div>
+                            <% } %>
                         </div>
-                        <div class="content-img">
-                            <a class="image-popup" href="webUI/image/catalog/demo/banners/home1/gallery2.jpg"><img class="responsive" src="webUI/image/catalog/demo/banners/home1/gallery2.jpg" alt="gallery2"></a>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="content-img">
-                            <a class="image-popup" href="webUI/image/catalog/demo/banners/home1/gallery3.jpg"><img class="responsive" src="webUI/image/catalog/demo/banners/home1/gallery3.jpg" alt="gallery3"></a>
-                        </div>
-                        <div class="content-img">
-                            <a class="image-popup" href="webUI/image/catalog/demo/banners/home1/gallery4.jpg"><img class="responsive" src="webUI/image/catalog/demo/banners/home1/gallery4.jpg" alt="gallery4"></a>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="content-img">
-                            <a class="image-popup" href="webUI/image/catalog/demo/banners/home1/gallery5.jpg"><img class="responsive" src="webUI/image/catalog/demo/banners/home1/gallery5.jpg" alt="gallery5"></a>
-                        </div>
-                        <div class="content-img">
-                            <a class="image-popup" href="webUI/image/catalog/demo/banners/home1/gallery6.jpg"><img class="responsive" src="webUI/image/catalog/demo/banners/home1/gallery6.jpg" alt="gallery6"></a>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="content-img">
-                            <a class="image-popup" href="webUI/image/catalog/demo/banners/home1/gallery7.jpg"><img class="responsive" src="webUI/image/catalog/demo/banners/home1/gallery7.jpg" alt="gallery7"></a>
-                        </div>
-                        <div class="content-img">
-                            <a class="image-popup" href="webUI/image/catalog/demo/banners/home1/gallery8.jpg"><img class="responsive" src="webUI/image/catalog/demo/banners/home1/gallery8.jpg" alt="gallery8"></a>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="content-img">
-                            <a class="image-popup" href="webUI/image/catalog/demo/banners/home1/gallery9.jpg"><img class="responsive" src="webUI/image/catalog/demo/banners/home1/gallery9.jpg" alt="gallery9"></a>
-                        </div>
-                        <div class="content-img">
-                            <a class="image-popup" href="webUI/image/catalog/demo/banners/home1/gallery10.jpg"><img class="responsive" src="webUI/image/catalog/demo/banners/home1/gallery10.jpg" alt="gallery10"></a>
-                        </div>
-                    </div>
+                    <% } %>
+
                 </div>
             </div>
         </section>
+        
+
         <section class="section-style7">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col_6fdl float_none container">
-                <div class="head-title clearfix">
-                    <div class="block-title pull-left">
-                        <h3><span>Travel tip</span></h3>
-                    </div>
-                    <a href="blog-sidebar.html" class="pull-right">view all <i class="fa fa-angle-right" aria-hidden="true"></i></a>
-                </div>
-                <div class="row">
-                    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 col_cfay block block_11">
-                        <div class="module custom-ourblog clearfix default-nav">
-                            <div class="modcontent">
-                                <div id="so_latest_blog_1" class="so-blog-external button-type2 button-type2">
-                                    <div class="category-slider-inner products-list yt-content-slider blog-external clearfix " data-rtl="yes" data-autoplay="no" data-autoheight="no" data-delay="4" data-speed="0.6" data-margin="30" data-items_column00="2" data-items_column0="2" data-items_column1="2" data-items_column2="2"  data-items_column3="2" data-items_column4="1" data-arrows="no" data-pagination="yes" data-lazyload="yes" data-loop="yes" data-hoverpause="yes">
-                                        <div class="media">
-                                            <div class="item head-button">
-                                                <div class="content-img">
-                                                    <a href="blog-detail.html" target="_self">
-                                                        <img src="webUI/image/catalog/demo/blog/blog1.jpg" alt="Aestibulum ipsum a ornare car">
-                                                    </a>
-                                                </div>
-                                                <div class="content-detail">
-                                                    <div class="media-content so-block">
-                                                        <div class="entry-meta clearfix">
-                                                            <div class="entry-date font-ct date-bottom">
-                                                                <i class="fa fa-calendar" aria-hidden="true"></i>11/11/2019
-                                                            </div>
-                                                            <div class="entry-comment">
-                                                                <i class="fa fa-commenting" aria-hidden="true"></i>2 Comments
-                                                            </div>
-                                                            <div class="entry-social">
-                                                                <i class="fa fa-share-alt" aria-hidden="true"></i><a href="#">Share</a>
-                                                            </div>
-                                                        </div>
-                                                        <h4 class="media-heading head-item">
-                                                            <a href="blog-detail.html" title="Aestibulum ipsum a ornare car" target="_self">Aestibulum ipsum a ornare car</a>
-                                                        </h4>
-                                                        <div class="description">
-                                                            Sed ut perspiciatis unde omnis iste natus error sit volup tatem accusantium dolorem.que lau...
-                                                        </div>
-                                                        <div class="readmore">
-                                                            <a href="blog-detail.html" target="_self">Read more</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="media">
-                                            <div class="item head-button">
-                                                <div class="content-img">
-                                                    <a href="blog-detail.html" target="_self">
-                                                        <img src="webUI/image/catalog/demo/blog/blog2.jpg" alt="Aestibulum ipsum a ornare car">
-                                                    </a>
-                                                </div>
-                                                <div class="content-detail">
-                                                    <div class="media-content so-block">
-                                                        <div class="entry-meta clearfix">
-                                                            <div class="entry-date font-ct date-bottom">
-                                                                <i class="fa fa-calendar" aria-hidden="true"></i>11/11/2019
-                                                            </div>
-                                                            <div class="entry-comment">
-                                                                <i class="fa fa-commenting" aria-hidden="true"></i>2 Comments
-                                                            </div>
-                                                            <div class="entry-social">
-                                                                <i class="fa fa-share-alt" aria-hidden="true"></i><a href="#">Share</a>
-                                                            </div>
-                                                        </div>
-                                                        <h4 class="media-heading head-item">
-                                                            <a href="blog-detail.html" title="Aestibulum ipsum a ornare car" target="_self">Aestibulum ipsum a ornare car</a>
-                                                        </h4>
-                                                        <div class="description">
-                                                            Sed ut perspiciatis unde omnis iste natus error sit volup tatem accusantium dolorem.que lau...
-                                                        </div>
-                                                        <div class="readmore">
-                                                            <a href="blog-detail.html" target="_self">Read more</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="media">
-                                            <div class="item head-button">
-                                                <div class="content-img">
-                                                    <a href="blog-detail.html" target="_self">
-                                                        <img src="webUI/image/catalog/demo/blog/blog3.jpg" alt="Aestibulum ipsum a ornare car">
-                                                    </a>
-                                                </div>
-                                                <div class="content-detail">
-                                                    <div class="media-content so-block">
-                                                        <div class="entry-meta clearfix">
-                                                            <div class="entry-date font-ct date-bottom">
-                                                                <i class="fa fa-calendar" aria-hidden="true"></i>11/11/2019
-                                                            </div>
-                                                            <div class="entry-comment">
-                                                                <i class="fa fa-commenting" aria-hidden="true"></i>2 Comments
-                                                            </div>
-                                                            <div class="entry-social">
-                                                                <i class="fa fa-share-alt" aria-hidden="true"></i><a href="#">Share</a>
-                                                            </div>
-                                                        </div>
-                                                        <h4 class="media-heading head-item">
-                                                            <a href="blog-detail.html" title="Aestibulum ipsum a ornare car" target="_self">Aestibulum ipsum a ornare car</a>
-                                                        </h4>
-                                                        <div class="description">
-                                                            Sed ut perspiciatis unde omnis iste natus error sit volup tatem accusantium dolorem.que lau...
-                                                        </div>
-                                                        <div class="readmore">
-                                                            <a href="blog-detail.html" target="_self">Read more</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                        <div class="sw-newletter">
-                            <h3>Sign up</h3>
-                            <p>...to get newletter & receive our best offer</p>
-                            <form id="mc4wp-form-1" class="mc4wp-form mc4wp-form-838" method="post" data-id="838" data-name="">
-                                <div class="mc4wp-form-fields">
-                                    <input class="frm-email" type="email" name="EMAIL" placeholder="Enter Your email..." required="">  
-                                    <button class="frm-submit" type="submit" value="subscribe">Sign up</button>
-                                </div>
-                            </form>
-                            <ul>
-                                <li><a href="https://www.facebook.com/wpthemego" title="Face Book"><span class="fa fa-facebook"></span></a></li>
-                                <li><a href="https://twitter.com/wpthemego" title="Twitter"><span class="fa fa-twitter"></span></a></li>
-                                <li><a href="https://www.pinterest.com/wpthemego/" title="pinterest"><span class="fa fa-pinterest"></span></a></li>
-                                <li><a href="#" title="Instagram"><span class="fa fa-instagram"></span></a></li>
-                                <li><a href="https://plus.google.com/u/0/117616422700848151321" title="Google Plus"><span class="fa fa-google-plus"></span></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col_6fdl float_none container">
+						
+                        <%- contents.homeTravelTipHead %>
+						<div class="row">
+							<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 col_cfay block block_11">
+								<div class="module custom-ourblog clearfix default-nav">
+									<div class="modcontent">
+										<div id="so_latest_blog_1" class="so-blog-external button-type2 button-type2">
+											<div class="category-slider-inner products-list yt-content-slider blog-external clearfix " data-rtl="yes" data-autoplay="no" data-autoheight="no" data-delay="4" data-speed="0.6" data-margin="30" data-items_column00="2" data-items_column0="2" data-items_column1="2" data-items_column2="2"  data-items_column3="2" data-items_column4="1" data-arrows="no" data-pagination="yes" data-lazyload="yes" data-loop="yes" data-hoverpause="yes">
+												<div class="media">
+													<div class="item head-button">
+														<div class="content-img">
+															<a href="blog-detail.html" target="_self">
+																<img src="image/catalog/demo/blog/blog1.jpg" alt="Aestibulum ipsum a ornare car">
+															</a>
+														</div>
+														<div class="content-detail">
+															<div class="media-content so-block">
+																<div class="entry-meta clearfix">
+																	<div class="entry-date font-ct date-bottom">
+																		<i class="fa fa-calendar" aria-hidden="true"></i>11/11/2019
+																	</div>
+																	<div class="entry-comment">
+																		<i class="fa fa-commenting" aria-hidden="true"></i>2 Comments
+																	</div>
+																	<div class="entry-social">
+																		<i class="fa fa-share-alt" aria-hidden="true"></i><a href="#">Share</a>
+																	</div>
+																</div>
+																<h4 class="media-heading head-item">
+																	<a href="blog-detail.html" title="Aestibulum ipsum a ornare car" target="_self">Aestibulum ipsum a ornare car</a>
+																</h4>
+																<div class="description">
+																	Sed ut perspiciatis unde omnis iste natus error sit volup tatem accusantium dolorem.que lau...
+																</div>
+																<div class="readmore">
+																	<a href="blog-detail.html" target="_self">Read more</a>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="media">
+													<div class="item head-button">
+														<div class="content-img">
+															<a href="blog-detail.html" target="_self">
+																<img src="image/catalog/demo/blog/blog2.jpg" alt="Aestibulum ipsum a ornare car">
+															</a>
+														</div>
+														<div class="content-detail">
+															<div class="media-content so-block">
+																<div class="entry-meta clearfix">
+																	<div class="entry-date font-ct date-bottom">
+																		<i class="fa fa-calendar" aria-hidden="true"></i>11/11/2019
+																	</div>
+																	<div class="entry-comment">
+																		<i class="fa fa-commenting" aria-hidden="true"></i>2 Comments
+																	</div>
+																	<div class="entry-social">
+																		<i class="fa fa-share-alt" aria-hidden="true"></i><a href="#">Share</a>
+																	</div>
+																</div>
+																<h4 class="media-heading head-item">
+																	<a href="blog-detail.html" title="Aestibulum ipsum a ornare car" target="_self">Aestibulum ipsum a ornare car</a>
+																</h4>
+																<div class="description">
+																	Sed ut perspiciatis unde omnis iste natus error sit volup tatem accusantium dolorem.que lau...
+																</div>
+																<div class="readmore">
+																	<a href="blog-detail.html" target="_self">Read more</a>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="media">
+													<div class="item head-button">
+														<div class="content-img">
+															<a href="blog-detail.html" target="_self">
+																<img src="image/catalog/demo/blog/blog3.jpg" alt="Aestibulum ipsum a ornare car">
+															</a>
+														</div>
+														<div class="content-detail">
+															<div class="media-content so-block">
+																<div class="entry-meta clearfix">
+																	<div class="entry-date font-ct date-bottom">
+																		<i class="fa fa-calendar" aria-hidden="true"></i>11/11/2019
+																	</div>
+																	<div class="entry-comment">
+																		<i class="fa fa-commenting" aria-hidden="true"></i>2 Comments
+																	</div>
+																	<div class="entry-social">
+																		<i class="fa fa-share-alt" aria-hidden="true"></i><a href="#">Share</a>
+																	</div>
+																</div>
+																<h4 class="media-heading head-item">
+																	<a href="blog-detail.html" title="Aestibulum ipsum a ornare car" target="_self">Aestibulum ipsum a ornare car</a>
+																</h4>
+																<div class="description">
+																	Sed ut perspiciatis unde omnis iste natus error sit volup tatem accusantium dolorem.que lau...
+																</div>
+																<div class="readmore">
+																	<a href="blog-detail.html" target="_self">Read more</a>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+                            <%- contents.homeTravelTipRight %>
+							
+						</div>
+					</div>
+				</section>
+
+        
+
     </div>
 </div>
 <!-- //Main Container -->
