@@ -1,0 +1,64 @@
+<div class="breadcrumbs">
+    <div class="container">
+        <div class="title-breadcrumb">
+            Blog
+        </div>
+        <ul class="breadcrumb-cate">
+            <li><a href="/">Anasayfa</a></li>
+            <li><a href="#">Blog</a></li>
+        </ul>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div id="content" class="col-sm-12">
+            <div class="blog-listitem row">
+
+                <% blogs.forEach(item => { %>
+                    
+                    <div class="blog-item col-md-4 col-sm-4">
+                        <div class="blog-item-inner">
+                            <div class="itemBlogImg left-block">
+                                <div class="article-image banners">
+                                    <a class="popup-gallery" href="<%= item.headImgUrl %>">
+                                        <img src="<%= item.headImgUrl %>" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="itemBlogContent right-block">
+                                <div class="blog-content">
+                                    <div class="media-content so-block">
+                                        <div class="entry-meta clearfix">
+                                            <div class="entry-date font-ct date-bottom">
+                                                <i class="fa fa-calendar" aria-hidden="true"></i> <%= moment(item.releaseDate).format("DD/MM/YYY") %>
+                                            </div>
+                                        </div>
+                                        <h4 class="media-heading head-item">
+                                            <a href="/blog-detay/<%= item.id%>" title="<%= item.title %>" target="_self"><%= item.title %></a>
+                                        </h4>
+                                        <div class="description">
+                                            <%- item.description %>
+                                        </div>
+                                        <div class="readmore">
+                                            <a href="/blog-detay/<%= item.id%>" target="_self">Devamını Oku</a>
+                                        </div>
+                                    </div>										
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+
+
+            </div>
+            <ul class="pagination">
+                <li><a href="#"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+                <li class="active"><span>1</span></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+            </ul>
+        </div>
+    </div>
+</div>

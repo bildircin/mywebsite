@@ -7,6 +7,7 @@ import LanguageCode from '../models/template/LanguageCode.js'
 import PageContent from '../models/template/PageContent.js'
 import Navigation from "../models/template/Navigation.js"
 import Category from "../models/Category.js"
+import Blog from "../models/Blog.js"
 import TourCategory from "../models/template/TourCategory.js"
 import db from '../../db.js'
 import Setting from "../models/template/Setting.js"
@@ -166,6 +167,7 @@ const homePage = async (req,res)=>{
         }
     })
     const sharedImages = await SharedImage.findAll()
+  
 
     let parentCategories = categories.filter(el=> {return el.parentId == 0})
 
@@ -321,6 +323,54 @@ const tourSinglePage = async (req,res)=>{
     }
 }
 
+const blogsPage = async (req,res)=>{
+
+    const page = req.query.page ? parseInt(req.query.page) : 1
+    const limit = 9
+    const startIndex = (page - 1) * limit
+    const endIndex = page * limit
+
+    const blogCount = await Blog.count({})
+    const paginatedResults = {
+        pageCount:Math.ceil(blogCount / limit),
+        page
+    }
+    if (endIndex < blogCount) {
+        paginatedResults.next = {
+            page: page + 1
+        }
+    }
+    if (startIndex > 0) {
+        paginatedResults.previous = {
+            page: page - 1
+        }
+    }
+    const t = await db.transaction()
+    
+    try {
+        const blogs = await Blog.findAll({
+            offset:startIndex,
+            limit:limit,
+            where:{
+                isActive:true
+            },
+            order:[
+                ['releaseDate', 'DESC']
+            ]
+        }, {transaction: t})
+        
+        res.locals.title = "Blog"
+
+        await t.commit()
+        await res.render('webUI/blogs', {layout:'webUI/layout', currentLang, contents, navigations, languageCodes, blogs, paginatedResults})
+    } catch (error) {
+        await t.rollback()
+    }
+}
+
+const blogSinglePage = async (req,res)=>{
+    
+}
 
 
 const page404 = async (req,res,next)=>{
@@ -369,6 +419,7 @@ export default {
     toursPage,
     setSettings,
     tourSinglePage,
+    blogsPage,
     page404,
     cache
 }

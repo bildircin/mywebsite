@@ -1,0 +1,123 @@
+<div class="breadcrumbs">
+    <div class="container">
+        <div class="title-breadcrumb">
+            <%= blog.title  %> 
+        </div>
+        <ul class="breadcrumb-cate">
+            <li><a href="/">Anasayfa</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="contact-us-v1.html"><%= blog.title  %> </a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="container page-blog product-detail">
+    <div class="row">
+        <div id="content" class="col-md-9 col-sm-12 col-xs-12">
+            <a href="javascript:void(0)" class="open-sidebar hidden-lg hidden-md"><i class="fa fa-bars"></i>Sidebar</a>
+            <div class="blog-detail clearfix">
+                <div class="article-image banners">
+                    <img src="<%= item.headImgUrl %> ">
+                </div>
+                <div class="content clearfix">
+                    <h1><%= item.title %> </h1>
+                    <div class="entry-meta clearfix">
+                        <div class="entry-date">
+                            <i class="fa fa-calendar" aria-hidden="true"></i><span> <%= moment(item.releaseDate).format("DD/MM/YYY") %> </span>
+                        </div>
+                    </div>
+                    <div>
+                        <%= item.description %> 
+                    </div>
+                </div>
+                <div class="entry-tag clearfix">
+                    <div class="tag pull-left">
+                        <% let tags = item.tags ? JSON.parse(item.tags) : [] %> 
+                        <label>Etiketler:</label>
+                        <% tags.forEach(el => { %>
+                            <a href="/blog?tag=<%= el %>"><%= el %></a>,
+                            <% }) %> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <aside class="col-md-3 col-sm-4 col-xs-12 content-aside left_column sidebar-offcanvas">
+            <span id="close-sidebar" class="fa fa-times"></span>
+            <div class="content-search">
+                <input class="autosearch-input" type="text" value="" size="50" autocomplete="off" placeholder="Search..." name="s"> 
+                <span class="input-group-btn">
+                    <button type="submit" class="fa fa-search button-search-pro form-button"></button>
+                </span>
+            </div>
+            <div class="module-travel clearfix">
+                <h3>travel style</h3>
+                <ul>
+                    <li class="active"><a href="#"><span>Holiday</span><label>15</label></a></li>
+                    <li><a href="#"><span>Adventure</span><label>20</label></a></li>
+                    <li><a href="#"><span>Family Tour</span><label>5</label></a></li>
+                    <li><a href="#"><span>Cheap Trip</span><label>30</label></a></li>
+                    <li><a href="#"><span>Open Tour</span><label>18</label></a></li>
+                    <li><a href="#"><span>Classic Tour</span><label>6</label></a></li>
+                </ul>
+            </div>
+            <div class="module-archive">
+                <h3>Archive</h3>
+                <ul>
+                    <li><a href="#"><i class="fa fa-calendar" aria-hidden="true"></i>February 2019</a></li>
+                    <li><a href="#"><i class="fa fa-calendar" aria-hidden="true"></i>August 2019</a></li>
+                    <li><a href="#"><i class="fa fa-calendar" aria-hidden="true"></i>June 2019</a></li>
+                    <li><a href="#"><i class="fa fa-calendar" aria-hidden="true"></i>July 2019</a></li>
+                    <li><a href="#"><i class="fa fa-calendar" aria-hidden="true"></i>October 2019</a></li>
+                </ul>
+            </div>
+            <div class="module-tag">
+                <h3>Popular tags</h3>
+                <ul>
+                    <li><a href="#">sea</a></li>
+                    <li><a href="#">mountain</a></li>
+                    <li><a href="#">europe</a></li>
+                    <li><a href="#">vietnam</a></li>
+                </ul>
+            </div>
+            <div class="module-blog clearfix">
+                <h3>Lastest News</h3>
+                <div class="item clearfix">
+                    <div class="image pull-left">
+                        <a href="blog-detail.html"><img src="image/catalog/demo/product/travel/p1.jpg" alt="Bougainvilleas on Lombard Street" class="img-responsive"></a>
+                    </div>
+                    <div class="content">
+                        <h4><a href="blog-detail.html">Where does it come from?</a></h4>
+                        <p><i class="fa fa-calendar" aria-hidden="true"></i>Aug 24, 2018</p>
+                    </div>
+                </div>
+                <div class="item clearfix">
+                    <div class="image pull-left">
+                        <a href="blog-detail.html"><img src="image/catalog/demo/product/travel/p2.jpg" alt="Bougainvilleas on Lombard Street" class="img-responsive"></a>
+                    </div>
+                    <div class="content">
+                        <h4><a href="blog-detail.html">Where does it come from?</a></h4>
+                        <p><i class="fa fa-calendar" aria-hidden="true"></i>Aug 24, 2018</p>
+                    </div>
+                </div>
+                <div class="item clearfix">
+                    <div class="image pull-left">
+                        <a href="blog-detail.html"><img src="image/catalog/demo/product/travel/p3.jpg" alt="Bougainvilleas on Lombard Street" class="img-responsive"></a>
+                    </div>
+                    <div class="content">
+                        <h4><a href="blog-detail.html">Where does it come from?</a></h4>
+                        <p><i class="fa fa-calendar" aria-hidden="true"></i>Aug 24, 2018</p>
+                    </div>
+                </div>
+                <div class="item clearfix">
+                    <div class="image pull-left">
+                        <a href="blog-detail.html"><img src="image/catalog/demo/product/travel/p4.jpg" alt="Bougainvilleas on Lombard Street" class="img-responsive"></a>
+                    </div>
+                    <div class="content">
+                        <h4><a href="blog-detail.html">Where does it come from?</a></h4>
+                        <p><i class="fa fa-calendar" aria-hidden="true"></i>Aug 24, 2018</p>
+                    </div>
+                </div>
+            </div>				
+        </aside>
+    </div>
+</div>

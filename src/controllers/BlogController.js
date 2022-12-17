@@ -149,8 +149,32 @@ const createOrUpdateBlogAjax = async (req,res)=>{
     }
 }
 
+const deleteBlogAjax = async (req,res)=>{
+    const id = req.body.id
+    
+    if(id == "" && id == null && id == undefined){
+        return res.status(400).send({isSuccess:false, message: "Sayfayı yenileyim tekrar deneyiniz"})
+    }
+    const t = await db.transaction()
+    try {
+        await Blog.destroy({
+            where:{
+                id:id
+            }
+        }, {transaction: t})
+
+        await t.commit()
+        await res.send({isSuccess:true, message:'Blog silindi'})
+    } catch (error) {
+        console.log(error)
+        await t.rollback()
+        await res.send({isSuccess:false, message:'Bir hata oluştu'})
+    }
+}
+
 export default {
     blogs,
     createOrUpdateBlog,
-    createOrUpdateBlogAjax
+    createOrUpdateBlogAjax,
+    deleteBlogAjax
 }
