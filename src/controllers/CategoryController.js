@@ -3,9 +3,6 @@ import Category  from '../models/Category.js'
 import moment  from 'moment'
 import db  from '../../db.js'
 import { getCheckedBtn }  from "../../globalFunctions.js"
-import i18next from "i18next"
-
-
 
 const allCategories = async (req,res)=>{
 
@@ -26,17 +23,18 @@ const addCategory = async (req,res)=>{
 
 const updateCategory = async (req,res)=>{
 
-    res.locals.title = ""
+    res.locals.title = "Kategori Güncelleme"
     const id = req.params.id
-    const category = await Category.findByPk(id, {
+    await Category.findByPk(id, {
         where:{
             isDeleted:false
         }
+        
     }).then(category=>{
-        res.locals.title = category.name
         res.render('category/updateCategory', {isSuccess:true, category})
     }).catch(err=>{
-        res.render('category/updateCategory', {isSuccess:false, category:{}})
+        console.log(err)
+        throw err
     })
 }
 
@@ -74,10 +72,10 @@ const addCategoryAjax = async (req,res)=>{
 
 const updateCategoryAjax = async (req,res)=>{
     
-    const {id, isActive} = req.body.id
+    const {id, isActive} = req.body
     let name = req.body.name
    
-    if (name == "" || name == null || name == undefined || name.tirm() == "") {
+    if (name == "" || name == null || name == undefined || name.trim() == "") {
         return res.status(400).send({isSuccess:false, message: "Lütfen isim giriniz"})
     }
     name = name.trim()
