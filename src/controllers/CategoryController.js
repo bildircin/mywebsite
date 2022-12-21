@@ -2,7 +2,7 @@ import { Op }  from "sequelize"
 import Category  from '../models/Category.js'
 import moment  from 'moment'
 import db  from '../../db.js'
-import { getCheckedBtn }  from "../../globalFunctions.js"
+import { getCheckedBtn, serializeList }  from "../../globalFunctions.js"
 
 const allCategories = async (req,res)=>{
 
@@ -138,54 +138,20 @@ const deleteCategoryAjax = async (req,res)=>{
     await res.send({isSuccess:true, message: "Kategori başarıyla silindi", id, removedIds})
 }
 
-const sequenceCategory = (req,res)=>{
+const sequenceCategory = async (req,res)=>{
     res.locals.title="Kategori Sıralama"
 
-    Category.findAll({
+    await Category.findAll({
         where:{
             isDeleted:false
         }
-    }).then((categories)=>{
+    }).then((results)=>{
         
-        let geciciDizi = []
+        const categories = serializeList(results)
 
-        categories.forEach(item => {  // parentid ye sahip olanları gecici dizide parentid olusturup içine ekedik
-            if (item.parentId == 0)
-            return
-            
-            if (geciciDizi[ item.parentId ] === undefined)
-            geciciDizi[ item.parentId ] = []
-            
-            geciciDizi[ item.parentId ].push(item)
-        })
-        
-        categories.forEach(item => {
-            if (item.id == 0)
-                return
-
-            if (geciciDizi[ item.id ] === undefined)  // gecici dizide yoksa bu en tepede bir parenttır yani parent id si 0 dır
-                return
-
-            item["children"] = geciciDizi[ item.id ] // degerini gecici diziden alıp içine ekleyeim
-        })
-
-        let ret = []
-
-        categories.forEach(item => { // son olarak en tepe parent ları ret e ekleyelim
-            if (item.parentId !== 0)
-                return
-
-            ret.push(item)
-        })
-
-
-        //sıralamak için
-        categories.forEach(item =>{
-            isChildren(item)
-        })
-        sirala(ret)
-
-        res.render('category/sequenceCategory', {categories:ret})
+        res.render('category/sequenceCategory', {categories})
+    }).catch(err=>{
+        throw err
     })
 }
 

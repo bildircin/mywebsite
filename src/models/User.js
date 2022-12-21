@@ -29,7 +29,8 @@ export default db.define('User', {
     },
     type:{
         type:Sequelize.INTEGER,
-        allowNull:false
+        allowNull:false,
+        defaultValue:1
     },
     phone:{
         type:Sequelize.STRING,

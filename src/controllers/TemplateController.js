@@ -3,14 +3,13 @@ import Navigation from '../models/template/Navigation.js'
 import Page from '../models/template/Page.js'
 import moment from 'moment'
 import db from '../../db.js'
-import { getCheckedBtn, deserializeList } from "../../globalFunctions.js"
+import { getCheckedBtn, deserializeList, serializeList } from "../../globalFunctions.js"
 import mime from 'mime-types'
 import LanguageItem from "../models/template/LanguageItem.js"
 import LanguageCode from "../models/template/LanguageCode.js"
 import PageContent from "../models/template/PageContent.js"
 
 let adminNavigations = [
-    '/',
     '/login',
     '/logout',
     //categories
@@ -58,77 +57,21 @@ const navigations = async (req,res)=>{
             isDeleted:false
         }
     })
-    const parentNavigations = await navigations.filter(el => el.parentId == 0)
-    let geciciDizi = []
+    const parentNavigations = navigations.filter(el => el.parentId == 0)
+    const results = serializeList(navigations)
 
-    navigations.forEach(item => {  // parentid ye sahip olanları gecici dizide parentid olusturup içine ekedik
-        if (item.parentId == 0)
-        return
-        
-        if (geciciDizi[ item.parentId ] === undefined)
-        geciciDizi[ item.parentId ] = []
-        
-        geciciDizi[ item.parentId ].push(item)
-    })
-    
-    navigations.forEach(item => {
-        if (item.id == 0)
-            return
-
-        if (geciciDizi[ item.id ] === undefined)  // gecici dizide yoksa bu en tepede bir parenttır yani parent id si 0 dır
-            return
-
-        item["children"] = geciciDizi[ item.id ] // degerini gecici diziden alıp içine ekleyeim
-    })
-
-    let ret = []
-
-    navigations.forEach(item => { // son olarak en tepe parent ları ret e ekleyelim
-        if (item.parentId !== 0)
-            return
-
-        ret.push(item)
-    })
-
-
-    //sıralamak için
-    navigations.forEach(item =>{
-        isChildren(item)
-    })
-    sirala(ret)
-
-    await res.render('template/navigations', {navigations:ret, tempNavigations:navigations, parentNavigations})
+    await res.render('template/navigations', {navigations:results, tempNavigations:navigations, parentNavigations})
 }
 
 const sequenceNavigationUpdateAjax = async (req,res)=>{
     let nestList = JSON.parse(req.body.EditableJSONList)
     let id = 0
     let navigationList = deserializeList(nestList, id)
-
-    const parentNavigations = await Navigation.findAll({
-        where:{
-            parentId:0,
-            isDeleted:false
-        }
-    })
-    let parentList = parentNavigations.map(el=> el.id)
-    let navList = navigationList.filter(el=>el.parentId == 0).map(el=> el.id)
-    let invalidNavigationInclude = false
-    await navList.forEach(item => {
-        if(!parentList.includes(item)){
-            console.log('not include => ' + item)
-            invalidNavigationInclude = true
-            return
-        }
-    })
-    if(invalidNavigationInclude){
-        return res.status(400).send({isSuccess:false, message: "Ana Navigasyon Ekleme yetkiniz yok. Lütfen alt navigasyon ekleyiniz"})
-    }
+   
     const t = await db.transaction()
     
     try{
-        for (let i = 0; i < navigationList.length; i++) {
-            const item = navigationList[i];
+        navigationList.forEach(async (item, i) => {
             item.sequence = i + 1
 
             await Navigation.update({ 
@@ -139,7 +82,7 @@ const sequenceNavigationUpdateAjax = async (req,res)=>{
                   id: item.id
                 }
             }, { transaction: t })
-        }
+        })
         
         await t.commit()
         await res.send({isSuccess:true, message:'Navigasyon sıralaması başarıyla güncellendi'})
@@ -212,7 +155,7 @@ const createOrUpdateNavAjax = async (req,res)=>{
                 return res.send({isSuccess:false, message: "Bu link kullanılıyor. Lütfen farklı bir link giriniz"})
             }
 
-            const navigation = await Navigation.update({
+            await Navigation.update({
                 parentId:selectedParentNavigation,
                 title,
                 link,

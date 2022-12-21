@@ -33,7 +33,8 @@ module.exports = {
     },
     type:{
         type:Sequelize.INTEGER,
-        allowNull:false
+        allowNull:false,
+        defaultValue:1
     },
     phone:{
         type:Sequelize.STRING,

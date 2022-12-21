@@ -63,14 +63,11 @@
                                
                                 <li class="dd-item <%= cssClass + '_' + item.id %>" data-name="<%= item.title %>" data-id="<%= item.id %>">
                                     <div class="dd-<%= cssClass %> dd-container">
-
                                         <span class="item-title"><%= item.title %></span>
-                                        <% if(item.parentId != 0){ %>
                                             <span class="dd-item-btn-group">
                                                 <a href="javascript:;" class="badge light badge-secondary edit-button"><i class="fa-solid fa-pen-to-square"></i></a>
                                                 <a href="javascript:;" class="badge light badge-danger delete-item"><i class="fa-solid fa-trash"></i></a>
-                                            </span>
-                                        <% } %>
+                                        </span>
                                     </div>
                                      
                                       <%  if (item.hasOwnProperty('children')){ %>
