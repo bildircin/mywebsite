@@ -8,10 +8,8 @@ import flash from 'connect-flash'
 import i18next from 'i18next'
 import Backend from 'i18next-fs-backend'
 import middleware from 'i18next-http-middleware'
-import Page from './src/models/template/Page.js'
+import Page from './src/models/Page.js'
 import fileUpload from 'express-fileupload'
-import LanguageItem from './src/models/template/LanguageItem.js'
-import fs from 'fs'
 
 const app = express()
 app.use(session({
@@ -116,6 +114,7 @@ import tourRoutes from './src/routes/TourRoutes.js'
 import imageRoutes from './src/routes/ImageRoutes.js'
 import sharedImageRoutes from './src/routes/SharedImageRoutes.js'
 import templateRoutes from './src/routes/TemplateRoutes.js'
+import pageContentRoutes from './src/routes/PageContentRoutes.js'
 import webUIRoutes from './src/routes/WebUIRoutes.js'
 import settingsRoutes from './src/routes/SettingsRoutes.js'
 import blogRoutes from './src/routes/BlogRoutes.js'
@@ -187,6 +186,7 @@ app.use(sharedImageRoutes)
 app.use(settingsRoutes)
 app.use(blogRoutes)
 app.use(templateRoutes)
+app.use(pageContentRoutes)
 
 
 app.get('*', (req,res)=>{

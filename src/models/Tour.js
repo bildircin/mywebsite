@@ -1,5 +1,5 @@
 import Sequelize from 'sequelize'
-import db from '../../../db.js'
+import db from '../../db.js'
 
 const Tour = db.define('Tour', {
     id:{
@@ -10,6 +10,11 @@ const Tour = db.define('Tour', {
     },
     title:{
         type:Sequelize.STRING
+    },
+    url:{
+        type:Sequelize.STRING(500),
+        allowNull:false,
+        unique:true
     },
     description:{
         type:Sequelize.TEXT('long')

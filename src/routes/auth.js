@@ -2,7 +2,7 @@ import express from 'express'
 import passport from 'passport'
 import LocalStrategy from 'passport-local'
 import User from '../models/User.js'
-import LogUserSession from '../models/log/LogUserSession.js'
+import LogUserSession from '../models/LogUserSession.js'
 import bcrypt from 'bcryptjs'
 
 var router = express.Router();

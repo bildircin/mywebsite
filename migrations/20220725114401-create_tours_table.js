@@ -16,6 +16,11 @@ module.exports = {
         title:{
             type:Sequelize.STRING
         },
+        url:{
+            type:Sequelize.STRING(500),
+            allowNull:false,
+            unique:true
+        },
         description:{
             type:Sequelize.TEXT('long')
         },

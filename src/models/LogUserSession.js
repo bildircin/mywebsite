@@ -1,5 +1,5 @@
 import Sequelize from 'sequelize'
-import db from '../../../db.js'
+import db from '../../db.js'
 
 const LogUserSession = db.define('LogUserSession', {
     id:{

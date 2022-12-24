@@ -1,5 +1,4 @@
 import {Op} from "sequelize"
-import sequelize from "sequelize"
 import Video from '../models/Video.js'
 import Category from '../models/Category.js'
 import VideoCategory from '../models/VideoCategory.js'

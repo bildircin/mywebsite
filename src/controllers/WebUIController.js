@@ -1,16 +1,16 @@
 import { Op, Sequelize } from "sequelize"
-import Tour from '../models/template/Tour.js'
+import Tour from '../models/Tour.js'
 import moment from 'moment'
 import { serializeList, dhm } from "../../globalFunctions.js"
-import LanguageItem from '../models/template/LanguageItem.js'
-import LanguageCode from '../models/template/LanguageCode.js'
-import PageContent from '../models/template/PageContent.js'
-import Navigation from "../models/template/Navigation.js"
+import LanguageItem from '../models/LanguageItem.js'
+import LanguageCode from '../models/LanguageCode.js'
+import PageContent from '../models/PageContent.js'
+import Navigation from "../models/Navigation.js"
 import Category from "../models/Category.js"
 import Blog from "../models/Blog.js"
-import TourCategory from "../models/template/TourCategory.js"
+import TourCategory from "../models/TourCategory.js"
 import db from '../../db.js'
-import Setting from "../models/template/Setting.js"
+import Setting from "../models/Setting.js"
 import flatCache from 'flat-cache'
 import SharedImage from "../models/SharedImage.js"
 

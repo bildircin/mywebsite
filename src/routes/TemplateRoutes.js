@@ -19,13 +19,10 @@ router.post('/createOrUpdateLanguageItemGetAjax', templateController.createOrUpd
 router.post('/createOrUpdateLanguageItemSaveAjax', templateController.createOrUpdateLanguageItemSaveAjax)
 router.post('/createOrUpdateLanguageItemCreateAjax', templateController.createOrUpdateLanguageItemCreateAjax)
 
-router.get('/icerik-guncelleme', templateController.createOrUpdatePageContent)
-router.post('/createOrUpdatePageContentGetValueAjax', templateController.createOrUpdatePageContentGetValueAjax)
-router.post('/createOrUpdatePageContentSetValueAjax', templateController.createOrUpdatePageContentSetValueAjax)
+
 
 
 
 
 
 export default router;
-//export {createOrUpdatePageUpload}

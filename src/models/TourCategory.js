@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize'
-import db from '../../../db.js'
-import Category from '../Category.js'
+import db from '../../db.js'
+import Category from './Category.js'
 import Tour from './Tour.js'
 
 const TourCategory = db.define('TourCategory', {

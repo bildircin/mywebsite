@@ -1,8 +1,8 @@
 import {Op} from "sequelize"
-import Tour from "../models/template/Tour.js"
+import Tour from "../models/Tour.js"
 import Category from '../models/Category.js'
 import Image from '../models/Image.js'
-import TourCategory from '../models/template/TourCategory.js'
+import TourCategory from '../models/TourCategory.js'
 import moment from 'moment'
 import db from '../../db.js'
 import { getCheckedBtn } from "../../globalFunctions.js"
@@ -82,12 +82,16 @@ const createOrUpdateTourAjax = async (req,res)=>{
     const {id, category, description, sequence, day, dataSrcCoverUrl, dataSrcHeadImgUrl, dataSrcFlashDealUrl,
          persons, price, startedAt, finishedAt, isActive, overview, dayList, amenities, isFlashDeal } = req.body
     let title = req.body.title
+    let url = req.body.url
 
     if(category == undefined || category == null || category == ""){
         return res.status(400).send({isSuccess:false, message: "Lütfen kategori seçiniz"})
     }
     if (title == "" || title == null || title == undefined || title.trim() == "") {
         return res.status(400).send({isSuccess:false, message: "Lütfen başlık giriniz"})
+    }
+    if (url == "" || url == null || url == undefined || url.trim() == "") {
+        return res.status(400).send({isSuccess:false, message: "Lütfen url giriniz"})
     }
     if (startedAt == "" || startedAt == null || startedAt == undefined) {
         return res.status(400).send({isSuccess:false, message: "Lütfen başlama tarihi giriniz"})
@@ -96,18 +100,19 @@ const createOrUpdateTourAjax = async (req,res)=>{
         return res.status(400).send({isSuccess:false, message: "Lütfen bitiş tarihi giriniz"})
     }
     title = title.trim()
+    url = url.trim()
 
     /* create */
     if(id == null || id == undefined || id == ""){
         
         const sameTour = await Tour.findOne({
             where:{
-                title,
+                url,
                 isDeleted:false
             }
         })
         if (sameTour) {
-            return res.send({isSuccess:false, message: "Bu isimde tur var. Lütfen farklı bir isim giriniz"})
+            return res.send({isSuccess:false, message: "Bu url ile bir tur var. Lütfen farklı bir url giriniz"})
         }
 
         let fileArr = {}
@@ -137,6 +142,7 @@ const createOrUpdateTourAjax = async (req,res)=>{
         try{
             const tour = await Tour.create({
                 title,
+                url,
                 sequence,
                 description,
                 day,
@@ -177,7 +183,7 @@ const createOrUpdateTourAjax = async (req,res)=>{
         
         const sameTour = await Tour.findOne({
             where:{
-                title,
+                url,
                 id:{
                     [Op.ne]: id,
                 },
@@ -186,7 +192,7 @@ const createOrUpdateTourAjax = async (req,res)=>{
         })
 
         if (sameTour && id != sameTour.id) {
-            return res.status(400).send({isSuccess:false, message: "Bu başlıkta tur var. Lütfen farklı bir başlık giriniz"})
+            return res.status(400).send({isSuccess:false, message: "Bu url ile bir tur var. Lütfen farklı bir url giriniz"})
         }
 
         let fileArr = {}
@@ -217,6 +223,7 @@ const createOrUpdateTourAjax = async (req,res)=>{
         try {
             const tour = await Tour.update({
                 title,
+                url,
                 description,
                 sequence,
                 day,
@@ -296,7 +303,6 @@ const selectImageTourAjax = async (req,res)=>{
         }, {transaction: t})
         
         await t.commit()
-        console.log(paginatedResults)
         await res.send({isActive:true, images, paginatedResults})
     } catch (error) {
         await t.rollback()
@@ -305,66 +311,6 @@ const selectImageTourAjax = async (req,res)=>{
 }
 
 
-
-
-function abc(arr, categories){
-    let result = []
-    
-    for (let i = 0; i < arr.length; i++) {
-        const item = arr[i];
-        
-        let childCategories = categories.filter(el=>el.parentId == item.id)
-
-        if(childCategories.length > 0){
-            let itemChildIds = childCategories.map(el=>el.id)
-            result.push(...itemChildIds)
-            result = result.concat(abc(childCategories, categories))
-        }
-    }
-    return result
-}
-function isChildren(item){
-    if(item.children){
-        for (let i = 0; i < item.children.length; i++) {
-            isChildren(item.children[i])
-        }
-        sirala(item.children)
-    }
-}
-
-function sirala(arr){
-    for (let i = 0; i < arr.length; i++) {
-        for (let j = 0; j < arr.length - 1; j++) {
-            if(arr[j].sequence > arr[j + 1].sequence){
-                let temp = arr[j]
-                arr[j] = arr[j + 1]
-                arr[j + 1] = temp
-            }
-        }
-    }
-}
-
-function adjustCategoryList(arr, id) {
-    let result = []
-
-    for(let i = 0; i < arr.length; i++){
-        if(arr[i].hasOwnProperty('children')){
-            result.push({
-                id:arr[i].id,
-                parentId:id,
-                has:true
-            })
-            result = result.concat(adjustCategoryList(arr[i].children, arr[i].id))
-        }else{
-            result.push({
-                id:arr[i].id,
-                parentId:id,
-                has:false
-            })
-        }
-    }
-    return result
-}
 
 
 export default {

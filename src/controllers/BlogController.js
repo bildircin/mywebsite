@@ -1,7 +1,4 @@
-import {Op} from "sequelize"
-import Tour from "../models/template/Tour.js"
 import Blog from '../models/Blog.js'
-import moment from 'moment'
 import db from '../../db.js'
 import { getCheckedBtn } from "../../globalFunctions.js"
 import mime from 'mime-types'

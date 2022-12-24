@@ -1,5 +1,5 @@
 import Sequelize from  'sequelize'
-import db  from '../../../db.js'
+import db  from '../../db.js'
 
 const Navigation = db.define('Navigation', {
     id:{

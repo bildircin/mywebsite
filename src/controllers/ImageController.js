@@ -1,8 +1,5 @@
-import {Op} from "sequelize"
 import Image from "../models/Image.js"
-import moment from 'moment'
 import db from '../../db.js'
-import { getCheckedBtn } from "../../globalFunctions.js"
 import mime from 'mime-types'
 import fs from 'fs'
 
@@ -73,13 +70,13 @@ const createImageAjax = async (req,res)=>{
         }
         let fileType = mime.extension(file.mimetype)
         let fileName = Date.now() + '.' + fileType
-        let fileUrl = '/webUI/public-image/' + fileName;
+        let fileUrl = '/webUI/image/' + fileName;
         fileObj =  {
             name:file.name,
             url:fileUrl
         }
         
-        await file.mv('public/webUI/public-image/' + fileName)
+        await file.mv('public/webUI/image/' + fileName)
     }else{
         return res.status(400).send({isSuccess:false, message: "Resim seçiniz"})
     }

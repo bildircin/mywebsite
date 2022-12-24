@@ -1,13 +1,12 @@
 import {Op} from "sequelize"
-import Navigation from '../models/template/Navigation.js'
-import Page from '../models/template/Page.js'
+import Navigation from '../models/Navigation.js'
+import Page from '../models/Page.js'
 import moment from 'moment'
 import db from '../../db.js'
 import { getCheckedBtn, deserializeList, serializeList } from "../../globalFunctions.js"
 import mime from 'mime-types'
-import LanguageItem from "../models/template/LanguageItem.js"
-import LanguageCode from "../models/template/LanguageCode.js"
-import PageContent from "../models/template/PageContent.js"
+import LanguageItem from "../models/LanguageItem.js"
+import LanguageCode from "../models/LanguageCode.js"
 
 let adminNavigations = [
     '/login',
@@ -541,78 +540,6 @@ const createOrUpdateLanguageItemCreateAjax = async (req,res, next)=>{
     
 }
 
-//PageContent
-const createOrUpdatePageContent = async (req,res)=>{
-    
-    const keys = await PageContent.findAll({
-        attributes:[[db.literal('DISTINCT `key`'), 'key']]
-    })
-    const languageCodes = await LanguageCode.findAll()
-    res.locals.title = 'İçerik Güncelleme'
-
-    await res.render('pageContent/createOrUpdatePageContent', {keys, languageCodes})
-}
-
-const createOrUpdatePageContentGetValueAjax = async (req,res, next)=>{
-    
-    const key = req.body.key
-    const languageCode = req.body.languageCode
-
-    const pageContent = await PageContent.findOne({
-        where:{
-            key,
-            languageCode
-        }
-    })
-    if (pageContent) {
-        await res.send({isSuccess:true, message:'İçerik yüklendi', pageContent})
-    }else{
-        await res.send({isSuccess:true, message:'Bu içeriği ilk defa oluşturacaksınız', pageContent})
-    }
-
-} 
-
-const createOrUpdatePageContentSetValueAjax = async (req,res, next)=>{
-    
-    const {key, languageCode, value} = req.body
-
-    const t = await db.transaction()
-    try {
-
-        const pageContent = await PageContent.findOne({
-            where:{
-                key,
-                languageCode
-            }
-        })
-
-        let message = 'İçerik güncellendi' 
-        if(pageContent){
-            await PageContent.update({
-                value
-            },{
-                where:{
-                    key,
-                    languageCode
-                }
-            }, { transaction: t})
-        }else{
-            await PageContent.create({
-                key,
-                languageCode,
-                value
-            }, { transaction: t})
-            message = 'İçerik oluşturuldu'
-        }
-        
-        await t.commit()
-        await res.send({isSuccess:true, message})
-    } catch (error) {
-        await t.rollback()
-        await res.send({isSuccess:false, message:error})
-    }
-}
-
 
 
 
@@ -673,8 +600,5 @@ export default {
     createOrUpdateLanguageItem,
     createOrUpdateLanguageItemGetAjax,
     createOrUpdateLanguageItemSaveAjax,
-    createOrUpdateLanguageItemCreateAjax,
-    createOrUpdatePageContent,
-    createOrUpdatePageContentGetValueAjax,
-    createOrUpdatePageContentSetValueAjax
+    createOrUpdateLanguageItemCreateAjax
 }
