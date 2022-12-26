@@ -40,15 +40,20 @@ const createOrUpdateBlogAjax = async (req,res)=>{
     
     const {id, dataSrcHeadImgUrl, releaseDate, description, tags, isActive } = req.body
     let title = req.body.title
+    let url = req.body.url
 
     if (title == "" || title == null || title == undefined || title.trim() == "") {
         return res.status(400).send({isSuccess:false, message: "Lütfen başlık giriniz"})
+    }
+    if (url == "" || url == null || url == undefined || url.trim() == "") {
+        return res.status(400).send({isSuccess:false, message: "Lütfen url giriniz"})
     }
     if (releaseDate == "" || releaseDate == null || releaseDate == undefined) {
         return res.status(400).send({isSuccess:false, message: "Lütfen yayınlanma tarihi giriniz"})
     }
 
     title = title.trim()
+    url = id + '-' + url.trim()
 
     /* create */
     if(id == null || id == undefined || id == ""){
@@ -69,17 +74,18 @@ const createOrUpdateBlogAjax = async (req,res)=>{
                 const file = req.files[key];
                 let fileType = mime.extension(file.mimetype)
                 let fileName = Date.now() + '.' + fileType
-                let fileUrl = '/webUI/public-image/' + fileName;
+                let fileUrl = '/webUI/image/' + fileName;
                 
-                await file.mv('public/webUI/public-image/' + fileName)
+                await file.mv('public/webUI/image/' + fileName)
                 fileArr =  {...fileArr, [key]:fileUrl}
             }
         }
         const t = await db.transaction()
 
         try{
-            const blog = await Blog.create({
+            await Blog.create({
                 title,
+                url,
                 headImgUrl: fileArr.headImgUrlFile ? fileArr.headImgUrlFile : dataSrcHeadImgUrl ? dataSrcHeadImgUrl : null,
                 releaseDate,
                 description,
@@ -96,7 +102,7 @@ const createOrUpdateBlogAjax = async (req,res)=>{
         }
 
         /* update */
-    }else{ 
+    }else{
 
         let fileArr = {}
 
@@ -114,9 +120,9 @@ const createOrUpdateBlogAjax = async (req,res)=>{
                 const file = req.files[key];
                 let fileType = mime.extension(file.mimetype)
                 let fileName = Date.now() + '.' + fileType
-                let fileUrl = '/webUI/public-image/' + fileName;
+                let fileUrl = '/webUI/image/' + fileName;
                 
-                await file.mv('public/webUI/public-image/' + fileName)
+                await file.mv('public/webUI/image/' + fileName)
                 fileArr =  {...fileArr, [key]:fileUrl}
             }
         }
@@ -125,6 +131,7 @@ const createOrUpdateBlogAjax = async (req,res)=>{
         try {
             await Blog.update({
                 title,
+                url,
                 headImgUrl: fileArr.headImgUrlFile ? fileArr.headImgUrlFile : dataSrcHeadImgUrl ? dataSrcHeadImgUrl : null,
                 releaseDate,
                 description,

@@ -16,6 +16,10 @@ module.exports = {
         title:{
             type:Sequelize.STRING('1000')
         },
+        url:{
+            type:Sequelize.STRING(500),
+            allowNull:false
+        },
         headImgUrl:{
             type:Sequelize.STRING('500')
         },

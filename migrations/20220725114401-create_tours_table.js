@@ -18,8 +18,7 @@ module.exports = {
         },
         url:{
             type:Sequelize.STRING(500),
-            allowNull:false,
-            unique:true
+            allowNull:false
         },
         description:{
             type:Sequelize.TEXT('long')

@@ -100,12 +100,12 @@ const createOrUpdateTourAjax = async (req,res)=>{
         return res.status(400).send({isSuccess:false, message: "Lütfen bitiş tarihi giriniz"})
     }
     title = title.trim()
-    url = url.trim()
+    url = id + '-' + url.trim()
 
     /* create */
     if(id == null || id == undefined || id == ""){
         
-        const sameTour = await Tour.findOne({
+        /* const sameTour = await Tour.findOne({
             where:{
                 url,
                 isDeleted:false
@@ -113,7 +113,7 @@ const createOrUpdateTourAjax = async (req,res)=>{
         })
         if (sameTour) {
             return res.send({isSuccess:false, message: "Bu url ile bir tur var. Lütfen farklı bir url giriniz"})
-        }
+        } */
 
         let fileArr = {}
 
@@ -182,7 +182,7 @@ const createOrUpdateTourAjax = async (req,res)=>{
         /* update */
     }else{ 
         
-        const sameTour = await Tour.findOne({
+        /* const sameTour = await Tour.findOne({
             where:{
                 url,
                 id:{
@@ -191,10 +191,9 @@ const createOrUpdateTourAjax = async (req,res)=>{
                 isDeleted:false
             }
         })
-
         if (sameTour && id != sameTour.id) {
             return res.status(400).send({isSuccess:false, message: "Bu url ile bir tur var. Lütfen farklı bir url giriniz"})
-        }
+        } */
 
         let fileArr = {}
 

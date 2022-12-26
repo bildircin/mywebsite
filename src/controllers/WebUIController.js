@@ -13,6 +13,7 @@ import db from '../../db.js'
 import Setting from "../models/Setting.js"
 import flatCache from 'flat-cache'
 import SharedImage from "../models/SharedImage.js"
+import {convert} from "html-to-text"
 
 let cache = flatCache.load('webUIController')
 let currentLang = {
@@ -352,7 +353,7 @@ const blogsPage = async (req,res)=>{
     const t = await db.transaction()
     
     try {
-        const blogs = await Blog.findAll({
+        let blogs = await Blog.findAll({
             offset:startIndex,
             limit:limit,
             where:{
@@ -364,6 +365,12 @@ const blogsPage = async (req,res)=>{
         }, {transaction: t})
         
         res.locals.title = "Blog"
+
+        blogs = await blogs.map(el=>{
+            let item = el
+            item.description = convert(el.description).slice(0, 90)
+            return item
+        })
 
         await t.commit()
         await res.render('webUI/blogs', {layout:'webUI/layout', currentLang, contents, navigations, languageCodes, blogs, paginatedResults})
