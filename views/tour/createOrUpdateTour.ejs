@@ -227,6 +227,12 @@
                             </label>
                         </div>
                         <div class="form-check form-switch form-check-custom form-check-solid my-10">
+                            <input class="form-check-input" type="checkbox" id="is_popular" name="isPopular" <%= tour.isPopular ? 'checked=checked' : '' %> />
+                            <label class="form-check-label" for="is_popular">
+                                Popüler
+                            </label>
+                        </div>
+                        <div class="form-check form-switch form-check-custom form-check-solid my-10">
                             <input class="form-check-input" type="checkbox" id="is_active" name="isActive" <%= tour.isActive ? 'checked=checked' : '' %> />
                             <label class="form-check-label" for="is_active">
                                 Aktif

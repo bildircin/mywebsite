@@ -80,7 +80,7 @@ const createOrUpdateTour = async (req,res)=>{
 const createOrUpdateTourAjax = async (req,res)=>{
     
     const {id, category, description, sequence, day, dataSrcCoverUrl, dataSrcHeadImgUrl, dataSrcFlashDealUrl,
-         persons, price, startedAt, finishedAt, isActive, overview, dayList, amenities, isFlashDeal } = req.body
+         persons, price, startedAt, finishedAt, isPopular, isFlashDeal, isActive, overview, dayList, amenities } = req.body
     let title = req.body.title
     let url = req.body.url
 
@@ -157,6 +157,7 @@ const createOrUpdateTourAjax = async (req,res)=>{
                 headImgUrl: fileArr.headImgUrlFile ? fileArr.headImgUrlFile : dataSrcHeadImgUrl ? dataSrcHeadImgUrl : null,
                 flashDealUrl: fileArr.flashDealUrlFile ? fileArr.flashDealUrlFile : dataSrcFlashDealUrl ? dataSrcFlashDealUrl : null,
                 isFlashDeal:getCheckedBtn(isFlashDeal),
+                isPopular:getCheckedBtn(isPopular),
                 isActive:getCheckedBtn(isActive),
                 isDeleted:false,
                 createdAt:moment(),
@@ -238,6 +239,7 @@ const createOrUpdateTourAjax = async (req,res)=>{
                 headImgUrl: fileArr.headImgUrlFile ? fileArr.headImgUrlFile : dataSrcHeadImgUrl ? dataSrcHeadImgUrl : null,
                 flashDealUrl: fileArr.flashDealUrlFile ? fileArr.flashDealUrlFile : dataSrcFlashDealUrl ? dataSrcFlashDealUrl : null,
                 isFlashDeal:getCheckedBtn(isFlashDeal),
+                isPopular:getCheckedBtn(isPopular),
                 isActive:getCheckedBtn(isActive),
                 updatedAt: moment()
             }, {

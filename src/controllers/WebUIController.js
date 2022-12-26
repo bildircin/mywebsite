@@ -305,12 +305,16 @@ const toursPage = async (req,res)=>{
 }
 
 const tourSinglePage = async (req,res)=>{
-    const id = req.params.id
+    const url = req.params.url
     
     res.locals.title = ""
     const t = await db.transaction()
     try {
-        const tour = await Tour.findByPk(id, {transaction: t})
+        const tour = await Tour.findOne({
+            where:{
+                url:url
+            }
+        }, {transaction: t})
 
         if(tour){
             res.locals.title = tour.title
