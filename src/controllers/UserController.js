@@ -6,15 +6,15 @@ import { getCheckedBtn } from "../../globalFunctions.js"
 
 const allUsers = async (req,res)=>{
     res.locals.title="Kullanıcılar"
-    if(req.user.type == 0){
-        await res.render('layouts/notAuthorized')
+    if(req.user && req.user.type == 1){
+        const users = await User.findAll({
+            where:{
+                isDeleted:false
+            }
+        })
+        await res.render('user/users', {users})
     }
-    const users = await User.findAll({
-        where:{
-            isDeleted:false
-        }
-    })
-    await res.render('user/users', {users})
+    await res.render('layouts/notAuthorized')
 }
 
 const addUser = async (req,res)=>{

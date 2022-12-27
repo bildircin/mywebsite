@@ -17,22 +17,22 @@
             <a href="javascript:void(0)" class="open-sidebar hidden-lg hidden-md"><i class="fa fa-bars"></i>Sidebar</a>
             <div class="blog-detail clearfix">
                 <div class="article-image banners">
-                    <img src="<%= item.headImgUrl %> ">
+                    <img src="<%= blog.headImgUrl %> ">
                 </div>
                 <div class="content clearfix">
-                    <h1><%= item.title %> </h1>
+                    <h1><%= blog.title %> </h1>
                     <div class="entry-meta clearfix">
                         <div class="entry-date">
-                            <i class="fa fa-calendar" aria-hidden="true"></i><span> <%= moment(item.releaseDate).format("DD/MM/YYY") %> </span>
+                            <i class="fa fa-calendar" aria-hidden="true"></i><span> <%= moment(blog.releaseDate).format("DD/MM/YYY") %> </span>
                         </div>
                     </div>
                     <div>
-                        <%= item.description %> 
+                        <%- blog.description %> 
                     </div>
                 </div>
                 <div class="entry-tag clearfix">
                     <div class="tag pull-left">
-                        <% let tags = item.tags ? JSON.parse(item.tags) : [] %> 
+                        <% let tags = blog.tags ? JSON.parse(blog.tags) : [] %> 
                         <label>Etiketler:</label>
                         <% tags.forEach(el => { %>
                             <a href="/blog?tag=<%= el %>"><%= el %></a>,

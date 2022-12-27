@@ -140,7 +140,6 @@ const setLanguageCode = async (req,res,next)=>{
 
 const homePage = async (req,res)=>{
     res.locals.title="Ana Sayfa"
-
     res.locals.dhm = dhm;
 
     const categories = await Category.findAll({
@@ -380,7 +379,26 @@ const blogsPage = async (req,res)=>{
 }
 
 const blogSinglePage = async (req,res)=>{
+    const url = req.params.url
     
+    res.locals.title = ""
+    const t = await db.transaction()
+    try {
+        const blog = await Blog.findOne({
+            where:{
+                url:url
+            }
+        }, {transaction: t})
+
+        if(blog){
+            res.locals.title = blog.title
+        }
+        await t.commit()
+        await res.render('webUI/blog-single', {layout:'webUI/layout', currentLang, contents, navigations, languageCodes, blog})
+    } catch (error) {
+        console.log(error)
+        await t.rollback()
+    }
 }
 
 
@@ -431,6 +449,7 @@ export default {
     setSettings,
     tourSinglePage,
     blogsPage,
+    blogSinglePage,
     page404,
     cache
 }

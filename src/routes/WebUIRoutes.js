@@ -13,6 +13,7 @@ router.get('/iletisim', webUIController.contactPage)
 router.get('/turlar', webUIController.toursPage)
 router.get('/tur-detay/:url', webUIController.tourSinglePage)
 router.get('/blog', webUIController.blogsPage)
+router.get('/blog-detay/:url', webUIController.blogSinglePage)
 
 router.get('/404', webUIController.page404) 
 

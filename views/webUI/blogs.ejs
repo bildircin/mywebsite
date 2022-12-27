@@ -34,13 +34,13 @@
                                             </div>
                                         </div>
                                         <h4 class="media-heading head-item">
-                                            <a href="/blog-detay/<%= item.id%>" title="<%= item.title %>" target="_self"><%= item.title %></a>
+                                            <a href="/blog-detay/<%= item.url %>" title="<%= item.title %>" target="_self"><%= item.title %></a>
                                         </h4>
                                         <div class="description">
                                             <%- item.description %>...
                                         </div>
                                         <div class="readmore">
-                                            <a href="/blog-detay/<%= item.id%>" target="_self">Devamını Oku</a>
+                                            <a href="/blog-detay/<%= item.url %>" target="_self">Devamını Oku</a>
                                         </div>
                                     </div>										
                                 </div>
@@ -52,12 +52,15 @@
 
             </div>
             <ul class="pagination">
-                <li><a href="#"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
-                <li class="active"><span>1</span></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                <% if(paginatedResults.previous){ %>
+                    <li><a href="javascript:;" class="paginate-btn" data-value="<%= paginatedResults.previous.page %>"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+                <% } %>
+                <% for(let i = 0; i < paginatedResults.pageCount; i++){ %>
+                    <li class=<%= i + 1 == paginatedResults.page ? 'active' : '' %>><a href="javascript:;" class="paginate-btn" data-value="<%= i + 1 %>"><%= i + 1 %></a></li>
+                <% } %>
+                <% if(paginatedResults.next){ %>
+                    <li><a href="javascript:;" class="paginate-btn" data-value="<%= paginatedResults.next.page %>"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                <% } %>
             </ul>
         </div>
     </div>
